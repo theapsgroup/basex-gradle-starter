@@ -12,19 +12,77 @@ configurations {
 dependencies {
     basex "org.basex:basex:8.0"
     basex "org.basex:basex-api:8.0"
+    // XQJ API
+    basex "net.xqj:basex-xqj:1.2.0"
+    basex "com.xqj2:xqj2:0.1.0"
+    basex "javax.xml.xquery:xqj-api:1.0"
+    // needed for running HTTP server
+    basex "org.eclipse.jetty:jetty-continuation:8.1.16.v20140903"
+    basex "org.eclipse.jetty:jetty-http:8.1.16.v20140903"
+    basex "org.eclipse.jetty:jetty-io:8.1.16.v20140903"
+    basex "org.eclipse.jetty:jetty-security:8.1.16.v20140903"
+    basex "org.eclipse.jetty:jetty-server:8.1.16.v20140903"
+    basex "org.eclipse.jetty:jetty-servlet:8.1.16.v20140903"
+    basex "org.eclipse.jetty:jetty-util:8.1.16.v20140903"
+    basex "org.eclipse.jetty:jetty-webapp:8.1.16.v20140903"
+    basex "org.eclipse.jetty:jetty-xml:8.1.16.v20140903"
+    // XSLT 2.0 support
     basex "net.sf.saxon:Saxon-HE:9.6.0-4"
+    // HTML parsing
+    basex "org.ccil.cowan.tagsoup:tagsoup:1.2.1"
+    // XML catalog support
+    basex "xml-resolver:xml-resolver:1.2"
 }
 
-task query(type: JavaExec) {
+task server(type: JavaExec) {
+    description 'Start BaseX database server.'
     classpath configurations.basex
-    main = "org.basex.BaseX"
-    args "-q", "4+2"
+    main = "org.basex.BaseXServer"
+    systemProperties System.getProperties()   
+}
+
+task serverstop(type: JavaExec) {
+    description 'Stop BaseX HTTP server.'
+    classpath configurations.basex
+    main = "org.basex.BaseXServer"
+    args "stop"
+    systemProperties System.getProperties()
+}
+
+task http(type: JavaExec) {
+    description 'Start BaseX HTTP and database server.'
+    classpath configurations.basex
+    main = "org.basex.BaseXHTTP"
+    systemProperties System.getProperties()
+}
+
+task httpstop(type: JavaExec) {
+    description 'Stop BaseX HTTP and database server.'
+    classpath configurations.basex
+    main = "org.basex.BaseXHTTP"
+    args "stop"
+    systemProperties System.getProperties()
+}
+
+task client(type: JavaExec) {
+    description 'Start BaseX client.'
+    classpath configurations.basex
+    main = "org.basex.BaseXClient"
     systemProperties System.getProperties()
 }
 
 // no spawning yet
 task gui(type: JavaExec) {
+    description 'Start BaseX GUI.'
     classpath configurations.basex
     main = "org.basex.BaseXGUI"
+    systemProperties System.getProperties()
+}
+
+task query(type: JavaExec) {
+    description 'Start a simple query.'
+    classpath configurations.basex
+    main = "org.basex.BaseX"
+    args "-q", "4+2"
     systemProperties System.getProperties()
 }
