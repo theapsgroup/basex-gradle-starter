@@ -15,22 +15,16 @@ dependencies {
     basex "net.sf.saxon:Saxon-HE:9.6.0-4"
 }
 
-def basex_sysprops = [
-    'org.basex.dbpath': file('basex/data'),
-    'org.basex.repopath': file('basex/repo'),
-    'org.basex.webpath': file('basex/webapp')
-]
-
 task query(type: JavaExec) {
     classpath configurations.basex
     main = "org.basex.BaseX"
     args "-q", "4+2"
-    systemProperties basex_sysprops
+    systemProperties System.getProperties()
 }
 
 // no spawning yet
 task gui(type: JavaExec) {
     classpath configurations.basex
     main = "org.basex.BaseXGUI"
-    systemProperties basex_sysprops
+    systemProperties System.getProperties()
 }
