@@ -39,6 +39,10 @@ By default will put data under a `basex` subdirectory.
 
 For more information on [Gradle](https://gradle.org) have a look at it's extensive documentation.
 
+## Where to put your XQuery code?
+
+For now the easiest way is to add your code under `basex/webapp` (or wherever you set the `org.basex.WEBPATH` property in `gradle.properties` to).
+
 ## TODO
 
 - Provide arguments for query tasks
