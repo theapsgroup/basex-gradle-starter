@@ -16,7 +16,7 @@ dependencies {
     basex "net.xqj:basex-xqj:1.2.0"
     basex "com.xqj2:xqj2:0.1.0"
     basex "javax.xml.xquery:xqj-api:1.0"
-    // needed for running HTTP server
+    // HTTP server
     basex "org.eclipse.jetty:jetty-continuation:8.1.16.v20140903"
     basex "org.eclipse.jetty:jetty-http:8.1.16.v20140903"
     basex "org.eclipse.jetty:jetty-io:8.1.16.v20140903"
@@ -26,23 +26,23 @@ dependencies {
     basex "org.eclipse.jetty:jetty-util:8.1.16.v20140903"
     basex "org.eclipse.jetty:jetty-webapp:8.1.16.v20140903"
     basex "org.eclipse.jetty:jetty-xml:8.1.16.v20140903"
-    // XSLT 2.0 support
+    // XSLT 2.0
     basex "net.sf.saxon:Saxon-HE:9.6.0-4"
     // HTML parsing
     basex "org.ccil.cowan.tagsoup:tagsoup:1.2.1"
-    // XML catalog support
+    // XML catalogs
     basex "xml-resolver:xml-resolver:1.2"
 }
 
-task server(type: JavaExec) {
-    description 'Start BaseX database server.'
+task server << {
+    description "Start BaseX database server."
     classpath configurations.basex
     main = "org.basex.BaseXServer"
-    systemProperties System.getProperties()   
+    systemProperties System.getProperties()
 }
 
 task serverstop(type: JavaExec) {
-    description 'Stop BaseX HTTP server.'
+    description "Stop BaseX HTTP server."
     classpath configurations.basex
     main = "org.basex.BaseXServer"
     args "stop"
@@ -50,37 +50,43 @@ task serverstop(type: JavaExec) {
 }
 
 task http(type: JavaExec) {
-    description 'Start BaseX HTTP and database server.'
+    description "Start BaseX HTTP and database server."
     classpath configurations.basex
     main = "org.basex.BaseXHTTP"
     systemProperties System.getProperties()
 }
 
 task httpstop(type: JavaExec) {
-    description 'Stop BaseX HTTP and database server.'
+    description "Stop BaseX HTTP and database server."
     classpath configurations.basex
     main = "org.basex.BaseXHTTP"
     args "stop"
     systemProperties System.getProperties()
 }
 
-task client(type: JavaExec) {
-    description 'Start BaseX client.'
+// although typing works, the standard gradle build message
+// makes this awkward. 
+// See also https://issues.gradle.org/browse/GRADLE-1168
+task console(type: JavaExec) {
+    description "Start BaseX client console."
+    standardInput = System.in
     classpath configurations.basex
     main = "org.basex.BaseXClient"
     systemProperties System.getProperties()
 }
 
-// no spawning yet
-task gui(type: JavaExec) {
-    description 'Start BaseX GUI.'
-    classpath configurations.basex
-    main = "org.basex.BaseXGUI"
-    systemProperties System.getProperties()
+task gui << {
+    ant.java(
+        fork: true, 
+        spawn: true, 
+        classpath: configurations.basex.asPath, 
+        classname: "org.basex.BaseXGUI",
+        clonevm: true)
 }
+gui.description "Run BaseX GUI."
 
 task query(type: JavaExec) {
-    description 'Start a simple query.'
+    description "Start a simple query."
     classpath configurations.basex
     main = "org.basex.BaseX"
     args "-q", "4+2"
