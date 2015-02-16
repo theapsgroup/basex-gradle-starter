@@ -89,6 +89,14 @@ task query(type: JavaExec) {
     description "Start a simple query."
     classpath configurations.basex
     main = "org.basex.BaseX"
-    args "-q", "4+2"
+    args "-q", project.hasProperty('q') ? q : "'Please provide a query! Example: gradlew query -Pq=1+1'"
+    systemProperties System.getProperties()
+}
+
+task test(type: JavaExec) {
+    description "Runs all tests."
+    classpath configurations.basex
+    main = "org.basex.BaseX"
+    args "-t", file(System.properties['org.basex.WEBPATH'])
     systemProperties System.getProperties()
 }
