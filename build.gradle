@@ -1,7 +1,6 @@
 repositories {
     maven { url "http://files.basex.org/maven" }
     maven { url "http://xqj.net/maven" }
-    maven { url "https://raw.github.com/eXist-db/mvn-repo/master" }
     mavenCentral()
 }
 
