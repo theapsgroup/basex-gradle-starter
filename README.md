@@ -94,13 +94,26 @@ you save an XQuery test file it is automatically run again.
     
     Total time: 1.201 secs
     
-    
+## Building an HTTP application distribution
+
+You've created an application, running and testing it using this build script.
+Now it's time to distribute the application.
+
+    gradlew distZip
+
+This creates a Zip with the application and start scripts.
+
+See also: [Gradle Application
+Plugin](http://gradle.org/docs/current/userguide/application_plugin.html)
+  
 ## Create a runnable server jar
 
 You can combine all the needed jar files and create a so-called fat jar. This
-allows you to run BaseX as a jar (easy to deploy).
+allows you to run BaseX as a jar (easy to deploy). You can already do that
+with the BaseX core distribution but with this it also includes the optional
+libraries.
 
-    gradlew jar
+    gradlew shadowJar
 
 This will create a jar (we do not have local classes yet) inside `build/libs`.
 The task will build both a jar with local code and another one with all
@@ -140,9 +153,16 @@ are declared as optional. This makes sense but it's a bit unfortunate that to
 include these optional libraries they have to be explicitly listed in the build
 script.
 
+## Known issues
 
+- Client task (`client`) prints build message in between input.
+
+- Sometimes I cannot access the server with `client` from another shell. Run it
+  with `-d` option and you'll see that it cannot acquire a lock
+  
 ## TODO
 
+- Better configuration
 - Package other files as part of fat jar
 - Provide arguments for query tasks
 - Test task

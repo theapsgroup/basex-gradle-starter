@@ -3,17 +3,15 @@ buildscript {
         jcenter()
     }
     dependencies {
+        classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.0'
         classpath 'com.bluepapa32:gradle-watch-plugin:0.1.4'
     }
-}   
-
-plugins {
-  id 'java'
-  id 'com.github.johnrengelman.shadow' version '1.2.0'
 }
 
+apply plugin: 'application'
+apply plugin: 'java'
+apply plugin: 'com.github.johnrengelman.shadow'
 apply plugin: 'com.bluepapa32.watch'
-
 
 repositories {
     maven { url "http://files.basex.org/maven" }
@@ -21,13 +19,20 @@ repositories {
     mavenCentral()
 }
 
-def jettyVersion = '8.1.16.v20140903'
-
+// distributions will be called basex-demo-0.1.zip
+applicationName = 'basex-demo'
 version = '0.1'
-jar {
-    manifest {
-        attributes 'Main-Class': 'org.basex.BaseXHTTP'
-    }
+mainClassName = 'org.basex.BaseXHTTP'
+applicationDefaultJvmArgs = [
+    "-Dorg.basex.dbpath=${System.properties['org.basex.DBPATH']}",
+    "-Dorg.basex.repopath=${System.properties['org.basex.REPOPATH']}",
+    "-Dorg.basex.webpath=${System.properties['org.basex.WEBPATH']}",
+    "-Dorg.basex.mixupdates=${System.properties['org.basex.MIXUPDATES']}",
+    "-Dorg.basex.globallock=${System.properties['org.basex.GLOBALLOCK']}"]
+
+applicationDistribution.from("basex") {
+  include "**/*.*"
+  into "basex"
 }
 
 watch {
@@ -37,6 +42,8 @@ watch {
         tasks 'xqtest'
     }
 }
+
+def jettyVersion = '8.1.16.v20140903'
 
 dependencies {
     runtime "org.basex:basex-api:8.0"
@@ -62,7 +69,10 @@ dependencies {
     runtime "xml-resolver:xml-resolver:1.2"
 }
 
-task server << {
+// shadowPlugin adds a promo banner task, no thanks!
+tasks.remove(knows)
+
+task server(type: JavaExec) {
     description "Start BaseX database server."
     classpath configurations.runtime
     main = "org.basex.BaseXServer"
@@ -77,11 +87,9 @@ task serverstop(type: JavaExec) {
     systemProperties System.getProperties()
 }
 
-task http(type: JavaExec) {
-    description "Start BaseX HTTP and database server."
-    classpath configurations.runtime
-    main = "org.basex.BaseXHTTP"
-    systemProperties System.getProperties()
+// alias for gradlew run
+task http(dependsOn: run) {
+    description "Run BaseX HTTP and database server."
 }
 
 task httpstop(type: JavaExec) {
@@ -103,16 +111,6 @@ task console(type: JavaExec) {
     systemProperties System.getProperties()
 }
 
-task gui << {
-    ant.java(
-        fork: true, 
-        spawn: true, 
-        classpath: configurations.runtime.asPath, 
-        classname: "org.basex.BaseXGUI",
-        clonevm: true)
-}
-gui.description "Run BaseX GUI."
-
 task query(type: JavaExec) {
     description "Start a simple query."
     classpath configurations.runtime
@@ -129,3 +127,13 @@ task xqtest(type: JavaExec) {
     systemProperties System.getProperties()
     ignoreExitValue true
 }
+
+task gui << {
+    ant.java(
+        fork: true, 
+        spawn: true, 
+        classpath: configurations.runtime.asPath, 
+        classname: "org.basex.BaseXGUI",
+        clonevm: true)
+}
+gui.description "Run BaseX GUI."
