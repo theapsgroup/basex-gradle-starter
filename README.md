@@ -18,7 +18,8 @@ To execute other tasks:
 
     gradlew <taskname>
 
-For more information on [Gradle](https://gradle.org) have a look at it's extensive documentation.
+For more information on [Gradle](https://gradle.org) have a look at it's
+extensive documentation.
 
 
 ## Startup tasks
@@ -55,7 +56,16 @@ And by using the `--daemon` option you can also avoid a lot of the Java startup 
 
 ## Where to put XQuery code?
 
-For now the easiest way is to add your code under `basex/webapp` (or wherever you point `org.basex.WEBPATH` property in `gradle.properties` to).
+For now the easiest way is to add your code under `basex/webapp` (or wherever
+you point `org.basex.WEBPATH` property in `gradle.properties` to).
+
+
+## Why so many dependencies listed?
+
+This is a Gradle limitation. Gradle doesn't follow transitive dependencies that
+are declared (in the Maven POM) as optional. This makes sense but it's a bit
+unfortunate that to include these optional libraries they have to be explicitly
+listed in the build script.
 
 
 ## TODO
@@ -66,5 +76,3 @@ For now the easiest way is to add your code under `basex/webapp` (or wherever yo
 - Building XAR packages and managing module repository
 - Import/export files
 - Backup and restore
-
-

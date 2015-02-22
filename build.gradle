@@ -8,29 +8,34 @@ configurations {
     basex
 }
 
+def jettyVersion = '8.1.16.v20140903'
+
 dependencies {
-    basex "org.basex:basex:8.0"
-    basex "org.basex:basex-api:8.0"
+    basex "org.basex:basex-api:8.1-SNAPSHOT"
     // XQJ API
     basex "net.xqj:basex-xqj:1.2.0"
     basex "com.xqj2:xqj2:0.1.0"
     basex "javax.xml.xquery:xqj-api:1.0"
     // HTTP server
-    basex "org.eclipse.jetty:jetty-continuation:8.1.16.v20140903"
-    basex "org.eclipse.jetty:jetty-http:8.1.16.v20140903"
-    basex "org.eclipse.jetty:jetty-io:8.1.16.v20140903"
-    basex "org.eclipse.jetty:jetty-security:8.1.16.v20140903"
-    basex "org.eclipse.jetty:jetty-server:8.1.16.v20140903"
-    basex "org.eclipse.jetty:jetty-servlet:8.1.16.v20140903"
-    basex "org.eclipse.jetty:jetty-util:8.1.16.v20140903"
-    basex "org.eclipse.jetty:jetty-webapp:8.1.16.v20140903"
-    basex "org.eclipse.jetty:jetty-xml:8.1.16.v20140903"
+    basex "org.eclipse.jetty:jetty-continuation:${jettyVersion}"
+    basex "org.eclipse.jetty:jetty-http:${jettyVersion}"
+    basex "org.eclipse.jetty:jetty-io:${jettyVersion}"
+    basex "org.eclipse.jetty:jetty-security:${jettyVersion}"
+    basex "org.eclipse.jetty:jetty-server:${jettyVersion}"
+    basex "org.eclipse.jetty:jetty-servlet:${jettyVersion}"
+    basex "org.eclipse.jetty:jetty-util:${jettyVersion}"
+    basex "org.eclipse.jetty:jetty-webapp:${jettyVersion}"
+    basex "org.eclipse.jetty:jetty-xml:${jettyVersion}"
     // XSLT 2.0
     basex "net.sf.saxon:Saxon-HE:9.6.0-4"
     // HTML parsing
     basex "org.ccil.cowan.tagsoup:tagsoup:1.2.1"
     // XML catalogs
     basex "xml-resolver:xml-resolver:1.2"
+}
+
+task cfg << {
+    println "Transitive: ${configurations.basex.transitive}"
 }
 
 task server << {
