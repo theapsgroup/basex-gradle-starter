@@ -39,7 +39,7 @@ watch {
     xqtest {
         files fileTree(dir: file('basex/webapp/test'),
                        include: '**/*.xqm')
-        tasks 'xqtest', 'foo'
+        tasks 'xqtest'
     }
 }
 
@@ -123,7 +123,7 @@ task create(type: JavaExec) {
     description "Create a database and import XML files from a directory."
     classpath configurations.runtime
     main = "org.basex.BaseX"
-    args "-c", project.hasProperty('dir') && project.hasProperty('db') ? "CREATE DB $db $dir" : "'Please provide a db and dir! Example: gradlew create -Pdb=foo -Pdir=bar'"
+    args "-c", project.hasProperty('dir') && project.hasProperty('db') ? "CREATE DB $db ${file(dir)}" : "'Please provide a db and dir! Example: gradlew create -Pdb=foo -Pdir=bar'"
     systemProperties System.getProperties()
 }
 
@@ -131,7 +131,7 @@ task export(type: JavaExec) {
     description "Create a database and import XML files from a directory."
     classpath configurations.runtime
     main = "org.basex.BaseX"
-    args "-c", project.hasProperty('dir') && project.hasProperty('db') ? "OPEN $db\nEXPORT $dir" : "'Please provide a db and dir! Example: gradlew export -Pdb=foo -Pdir=bar'"
+    args "-c", project.hasProperty('dir') && project.hasProperty('db') ? "OPEN $db\nEXPORT ${file(dir)}" : "'Please provide a db and dir! Example: gradlew export -Pdb=foo -Pdir=bar'"
     systemProperties System.getProperties()
 }
 
