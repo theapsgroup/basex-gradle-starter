@@ -1,7 +1,19 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.bluepapa32:gradle-watch-plugin:0.1.4'
+    }
+}   
+
 plugins {
   id 'java'
   id 'com.github.johnrengelman.shadow' version '1.2.0'
 }
+
+apply plugin: 'com.bluepapa32.watch'
+
 
 repositories {
     maven { url "http://files.basex.org/maven" }
@@ -15,6 +27,14 @@ version = '0.1'
 jar {
     manifest {
         attributes 'Main-Class': 'org.basex.BaseXHTTP'
+    }
+}
+
+watch {
+    xqtest {
+        files fileTree(dir: file('basex/webapp/test'),
+                       include: '**/*.xqm')
+        tasks 'xqtest'
     }
 }
 
@@ -107,4 +127,5 @@ task xqtest(type: JavaExec) {
     main = "org.basex.BaseX"
     args "-t", file(System.properties['org.basex.WEBPATH'])
     systemProperties System.getProperties()
+    ignoreExitValue true
 }

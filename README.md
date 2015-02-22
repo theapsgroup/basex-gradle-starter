@@ -59,7 +59,42 @@ And by using the `--daemon` option you can also avoid a lot of the Java startup 
 For now the easiest way is to add your code under `basex/webapp` (or wherever
 you point `org.basex.WEBPATH` property in `gradle.properties` to).
 
+## Run tests automatically
 
+You can run all tests using the `xqtest` task. But you can also start the `watch`
+task which will watch all `*.xqm` files under `basex/webapp/test`. Now everytime
+you save an XQuery test file it is automatically run again.
+
+    > gradlew watch
+
+    :watch
+    Starting............ OK
+    
+    --------------------------------------------------------------------------------
+     Sun Feb 22 18:37:50 CET 2015
+     File "basex/webapp/test/test.xqm" was changed.
+    --------------------------------------------------------------------------------
+    :xqtest
+    <testsuites time="PT0.338S">
+    Result: 2 tests, 1 failure, 0 errors, 0 skipped.
+      <testsuite name="file:/basex-gradle-starter/basex/webapp/test/test.xqm" 
+        time="PT0.011S" tests="2" failures="1" errors="0" skipped="0">
+        <testcase name="pass" time="PT0.006S"/>
+        <testcase name="fail" time="PT0.002S">
+          <failure line="10" column="24">
+            <returned item="1" type="xs:integer">1</returned>
+            <expected item="1" type="xs:integer">3</expected>
+            <info>Item 1: 3 expected, 1 returned.</info>
+          </failure>
+        </testcase>
+      </testsuite>
+    </testsuites>
+    
+    BUILD SUCCESSFUL
+    
+    Total time: 1.201 secs
+    
+    
 ## Create a runnable server jar
 
 You can combine all the needed jar files and create a so-called fat jar. This
