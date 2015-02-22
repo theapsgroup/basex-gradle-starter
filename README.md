@@ -44,7 +44,7 @@ To run a simple query:
 
 To run all tests under `basex/webapp`:
 
-    gradlew test
+    gradlew xqtest
 
 
 ## Running faster with "daemon"
@@ -60,16 +60,55 @@ For now the easiest way is to add your code under `basex/webapp` (or wherever
 you point `org.basex.WEBPATH` property in `gradle.properties` to).
 
 
-## Why so many dependencies listed?
+## Create a runnable server jar
+
+You can combine all the needed jar files and create a so-called fat jar. This
+allows you to run BaseX as a jar (easy to deploy).
+
+    gradlew jar
+
+This will create a jar (we do not have local classes yet) inside `build/libs`.
+The task will build both a jar with local code and another one with all
+dependencies (postfixed with `-all`).
+
+Run the server:
+
+    java -Dorg.basex.dbpath=basex/data
+         -Dorg.basex.repopath=basex/repo 
+         -Dorg.basex.webpath=basex/web
+         -jar build/libs/basex-gradle-start-0.1-all.jar
+
+Note that you will have to pass the paths (and possibly other settings). In this
+case I passed the paths to the project files. You can also use all the regular
+basexhttp command-line arguments if you wish.
+
+For example start the HTTP server on a different port:
+
+    java -Dorg.basex.dbpath=basex/data
+         -Dorg.basex.repopath=basex/repo 
+         -Dorg.basex.webpath=basex/web
+         -jar build/libs/basex-gradle-start-0.1-all.jar
+         -h1234
+
+The name of the jar is the name of the project. The version is set from within
+`build.gradle`.
+
+To connect to this server you could also use the same jar (from another shell
+window):
+
+    java -cp build/lib/basex-gradle-start-0.1-all.jar org.basex.BaseXClient
+
+## Why are so many dependencies listed, aren't they part of the BaseX POM?
 
 This is a Gradle limitation. Gradle doesn't follow transitive dependencies that
-are declared (in the Maven POM) as optional. This makes sense but it's a bit
-unfortunate that to include these optional libraries they have to be explicitly
-listed in the build script.
+are declared as optional. This makes sense but it's a bit unfortunate that to
+include these optional libraries they have to be explicitly listed in the build
+script.
 
 
 ## TODO
 
+- Package other files as part of fat jar
 - Provide arguments for query tasks
 - Test task
 - Packaging as WAR for Tomcat etc.

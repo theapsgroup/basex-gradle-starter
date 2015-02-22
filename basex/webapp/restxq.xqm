@@ -4,6 +4,8 @@
  :)
 module namespace page = 'http://basex.org/modules/web-page';
 
+import module namespace m = 'http://basex.org/modules/Hello';
+
 (:~
  : This function generates the welcome page.
  : @return HTML page
@@ -72,7 +74,7 @@ declare
     as element(response)
 {
   <response>
-    <title>Hello { $world }!</title>
+    <title>{ m:hello($world) }!</title>
     <time>The current time is: { current-time() }</time>
   </response>
 };
