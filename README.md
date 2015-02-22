@@ -8,7 +8,8 @@ Installation steps:
 
 1. `git clone https://github.com/xokomola/basex-gradle-starter.git`
 
-Yep, that's right. There's only one step between wanting to use this and running queries with Basex. It even installs Gradle for you.
+Yep, that's right. There's only one step between wanting to use this and running
+queries with Basex. It even installs Gradle for you.
 
 To see what tasks are available:
 
@@ -35,6 +36,13 @@ Configuration of BaseX is done in `gradle.properties`.
 
 By default will put all data under the `basex` subdirectory.
 
+## Create a database
+
+    gradlew create -Pdb=dbname -Pdir=~/tmp/xml
+
+## Export a database
+
+    gradlew export -Pdb=dbname -Pdir=~/tmp/export
 
 ## XQuery tasks
 
@@ -49,7 +57,8 @@ To run all tests under `basex/webapp`:
 
 ## Running faster with "daemon"
 
-And by using the `--daemon` option you can also avoid a lot of the Java startup tax.
+And by using the `--daemon` option you can also avoid a lot of the Java startup
+tax.
 
     gradlew --daemon query
 
@@ -162,14 +171,14 @@ script.
   
 - Task `distZip` also packs `basex` directory but when running it it still uses
   the dir from the project. Need to do better config to set the paths.
-  
+
+- With Gradle 2.3 the `watch` task doesn't talk to STDOUT anymore so we do
+  not see test output anymore.
+ 
 ## TODO
 
 - Better configuration
-- Package other files as part of fat jar
 - Provide arguments for query tasks
-- Test task
 - Packaging as WAR for Tomcat etc.
 - Building XAR packages and managing module repository
-- Import/export files
 - Backup and restore
