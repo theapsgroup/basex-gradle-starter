@@ -46,9 +46,9 @@ watch {
 def jettyVersion = '8.1.16.v20140903'
 
 dependencies {
-    runtime "org.basex:basex-api:8.0"
+    runtime "org.basex:basex-api:8.2.3"
     // XQJ API
-    runtime "net.xqj:basex-xqj:1.2.0"
+    runtime "net.xqj:basex-xqj:1.4.0"
     runtime "com.xqj2:xqj2:0.1.0"
     runtime "javax.xml.xquery:xqj-api:1.0"
     // HTTP server
@@ -62,7 +62,7 @@ dependencies {
     runtime "org.eclipse.jetty:jetty-webapp:${jettyVersion}"
     runtime "org.eclipse.jetty:jetty-xml:${jettyVersion}"
     // XSLT 2.0
-    runtime "net.sf.saxon:Saxon-HE:9.6.0-4"
+    runtime "net.sf.saxon:Saxon-HE:9.6.0-6"
     // HTML parsing
     runtime "org.ccil.cowan.tagsoup:tagsoup:1.2.1"
     // XML catalogs

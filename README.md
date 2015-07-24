@@ -1,6 +1,6 @@
 # basex-gradle-starter
 
-A simple build script template for using [BaseX](basex.org) (8.0) with Gradle. Also adds Saxon 9.6 so you can use XSLT 2.0 out of the gate.
+A simple build script template for using [BaseX](basex.org) (8.2) with Gradle. Also adds Saxon 9.6 so you can use XSLT 2.0 out of the gate.
 
 Caution: this is still in very early stage.
 
