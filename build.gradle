@@ -156,6 +156,14 @@ task xqtest(type: JavaExec) {
     ignoreExitValue true
 }
 
+task command(type: JavaExec) {
+    description "Execute BaseX commands from file or string provided as -Pc=<file|\"string\">"
+    classpath configurations.runtime
+    main = "org.basex.BaseX"
+    args "-c", project.hasProperty('c') ? c : "XQUERY 'Please provide command using -Pc=file.bxs or -Pc=&quot;string&quot;'"
+    systemProperties System.getProperties()
+}
+
 task gui << {
     ant.java(
         fork: true, 

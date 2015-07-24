@@ -55,6 +55,17 @@ To run all tests under `basex/webapp`:
     gradlew xqtest
 
 
+## Execute BaseX commands
+
+See the BaseX documentation on [commands](http://docs.basex.org/wiki/Commands). To execute BaseX commands from a file:
+
+    gradle command -Pc=commands.bxs
+
+To execute BaseX commands provided as a string on the command line:
+
+    gradle command -Pc="get chop"
+
+ 
 ## Running faster with "daemon"
 
 And by using the `--daemon` option you can also avoid a lot of the Java startup
