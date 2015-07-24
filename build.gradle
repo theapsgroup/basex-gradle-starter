@@ -29,7 +29,9 @@ applicationDefaultJvmArgs = [
     "-Dorg.basex.repopath=${System.properties['org.basex.REPOPATH']}",
     "-Dorg.basex.webpath=${System.properties['org.basex.WEBPATH']}",
     "-Dorg.basex.mixupdates=${System.properties['org.basex.MIXUPDATES']}",
-    "-Dorg.basex.globallock=${System.properties['org.basex.GLOBALLOCK']}"]
+    "-Dorg.basex.globallock=${System.properties['org.basex.GLOBALLOCK']}",
+    "-Dorg.basex.chop=${System.properties['org.basex.CHOP']}"
+]
 
 applicationDistribution.from("basex") {
   include "**/*.*"
