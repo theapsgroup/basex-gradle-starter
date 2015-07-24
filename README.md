@@ -30,7 +30,7 @@ Most of the familiar startup scripts are all available as tasks:
 - `gui`
 - `console`
 - `server` and `serverstop`
-- `http` and `httpstop`
+- `http`, `httpstart` and `httpstop`
 
 Configuration of BaseX is done in `gradle.properties`.
 

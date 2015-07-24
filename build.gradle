@@ -104,6 +104,18 @@ task http(dependsOn: run) {
     description "Run BaseX HTTP and database server."
 }
 
+task httpstart << {
+	ant.java(
+		fork: true,
+		spawn: true,
+		classpath: configurations.runtime.asPath, 
+		className: "org.basex.BaseXHTTP",
+		clonevm: true
+	)
+}
+httpstart.description "Start BaseX HTTP and database server in background."
+
+
 task httpstop(type: JavaExec) {
     description "Stop BaseX HTTP and database server."
     classpath configurations.runtime
