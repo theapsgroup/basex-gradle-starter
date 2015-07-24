@@ -17,6 +17,7 @@ repositories {
     maven { url "http://files.basex.org/maven" }
     maven { url "http://xqj.net/maven" }
     mavenCentral()
+	mavenLocal()
 }
 
 // distributions will be called basex-demo-0.1.zip
@@ -67,6 +68,17 @@ dependencies {
     runtime "org.ccil.cowan.tagsoup:tagsoup:1.2.1"
     // XML catalogs
     runtime "xml-resolver:xml-resolver:1.2"
+	
+	// MySQL database connector
+	// Connection example: sql:connect('jdbc:mysql://host:port/database', 'user', 'password')
+	// runtime 'mysql:mysql-connector-java:5.1.36'
+	
+	// Oracle database connector
+	// Download ojdbc7.jar from: http://www.oracle.com/technetwork/database/features/jdbc/default-2280470.html
+	// Then install in local maven repository by running:
+	// mvn install:install-file -DgroupId=com.oracle -DartifactId=ojdbc7 -Dversion=12.1.0.2 -Dpackaging=jar -DgeneratePom=true -Dfile=ojdbc7.jar
+	// Connection example: sql:connect('jdbc:oracle:thin:@host:port:service', 'user', 'password')
+	// runtime 'com.oracle:ojdbc7:12.1.0.2'
 }
 
 // shadowPlugin adds a promo banner task, no thanks!
