@@ -4,14 +4,12 @@ buildscript {
     }
     dependencies {
         classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.0'
-        classpath 'com.bluepapa32:gradle-watch-plugin:0.1.4'
     }
 }
 
 apply plugin: 'application'
 apply plugin: 'java'
 apply plugin: 'com.github.johnrengelman.shadow'
-apply plugin: 'com.bluepapa32.watch'
 
 repositories {
     maven { url "http://files.basex.org/maven" }
@@ -36,14 +34,6 @@ applicationDefaultJvmArgs = [
 applicationDistribution.from("basex") {
   include "**/*.*"
   into "basex"
-}
-
-watch {
-    xqtest {
-        files fileTree(dir: file('basex/webapp/test'),
-                       include: '**/*.xqm')
-        tasks 'xqtest'
-    }
 }
 
 def jettyVersion = '8.1.16.v20140903'
@@ -163,6 +153,8 @@ task export(type: JavaExec) {
 
 task xqtest(type: JavaExec) {
     description "Runs all tests."
+    def xqDir = file(System.properties['org.basex.WEBPATH'])
+    inputs.dir xqDir
     classpath configurations.runtime
     main = "org.basex.BaseX"
     args "-t", file(System.properties['org.basex.WEBPATH'])

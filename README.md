@@ -186,6 +186,11 @@ script.
 - With Gradle 2.3 the `watch` task doesn't talk to STDOUT anymore so we do
   not see test output anymore.
 
+## Contributors
+
+- [xokomola](https://github.com/xokomola)
+- [vincentml](https://github.com/vincentml)
+
 ## TODO
 
 - Better configuration
