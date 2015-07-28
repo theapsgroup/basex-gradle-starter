@@ -17,6 +17,7 @@ repositories {
     maven { url "http://files.basex.org/maven" }
     maven { url "http://xqj.net/maven" }
     mavenCentral()
+	mavenLocal()
 }
 
 // distributions will be called basex-demo-0.1.zip
@@ -28,7 +29,9 @@ applicationDefaultJvmArgs = [
     "-Dorg.basex.repopath=${System.properties['org.basex.REPOPATH']}",
     "-Dorg.basex.webpath=${System.properties['org.basex.WEBPATH']}",
     "-Dorg.basex.mixupdates=${System.properties['org.basex.MIXUPDATES']}",
-    "-Dorg.basex.globallock=${System.properties['org.basex.GLOBALLOCK']}"]
+    "-Dorg.basex.globallock=${System.properties['org.basex.GLOBALLOCK']}",
+    "-Dorg.basex.chop=${System.properties['org.basex.CHOP']}"
+]
 
 applicationDistribution.from("basex") {
   include "**/*.*"
@@ -46,9 +49,9 @@ watch {
 def jettyVersion = '8.1.16.v20140903'
 
 dependencies {
-    runtime "org.basex:basex-api:8.0"
+    runtime "org.basex:basex-api:8.2.3"
     // XQJ API
-    runtime "net.xqj:basex-xqj:1.2.0"
+    runtime "net.xqj:basex-xqj:1.4.0"
     runtime "com.xqj2:xqj2:0.1.0"
     runtime "javax.xml.xquery:xqj-api:1.0"
     // HTTP server
@@ -62,11 +65,22 @@ dependencies {
     runtime "org.eclipse.jetty:jetty-webapp:${jettyVersion}"
     runtime "org.eclipse.jetty:jetty-xml:${jettyVersion}"
     // XSLT 2.0
-    runtime "net.sf.saxon:Saxon-HE:9.6.0-4"
+    runtime "net.sf.saxon:Saxon-HE:9.6.0-6"
     // HTML parsing
     runtime "org.ccil.cowan.tagsoup:tagsoup:1.2.1"
     // XML catalogs
     runtime "xml-resolver:xml-resolver:1.2"
+	
+	// MySQL database connector
+	// Connection example: sql:connect('jdbc:mysql://host:port/database', 'user', 'password')
+	// runtime 'mysql:mysql-connector-java:5.1.36'
+	
+	// Oracle database connector
+	// Download ojdbc7.jar from: http://www.oracle.com/technetwork/database/features/jdbc/default-2280470.html
+	// Then install in local maven repository by running:
+	// mvn install:install-file -DgroupId=com.oracle -DartifactId=ojdbc7 -Dversion=12.1.0.2 -Dpackaging=jar -DgeneratePom=true -Dfile=ojdbc7.jar
+	// Connection example: sql:connect('jdbc:oracle:thin:@host:port:service', 'user', 'password')
+	// runtime 'com.oracle:ojdbc7:12.1.0.2'
 }
 
 // shadowPlugin adds a promo banner task, no thanks!
@@ -91,6 +105,18 @@ task serverstop(type: JavaExec) {
 task http(dependsOn: run) {
     description "Run BaseX HTTP and database server."
 }
+
+task httpstart << {
+	ant.java(
+		fork: true,
+		spawn: true,
+		classpath: configurations.runtime.asPath, 
+		className: "org.basex.BaseXHTTP",
+		clonevm: true
+	)
+}
+httpstart.description "Start BaseX HTTP and database server in background."
+
 
 task httpstop(type: JavaExec) {
     description "Stop BaseX HTTP and database server."
@@ -142,6 +168,14 @@ task xqtest(type: JavaExec) {
     args "-t", file(System.properties['org.basex.WEBPATH'])
     systemProperties System.getProperties()
     ignoreExitValue true
+}
+
+task command(type: JavaExec) {
+    description "Execute BaseX commands from file or string provided as -Pc=<file|\"string\">"
+    classpath configurations.runtime
+    main = "org.basex.BaseX"
+    args "-c", project.hasProperty('c') ? c : "XQUERY 'Please provide command using -Pc=file.bxs or -Pc=&quot;string&quot;'"
+    systemProperties System.getProperties()
 }
 
 task gui << {

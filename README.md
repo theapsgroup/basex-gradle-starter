@@ -1,6 +1,6 @@
 # basex-gradle-starter
 
-A simple build script template for using [BaseX](basex.org) (8.0) with Gradle. Also adds Saxon 9.6 so you can use XSLT 2.0 out of the gate.
+A simple build script template for using [BaseX](basex.org) (8.2) with Gradle. Also adds Saxon 9.6 so you can use XSLT 2.0 out of the gate.
 
 Caution: this is still in very early stage.
 
@@ -30,7 +30,7 @@ Most of the familiar startup scripts are all available as tasks:
 - `gui`
 - `console`
 - `server` and `serverstop`
-- `http` and `httpstop`
+- `http`, `httpstart` and `httpstop`
 
 Configuration of BaseX is done in `gradle.properties`.
 
@@ -55,6 +55,17 @@ To run all tests under `basex/webapp`:
     gradlew xqtest
 
 
+## Execute BaseX commands
+
+See the BaseX documentation on [commands](http://docs.basex.org/wiki/Commands). To execute BaseX commands from a file:
+
+    gradle command -Pc=commands.bxs
+
+To execute BaseX commands provided as a string on the command line:
+
+    gradle command -Pc="get chop"
+
+ 
 ## Running faster with "daemon"
 
 And by using the `--daemon` option you can also avoid a lot of the Java startup
