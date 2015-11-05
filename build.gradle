@@ -69,7 +69,7 @@ dependencies {
         exclude group: 'net.sf.saxon', module: 'saxon'
         exclude group: 'isorelax', module: 'isorelax'
     }
-    runtime "net.sf.saxon:Saxon-HE:9.6.0-6"
+    runtime "net.sf.saxon:Saxon-HE:9.6.0-7"
 
 	// MySQL database connector
 	// Connection example: sql:connect('jdbc:mysql://host:port/database', 'user', 'password')
