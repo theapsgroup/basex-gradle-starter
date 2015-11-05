@@ -118,18 +118,16 @@ Run the server:
     java -Dorg.basex.dbpath=basex/data
          -Dorg.basex.repopath=basex/repo 
          -Dorg.basex.webpath=basex/web
-         -jar build/libs/basex-gradle-start-0.1-all.jar
+         -jar build/libs/basex-gradle-starter-0.1-all.jar
 
-Note that you will have to pass the paths (and possibly other settings). In this
-case I passed the paths to the project files. You can also use all the regular
-basexhttp command-line arguments if you wish.
+Note that you will have to pass the paths (and possibly other settings). In this case I passed the paths to the project files. You can also use all the regular basexhttp command-line arguments if you wish.
 
 For example start the HTTP server on a different port:
 
     java -Dorg.basex.dbpath=basex/data
          -Dorg.basex.repopath=basex/repo 
          -Dorg.basex.webpath=basex/web
-         -jar build/libs/basex-gradle-start-0.1-all.jar
+         -jar build/libs/basex-gradle-starter-0.1-all.jar
          -h1234
 
 The name of the jar is the name of the project. The version is set from within

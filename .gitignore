@@ -4,3 +4,4 @@ build/
 .basexgui
 .basexhistory
 basex/data/
+basex/web/
