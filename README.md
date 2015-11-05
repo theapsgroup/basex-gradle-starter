@@ -140,15 +140,6 @@ window):
 
     java -cp build/lib/basex-gradle-start-0.1-all.jar org.basex.BaseXClient
 
-
-## Why are so many dependencies listed, aren't they part of the BaseX POM?
-
-This is a Gradle limitation. Gradle doesn't follow transitive dependencies that
-are declared as optional. This makes sense but it's a bit unfortunate that to
-include these optional libraries they have to be explicitly listed in the build
-script.
-
-
 ## Known issues
 
 - Sometimes I cannot access the server with `console` from another shell. Run it with `-d` option and you'll see that it cannot acquire a lock
