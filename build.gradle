@@ -36,31 +36,41 @@ applicationDistribution.from("basex") {
   into "basex"
 }
 
-def jettyVersion = '8.1.16.v20140903'
+def jettyVersion = '8.1.18.v20150929'
+
+// see files.basex.org/maven/org/basex/basex-parent/8.3.1/basex-parent-8.3.1.pom
 
 dependencies {
-    runtime "org.basex:basex-api:8.2.3"
-    // XQJ API
-    runtime "net.xqj:basex-xqj:1.4.0"
-    runtime "com.xqj2:xqj2:0.1.0"
-    runtime "javax.xml.xquery:xqj-api:1.0"
-    // HTTP server
-    runtime "org.eclipse.jetty:jetty-continuation:${jettyVersion}"
-    runtime "org.eclipse.jetty:jetty-http:${jettyVersion}"
-    runtime "org.eclipse.jetty:jetty-io:${jettyVersion}"
-    runtime "org.eclipse.jetty:jetty-security:${jettyVersion}"
-    runtime "org.eclipse.jetty:jetty-server:${jettyVersion}"
-    runtime "org.eclipse.jetty:jetty-servlet:${jettyVersion}"
-    runtime "org.eclipse.jetty:jetty-util:${jettyVersion}"
+
+    runtime "org.basex:basex-api:8.3.1"
+    runtime "net.xqj:basex-xqj:1.5.0"
+    runtime "org.xmldb:xmldb-api:1.0"
+    runtime "commons-fileupload:commons-fileupload:1.3.1"
+    runtime "com.vividsolutions:jts:1.13"
+    runtime "org.slf4j:slf4j-simple:1.7.12"
     runtime "org.eclipse.jetty:jetty-webapp:${jettyVersion}"
-    runtime "org.eclipse.jetty:jetty-xml:${jettyVersion}"
-    // XSLT 2.0
-    runtime "net.sf.saxon:Saxon-HE:9.6.0-6"
-    // HTML parsing
-    runtime "org.ccil.cowan.tagsoup:tagsoup:1.2.1"
-    // XML catalogs
-    runtime "xml-resolver:xml-resolver:1.2"
+    runtime("com.ettrema:milton-api:1.8.1.4") {
+        exclude group: 'commons-logging', module: 'commons-logging'
+        exclude group: 'commons-beanutils', module: 'commons-beanutils'
+        exclude group: 'org.slf4j', module: 'slf4j-log4j12'
+        exclude group: 'log4j', module: 'log4j'
+        exclude group: 'org.slf4j', module: 'slf4j-api'
+    }
 	
+    // optional
+    runtime "jp.sourceforge.igo:igo:0.4.3"
+    runtime "org.apache:lucene-stemmers:3.4.0"
+    runtime "org.ccil.cowan.tagsoup:tagsoup:1.2.1"
+    runtime "xml-resolver:xml-resolver:1.2"
+    runtime "jline:jline:2.13"
+    runtime("com.thaiopensource:jing:20091111") {
+        exclude group: 'xerces', module: 'xercesImpl'
+        exclude group: 'xml-apis', module: 'xml-apis'
+        exclude group: 'net.sf.saxon', module: 'saxon'
+        exclude group: 'isorelax', module: 'isorelax'
+    }
+    runtime "net.sf.saxon:Saxon-HE:9.6.0-6"
+
 	// MySQL database connector
 	// Connection example: sql:connect('jdbc:mysql://host:port/database', 'user', 'password')
 	// runtime 'mysql:mysql-connector-java:5.1.36'
