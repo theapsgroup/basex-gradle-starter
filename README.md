@@ -151,8 +151,6 @@ script.
 
 ## Known issues
 
-- Client task (`console`) prints build progress message in between input. This is confusing.
-
 - Sometimes I cannot access the server with `console` from another shell. Run it with `-d` option and you'll see that it cannot acquire a lock
   
 - Task `distZip` also packs `basex` directory but when running it it still uses the dir from the project. Need to do better config to set the paths.
