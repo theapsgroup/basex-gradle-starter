@@ -1,13 +1,19 @@
 # basex-gradle-starter
 
-A simple build script template for using [BaseX](basex.org) (8.3.1) with Gradle. Also adds Saxon 9.6 so you can use XSLT 2.0 out of the gate.
+A simple build script template for using [BaseX](basex.org)
+with Gradle. Also adds Saxon 9 so you can use XSLT 2.0 out of the
+gate.
+
+The version of BaseX used is the name of the branch. The master will
+follow the latest released version but if you need to quickly test
+something with an older release then just switch to another branch.
 
 Installation steps:
 
 1. `git clone https://github.com/xokomola/basex-gradle-starter.git`
 
-Yep, that's right. There's only one step between wanting to use this and running
-queries with Basex. It even installs Gradle for you.
+Yep, that's right. There's only one step between wanting to use this
+and running queries with Basex. It even installs Gradle for you.
 
 To see what tasks are available:
 
@@ -120,7 +126,10 @@ Run the server:
          -Dorg.basex.webpath=basex/web
          -jar build/libs/basex-gradle-starter-0.1-all.jar
 
-Note that you will have to pass the paths (and possibly other settings). In this case I passed the paths to the project files. You can also use all the regular basexhttp command-line arguments if you wish.
+Note that you will have to pass the paths (and possibly other
+settings). In this case I passed the paths to the project files. You
+can also use all the regular basexhttp command-line arguments if you
+wish.
 
 For example start the HTTP server on a different port:
 
@@ -140,9 +149,12 @@ window):
 
 ## Known issues
 
-- Sometimes I cannot access the server with `console` from another shell. Run it with `-d` option and you'll see that it cannot acquire a lock
+- Sometimes I cannot access the server with `console` from another
+  shell. Run it with `-d` option and you'll see that it cannot acquire a lock
   
-- Task `distZip` also packs `basex` directory but when running it it still uses the dir from the project. Need to do better config to set the paths.
+- Task `distZip` also packs `basex` directory but when running it it
+  still uses the dir from the project. Need to do better config to set
+  the paths.
 
 
 ## Contributors
