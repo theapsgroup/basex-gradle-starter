@@ -15,7 +15,7 @@ repositories {
     maven { url "http://files.basex.org/maven" }
     maven { url "http://xqj.net/maven" }
     mavenCentral()
-	mavenLocal()
+    mavenLocal()
 }
 
 // distributions will be called basex-demo-0.1.zip
@@ -28,7 +28,8 @@ applicationDefaultJvmArgs = [
     "-Dorg.basex.webpath=${System.properties['org.basex.WEBPATH']}",
     "-Dorg.basex.mixupdates=${System.properties['org.basex.MIXUPDATES']}",
     "-Dorg.basex.globallock=${System.properties['org.basex.GLOBALLOCK']}",
-    "-Dorg.basex.chop=${System.properties['org.basex.CHOP']}"
+    "-Dorg.basex.chop=${System.properties['org.basex.CHOP']}",
+    "-Dorg.basex.cacherestxq=${System.properties['org.basex.CACHERESTXQ']}"
 ]
 
 applicationDistribution.from("basex") {
