@@ -123,7 +123,7 @@ Run the server:
 
     java -Dorg.basex.dbpath=basex/data
          -Dorg.basex.repopath=basex/repo 
-         -Dorg.basex.webpath=basex/web
+         -Dorg.basex.webpath=basex/webapp
          -jar build/libs/basex-gradle-starter-0.1-all.jar
 
 Note that you will have to pass the paths (and possibly other
@@ -145,7 +145,7 @@ The name of the jar is the name of the project. The version is set from within
 To connect to this server you could also use the same jar (from another shell
 window):
 
-    java -cp build/lib/basex-gradle-start-0.1-all.jar org.basex.BaseXClient
+    java -cp build/libs/basex-gradle-start-0.1-all.jar org.basex.BaseXClient
 
 ## Known issues
 
