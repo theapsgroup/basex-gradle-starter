@@ -61,6 +61,7 @@ dependencies {
 
 task server(type: JavaExec) {
     description "Start BaseX database server."
+    group "XML"
     classpath configurations.runtime
     main = "org.basex.BaseXServer"
     systemProperties System.getProperties()
@@ -68,6 +69,7 @@ task server(type: JavaExec) {
 
 task serverstart {
     description "Start BaseX database server in background."
+    group "XML"
     doLast {
         ant.java(
             fork: true,
@@ -80,6 +82,7 @@ task serverstart {
 
 task serverstop(type: JavaExec) {
     description "Stop BaseX database server."
+    group "XML"
     classpath configurations.runtime
     main = "org.basex.BaseXServer"
     args "stop"
@@ -89,10 +92,12 @@ task serverstop(type: JavaExec) {
 // alias for gradlew run
 task http(dependsOn: run) {
     description "Run BaseX HTTP and database server."
+    group "XML"
 }
 
 task httpstart {
     description "Start BaseX HTTP and database server in background."
+    group "XML"
     doLast {
         ant.java(
             fork: true,
@@ -105,6 +110,7 @@ task httpstart {
 
 task httpstop(type: JavaExec) {
     description "Stop BaseX HTTP and database server."
+    group "XML"
     classpath configurations.runtime
     main = "org.basex.BaseXHTTP"
     args "stop"
@@ -114,7 +120,8 @@ task httpstop(type: JavaExec) {
 // run with (or use repl.bat)
 // gradlew repl --no-daemon --console plain
 task repl(type: JavaExec) {
-    description "Start BaseX client console."
+    description "Start BaseX client console (use with --no-daemon --console plain)."
+    group "XML"
     standardInput = System.in
     classpath configurations.runtime
     main = "org.basex.BaseX"
@@ -134,9 +141,11 @@ task xqtest(type: JavaExec) {
     systemProperties System.getProperties()
 }
 test.dependsOn xqtest
+test.group "XML"
 
 task gui {
     description "Run BaseX GUI."
+    group "XML"
     doLast {
         ant.java(
             fork: true, 

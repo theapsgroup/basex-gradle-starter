@@ -44,16 +44,6 @@ Most of the familiar startup scripts are all available as tasks:
 
 Configuration of BaseX is done in `gradle.properties`.
 
-== DBA module
-
-The DBA module allows administration on BaseX via a nice web interface.
-
-[source]
-----
-.\gradlew httpstart
-start http://localhost:8984/dba
-----
-
 == Where to put XQuery code?
 
 For now the assumes that both source and tests are in `webapp` (or wherever you
@@ -94,10 +84,23 @@ gradlew test -Pdir=test --continuous
 Note that using this option requires the use of an explicit test directory
 argument.
 
-== Building an HTTP application distribution
+
+== DBA module
+
+The DBA module allows administration on BaseX via a nice web interface.
+
+[source]
+----
+.\gradlew httpstart
+start http://localhost:8984/dba
+----
+
+== Building
 
 You've created an application, running and testing it using this build script.
 Now it's time to distribute the application.
+
+=== Package the application as a ZIP
 
 [source]
 ----
@@ -110,8 +113,7 @@ See also:
 http://gradle.org/docs/current/userguide/application_plugin.html[Gradle
 Application Plugin].
 
-
-== Create a runnable server jar [FIXME]
+=== Create a runnable server jar [FIXME]
 
 You can combine all the needed jar files and create a so-called fat jar. This
 allows you to run BaseX as a jar (easy to deploy). You can already do that
