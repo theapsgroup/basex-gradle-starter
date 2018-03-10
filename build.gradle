@@ -37,18 +37,18 @@ applicationDistribution.from("basex") {
   into "basex"
 }
 
-def jettyVersion = '8.1.18.v20150929'
+def jettyVersion = '9.4.8.v20171121'
 
 // see files.basex.org/maven/org/basex/basex-parent/8.3.1/basex-parent-8.3.1.pom
 
 dependencies {
 
-    runtime "org.basex:basex-api:8.6"
+    runtime "org.basex:basex-api:9.0-SNAPSHOT"
     runtime "net.xqj:basex-xqj:1.6.0"
     runtime "org.xmldb:xmldb-api:1.0"
     runtime "commons-fileupload:commons-fileupload:1.3.1"
     runtime "com.vividsolutions:jts:1.13"
-    runtime "org.slf4j:slf4j-simple:1.7.12"
+    runtime "org.slf4j:slf4j-simple:1.7.13"
     runtime "org.eclipse.jetty:jetty-webapp:${jettyVersion}"
     runtime("com.ettrema:milton-api:1.8.1.4") {
         exclude group: 'commons-logging', module: 'commons-logging'
@@ -130,7 +130,7 @@ task httpstop(type: JavaExec) {
 // although typing works, the standard gradle build message
 // makes this awkward. 
 // See also https://issues.gradle.org/browse/GRADLE-1168
-task console(type: JavaExec) {
+task repl(type: JavaExec) {
     description "Start BaseX client console."
     standardInput = System.in
     classpath configurations.runtime
