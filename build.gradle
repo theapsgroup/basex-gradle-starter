@@ -1,15 +1,5 @@
-buildscript {
-    repositories {
-        jcenter()
-    }
-    dependencies {
-        classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.0'
-    }
-}
-
 apply plugin: 'application'
 apply plugin: 'java'
-apply plugin: 'com.github.johnrengelman.shadow'
 
 repositories {
     maven { url "http://files.basex.org/maven" }
@@ -38,8 +28,6 @@ applicationDistribution.from("basex") {
 }
 
 def jettyVersion = '9.4.8.v20171121'
-
-// see files.basex.org/maven/org/basex/basex-parent/8.3.1/basex-parent-8.3.1.pom
 
 dependencies {
 
@@ -83,9 +71,6 @@ dependencies {
 	// Connection example: sql:connect('jdbc:oracle:thin:@host:port:service', 'user', 'password')
 	// runtime 'com.oracle:ojdbc7:12.1.0.2'
 }
-
-// shadowPlugin adds a promo banner task, no thanks!
-tasks.remove(knows)
 
 task server(type: JavaExec) {
     description "Start BaseX database server."

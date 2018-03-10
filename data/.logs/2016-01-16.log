@@ -1,0 +1,22 @@
+22:33:08.999	SERVER	admin	OK	Server was started (port: 1984).
+22:33:09.119	SERVER	admin	OK	HTTP Server was started (port: 8984).
+22:34:18.443	127.0.0.1:50050	admin	REQUEST	SET QUERYPATH /Users/marcvangrootel/data/origami-webapp/webapp/origami-examples/check/run-origami-tests.xq	59.55 ms
+22:34:18.455	127.0.0.1:50050	admin	OK	QUERYPATH: /Users/marcvangrootel/data/origami-webapp/webapp/origami-examples/check/run-origami-tests.xq	11.92 ms
+22:34:19.398	127.0.0.1:50050	admin	REQUEST	XQUERY import module namespace qt = 'http://xokomola.com/xquery/check' at 'check.xqm'; import module namespace o = 'http://xokomola.com/xquery/origami' at '../../origami/origami.xqm'; o:xml(qt:test(file:base-dir() || '../../origami/test'))	935.77 ms
+22:34:37.922	127.0.0.1:50050	admin	OK	Query "run-origami-tests.xq" executed in 18523.24 ms.	18524.3 ms
+22:34:38.242	127.0.0.1:50050	admin	REQUEST	SET QUERYPATH	0.76 ms
+22:34:38.243	127.0.0.1:50050	admin	OK	QUERYPATH:	0.51 ms
+22:35:46.006	127.0.0.1:50057	admin	REQUEST	SET QUERYPATH /Users/marcvangrootel/data/origami-webapp/webapp/origami-examples/check/run-origami-tests.xq	0.97 ms
+22:35:46.033	127.0.0.1:50057	admin	OK	QUERYPATH: /Users/marcvangrootel/data/origami-webapp/webapp/origami-examples/check/run-origami-tests.xq	26.48 ms
+22:35:46.141	127.0.0.1:50057	admin	REQUEST	XQUERY import module namespace qt = 'http://xokomola.com/xquery/check' at 'check.xqm'; import module namespace o = 'http://xokomola.com/xquery/origami' at '../../origami/origami.xqm'; o:xml(qt:test(file:base-dir() || '../../origami/test'))	75.96 ms
+22:35:49.151	127.0.0.1:50057	admin	OK	Query "run-origami-tests.xq" executed in 3009.48 ms.	3009.9 ms
+22:35:49.155	127.0.0.1:50057	admin	REQUEST	SET QUERYPATH	0.38 ms
+22:35:49.155	127.0.0.1:50057	admin	OK	QUERYPATH:	0.22 ms
+22:36:33.952	127.0.0.1:50058	admin	REQUEST	SET QUERYPATH /Users/marcvangrootel/data/origami-webapp/webapp/origami-examples/check/run-origami-tests.xq	1.86 ms
+22:36:33.978	127.0.0.1:50058	admin	OK	QUERYPATH: /Users/marcvangrootel/data/origami-webapp/webapp/origami-examples/check/run-origami-tests.xq	25.71 ms
+22:36:34.084	127.0.0.1:50058	admin	REQUEST	XQUERY import module namespace qt = 'http://xokomola.com/xquery/check' at 'check.xqm'; import module namespace o = 'http://xokomola.com/xquery/origami' at '../../origami/origami.xqm'; o:xml(qt:test(file:base-dir() || '../../origami/test'))	73.06 ms
+22:36:37.574	127.0.0.1:50058	admin	OK	Query "run-origami-tests.xq" executed in 3490.16 ms.	3490.59 ms
+22:36:37.598	127.0.0.1:50058	admin	REQUEST	SET QUERYPATH	0.41 ms
+22:36:37.598	127.0.0.1:50058	admin	OK	QUERYPATH:	0.17 ms
+23:07:21.916	SERVER	admin	OK	Server was stopped (port: 1984).
+23:07:21.916	SERVER	admin	OK	HTTP Server was stopped (port: 8984).

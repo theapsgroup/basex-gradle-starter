@@ -1,0 +1,54 @@
+15:55:49.310	SERVER	admin	OK	Server was started (port: 1984).
+15:55:49.450	SERVER	admin	OK	HTTP Server was started (port: 8984).
+15:55:58.473	0:0:0:0:0:0:0:1:54604	admin	401	Basic authentication expected.	102.15 ms
+15:56:02.737	0:0:0:0:0:0:0:1:54604	admin	REQUEST	[GET] http://localhost:8984/
+15:56:03.056	0:0:0:0:0:0:0:1:54604	admin	200		320.11 ms
+15:56:03.208	0:0:0:0:0:0:0:1:54605	admin	REQUEST	[GET] http://localhost:8984/favicon.ico
+15:56:03.209	0:0:0:0:0:0:0:1:54605	admin	404	No function found that matches the request.	1.03 ms
+16:45:24.440	SERVER	admin	OK	Server was started (port: 1984).
+16:45:24.461	SERVER	admin	OK	HTTP Server was started (port: 8984).
+16:45:37.988	0:0:0:0:0:0:0:1:55064	admin	REQUEST	[GET] http://localhost:8984/dba
+16:45:38.829	0:0:0:0:0:0:0:1:55064	admin	302		842.69 ms
+16:45:38.830	0:0:0:0:0:0:0:1:55064	admin	200		0.18 ms
+16:45:38.849	0:0:0:0:0:0:0:1:55064	admin	REQUEST	[GET] http://localhost:8984/dba/login
+16:45:38.895	0:0:0:0:0:0:0:1:55064	admin	200		45.58 ms
+16:45:38.905	0:0:0:0:0:0:0:1:55064	admin	REQUEST	[GET] http://localhost:8984/dba/static/style.css
+16:45:38.906	0:0:0:0:0:0:0:1:55065	admin	REQUEST	[GET] http://localhost:8984/dba/static/js.js
+16:45:38.937	0:0:0:0:0:0:0:1:55064	admin	200		31.72 ms
+16:45:38.937	0:0:0:0:0:0:0:1:55065	admin	200		31.39 ms
+16:45:38.940	0:0:0:0:0:0:0:1:55064	admin	REQUEST	[GET] http://localhost:8984/dba/static/basex.svg
+16:45:38.961	0:0:0:0:0:0:0:1:55064	admin	200		21.6 ms
+16:45:44.662	0:0:0:0:0:0:0:1:55064	admin	REQUEST	[POST] http://localhost:8984/dba/login-check
+16:45:44.715	0:0:0:0:0:0:0:1:55064	admin	INFO	DBA user was logged in: admin
+16:45:44.716	0:0:0:0:0:0:0:1:55064	admin	302		54.14 ms
+16:45:44.716	0:0:0:0:0:0:0:1:55064	admin	200		0.09 ms
+16:45:44.718	0:0:0:0:0:0:0:1:55064	admin	REQUEST	[GET] http://localhost:8984/dba/logs
+16:45:44.835	0:0:0:0:0:0:0:1:55064	admin	200		117.22 ms
+16:45:44.851	0:0:0:0:0:0:0:1:55064	admin	REQUEST	[POST] http://localhost:8984/dba/log?name=2018-03-10&resource=&sort=&page=1
+16:45:44.954	0:0:0:0:0:0:0:1:55064	admin	200		103.68 ms
+16:46:04.058	0:0:0:0:0:0:0:1:55064	admin	REQUEST	[GET] http://localhost:8984/dba/databases
+16:46:04.129	0:0:0:0:0:0:0:1:55064	admin	200		71.98 ms
+16:46:05.641	0:0:0:0:0:0:0:1:55064	admin	REQUEST	[GET] http://localhost:8984/dba/queries
+16:46:05.668	0:0:0:0:0:0:0:1:55064	admin	200		27.76 ms
+16:46:05.681	0:0:0:0:0:0:0:1:55064	admin	REQUEST	[GET] http://localhost:8984/dba/static/codemirror/lib/codemirror.css
+16:46:05.683	0:0:0:0:0:0:0:1:55065	admin	REQUEST	[GET] http://localhost:8984/dba/static/editor.js
+16:46:05.684	0:0:0:0:0:0:0:1:55068	admin	REQUEST	[GET] http://localhost:8984/dba/static/codemirror/mode/xquery/xquery.js
+16:46:05.686	0:0:0:0:0:0:0:1:55067	admin	REQUEST	[GET] http://localhost:8984/dba/static/codemirror/lib/codemirror.js
+16:46:05.686	0:0:0:0:0:0:0:1:55069	admin	REQUEST	[GET] http://localhost:8984/dba/static/codemirror/mode/xml/xml.js
+16:46:05.708	0:0:0:0:0:0:0:1:55065	admin	200		24.93 ms
+16:46:05.715	0:0:0:0:0:0:0:1:55068	admin	200		31.09 ms
+16:46:05.716	0:0:0:0:0:0:0:1:55064	admin	200		35.19 ms
+16:46:05.730	0:0:0:0:0:0:0:1:55069	admin	200		42.82 ms
+16:46:05.749	0:0:0:0:0:0:0:1:55067	admin	200		61.94 ms
+16:46:08.319	0:0:0:0:0:0:0:1:55067	admin	REQUEST	[GET] http://localhost:8984/dba/logs
+16:46:08.354	0:0:0:0:0:0:0:1:55067	admin	200		34.69 ms
+16:46:08.368	0:0:0:0:0:0:0:1:55067	admin	REQUEST	[POST] http://localhost:8984/dba/log?name=2018-03-10&resource=&sort=&page=1
+16:46:08.436	0:0:0:0:0:0:0:1:55067	admin	200		67.44 ms
+16:46:10.796	0:0:0:0:0:0:0:1:55067	admin	REQUEST	[GET] http://localhost:8984/dba/jobs
+16:46:10.841	0:0:0:0:0:0:0:1:55067	admin	200		45.27 ms
+16:46:14.138	0:0:0:0:0:0:0:1:55067	admin	REQUEST	[GET] http://localhost:8984/dba/users
+16:46:14.183	0:0:0:0:0:0:0:1:55067	admin	200		45.8 ms
+16:46:15.786	0:0:0:0:0:0:0:1:55067	admin	REQUEST	[GET] http://localhost:8984/dba/sessions
+16:46:15.896	0:0:0:0:0:0:0:1:55067	admin	200		110.35 ms
+16:46:17.168	0:0:0:0:0:0:0:1:55067	admin	REQUEST	[GET] http://localhost:8984/dba/settings
+16:46:17.200	0:0:0:0:0:0:0:1:55067	admin	200		32.22 ms
