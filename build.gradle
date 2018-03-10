@@ -120,6 +120,21 @@ task repl(type: JavaExec) {
     main = "org.basex.BaseX"
     systemProperties System.getProperties()
 }
+
+task xqtest(type: JavaExec) {
+    description "Run XQuery tests"
+    inputs.dir {
+        project.hasProperty("dir") ? dir : null
+        //project.file("${project.projectDir}/test")
+    }
+    standardInput = System.in
+    classpath configurations.runtime
+    main = "org.basex.BaseX"
+    args "-t", project.hasProperty("dir") ? dir : '.'
+    systemProperties System.getProperties()
+}
+test.dependsOn xqtest
+
 task gui {
     description "Run BaseX GUI."
     doLast {

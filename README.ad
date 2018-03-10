@@ -59,15 +59,40 @@ start http://localhost:8984/dba
 For now the assumes that both source and tests are in `webapp` (or wherever you
 point `org.basex.WEBPATH` property in `gradle.properties` to).
 
-== Run tests automatically
+== Tests
 
-Gradle introduced "continous builds". If you want all tests to run automatically
-when test scripts or XQuery source code changes use this:
+.Using the REPL
+
+To run tests you can start the REPL and call the test command with the path to
+the directory that contains the tests.
 
 [source]
 ----
-gradlew -t xqtest
+.\repl
+> TEST test
 ----
+
+.Using the test task
+
+To run all tests, or to run tests from another test directory.
+
+[source]
+----
+.\gradlew test
+.\gradlew test -Pdir=testdir
+----
+
+.Continuous
+
+To run the tests from a directory continuously add the `--continuous` flag.
+
+[source]
+----
+gradlew test -Pdir=test --continuous
+----
+
+Note that using this option requires the use of an explicit test directory
+argument.
 
 == Building an HTTP application distribution
 
