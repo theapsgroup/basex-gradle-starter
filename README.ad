@@ -15,7 +15,7 @@ Installation steps:
 1. `git clone https://github.com/xokomola/basex-gradle-starter.git`
 
 Yep, that's right. There's only one step between cloning this and running
-queries with Basex. It even installs Gradle for you.
+queries with BaseX. It even installs Gradle for you.
 
 For more information on https://gradle.org[Gradle] have a look at it's extensive
 documentation.
