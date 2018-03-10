@@ -43,7 +43,7 @@ def jettyVersion = '8.1.18.v20150929'
 
 dependencies {
 
-    runtime "org.basex:basex-api:8.4-SNAPSHOT"
+    runtime "org.basex:basex-api:8.6"
     runtime "net.xqj:basex-xqj:1.6.0"
     runtime "org.xmldb:xmldb-api:1.0"
     runtime "commons-fileupload:commons-fileupload:1.3.1"
