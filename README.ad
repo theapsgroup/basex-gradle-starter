@@ -1,11 +1,13 @@
 = basex-gradle-starter
 :toc:
+:shadowJarName: basex-gradle-starter-1.0.jar
+:basexVersion: 9.0-SNAPSHOT
 
 A simple build script template for using http://basex.org[BaseX] with Gradle.
 Also adds Saxon HE so you can use XSLT 2.0 and 3.0 out of the gate.
 
 The version of BaseX used is also the name of a branch. The master is currently
-at BaseX 9.0-SNAPSHOT but if you need to quickly test something with an older
+at BaseX {basexVersion} but if you need to quickly test something with an older
 release then just switch to another branch.
 
 Installation steps:
@@ -101,40 +103,41 @@ to pass the paths (and possibly other settings). In this case I pass the paths
 to the project files.
 
 .Run HTTP server from jar
-[source]
+[source,subs="attributes"]
 ----
 java -Dorg.basex.dbpath=data
      -Dorg.basex.repopath=repo 
      -Dorg.basex.webpath=webapp
-     -jar build/libs/basex-gradle-starter-1.0-all.jar
+     -jar build/libs/{shadowJarName}
 ----
 
 You can also use all the regular basex
 http://docs.basex.org/wiki/Command-Line_Options[command-line arguments]. For
 example start the HTTP server on a different port.
 
-[source]
+[source,subs="attributes"]
 ----
 java -Dorg.basex.dbpath=data
      -Dorg.basex.repopath=repo 
      -Dorg.basex.webpath=web
-     -jar build/libs/basex-gradle-starter-1.0-all.jar
+     -jar build/libs/{shadowJarName}
      -h1234
 ----
 
 You can connect to this server (from another shell window).
 
 .Start the REPL
-[source]
+[source,subs="attributes"]
 ----
-java -cp build/libs/basex-gradle-start-0.1-all.jar org.basex.BaseXClient
+java -cp build/libs/{shadowJarName} org.basex.BaseXClient
 ----
 
 Or, start the GUI client.
 
 .Start the GUI
-[source]
-java -cp build/libs/basex-gradle-start-0.1-all.jar org.basex.BaseXGUI
+[source,subs="attributes"]
+----
+java -cp build/libs/{shadowJarName} org.basex.BaseXGUI
 ----
 
 == Contributors
