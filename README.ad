@@ -15,20 +15,6 @@ Installation steps:
 Yep, that's right. There's only one step between wanting to use this and running
 queries with Basex. It even installs Gradle for you.
 
-To see what tasks are available:
-
-[source]
-----
-gradlew tasks
-----
-
-To execute other tasks:
-
-[source]
-----
-gradlew <taskname>
-----
-
 For more information on https://gradle.org[Gradle] have a look at it's extensive
 documentation.
 
@@ -129,21 +115,22 @@ example start the HTTP server on a different port.
 
 [source]
 ----
-java -Dorg.basex.dbpath=basex/data
-     -Dorg.basex.repopath=basex/repo 
-     -Dorg.basex.webpath=basex/web
-     -jar build/libs/basex-gradle-starter-0.1-all.jar
+java -Dorg.basex.dbpath=data
+     -Dorg.basex.repopath=repo 
+     -Dorg.basex.webpath=web
+     -jar build/libs/basex-gradle-starter-1.0-all.jar
      -h1234
 ----
 
-You can connect to this server you could also use the same jar (from another
-shell window):
+You can connect to this server (from another shell window).
 
 .Start the REPL
 [source]
 ----
 java -cp build/libs/basex-gradle-start-0.1-all.jar org.basex.BaseXClient
 ----
+
+Or, start the GUI client.
 
 .Start the GUI
 [source]
