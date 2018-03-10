@@ -3,5 +3,5 @@ build/
 .basex
 .basexgui
 .basexhistory
-basex/data/
-basex/web/
+data/
+webapp/

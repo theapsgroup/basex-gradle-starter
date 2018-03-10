@@ -51,7 +51,6 @@ dependencies {
     runtime "org.apache:lucene-stemmers:3.4.0"
     runtime "org.ccil.cowan.tagsoup:tagsoup:1.2.1"
     runtime "xml-resolver:xml-resolver:1.2"
-    runtime "jline:jline:2.13"
     runtime("com.thaiopensource:jing:20091111") {
         exclude group: 'xerces', module: 'xercesImpl'
         exclude group: 'xml-apis', module: 'xml-apis'
@@ -103,7 +102,6 @@ task httpstart << {
 }
 httpstart.description "Start BaseX HTTP and database server in background."
 
-
 task httpstop(type: JavaExec) {
     description "Stop BaseX HTTP and database server."
     classpath configurations.runtime
@@ -112,9 +110,8 @@ task httpstop(type: JavaExec) {
     systemProperties System.getProperties()
 }
 
-// although typing works, the standard gradle build message
-// makes this awkward. 
-// See also https://issues.gradle.org/browse/GRADLE-1168
+// run with
+// gradlew repl --no-daemon --console plain
 task repl(type: JavaExec) {
     description "Start BaseX client console."
     standardInput = System.in
