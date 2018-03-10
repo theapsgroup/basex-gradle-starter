@@ -66,8 +66,20 @@ task server(type: JavaExec) {
     systemProperties System.getProperties()
 }
 
+task serverstart {
+    description "Start BaseX database server in background."
+    doLast {
+        ant.java(
+            fork: true,
+            spawn: true,
+            classpath: configurations.runtime.asPath, 
+            className: "org.basex.BaseXServer",
+            clonevm: true)
+    }
+}
+
 task serverstop(type: JavaExec) {
-    description "Stop BaseX HTTP server."
+    description "Stop BaseX database server."
     classpath configurations.runtime
     main = "org.basex.BaseXServer"
     args "stop"
@@ -99,7 +111,7 @@ task httpstop(type: JavaExec) {
     systemProperties System.getProperties()
 }
 
-// run with
+// run with (or use repl.bat)
 // gradlew repl --no-daemon --console plain
 task repl(type: JavaExec) {
     description "Start BaseX client console."
