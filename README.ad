@@ -40,7 +40,7 @@ Most of the familiar startup scripts are all available as tasks:
 - `gui`
 - `repl`
 - `server` and `serverstop`
-- `http`, `httpstart` and `httpstop`
+- `http`, or `httpstart` and `httpstop`
 
 Configuration of BaseX is done in `gradle.properties`.
 
@@ -52,53 +52,6 @@ The DBA module allows administration on BaseX via a nice web interface.
 ----
 .\gradlew httpstart
 start http://localhost:8984/dba
-----
-
-== Create a database
-
-[source]
-----
-gradlew create -Pdb=dbname -Pdir=~/tmp/xml
-----
-
-== Export a database
-
-[source]
-----
-gradlew export -Pdb=dbname -Pdir=~/tmp/export
-----
-
-== XQuery tasks
-
-To run a simple query:
-
-[source]
-----
-gradlew query -Pq="1+1"
-----
-
-To run all tests under `basex/webapp`:
-
-[source]
-----
-gradlew xqtest
-----
-
-== Execute BaseX commands
-
-See the BaseX documentation on http://docs.basex.org/wiki/Commands[commands]. To
-execute BaseX commands from a file:
-
-[source]
-----
-gradle command -Pc=commands.bxs
-----
-
-To execute BaseX commands provided as a string on the command line:
-
-[source]
-----
-gradle command -Pc="get chop"
 ----
 
 == Where to put XQuery code?
@@ -133,7 +86,7 @@ http://gradle.org/docs/current/userguide/application_plugin.html[Gradle
 Application Plugin].
 
 
-== Create a runnable server jar
+== Create a runnable server jar [FIXME]
 
 You can combine all the needed jar files and create a so-called fat jar. This
 allows you to run BaseX as a jar (easy to deploy). You can already do that
@@ -186,14 +139,6 @@ window):
 java -cp build/libs/basex-gradle-start-0.1-all.jar org.basex.BaseXClient
 ----
 
-== Known issues
-
-- Sometimes I cannot access the server with `console` from another
-  shell. Run it with `-d` option and you'll see that it cannot acquire a lock
-  
-- Task `distZip` also packs `basex` directory but when running it it
-  still uses the dir from the project. Need to do better config to set
-  the paths.
 
 == Contributors
 

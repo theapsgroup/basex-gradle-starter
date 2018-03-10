@@ -108,51 +108,8 @@ task repl(type: JavaExec) {
     main = "org.basex.BaseX"
     systemProperties System.getProperties()
 }
-
-task query(type: JavaExec) {
-    description "Start a simple query."
-    classpath configurations.runtime
-    main = "org.basex.BaseX"
-    args "-q", project.hasProperty('q') ? q : "'Please provide a query! Example: gradlew query -Pq=1+1'"
-    systemProperties System.getProperties()
-}
-
-task create(type: JavaExec) {
-    description "Create a database and import XML files from a directory."
-    classpath configurations.runtime
-    main = "org.basex.BaseX"
-    args "-c", project.hasProperty('dir') && project.hasProperty('db') ? "CREATE DB $db ${file(dir)}" : "'Please provide a db and dir! Example: gradlew create -Pdb=foo -Pdir=bar'"
-    systemProperties System.getProperties()
-}
-
-task export(type: JavaExec) {
-    description "Create a database and import XML files from a directory."
-    classpath configurations.runtime
-    main = "org.basex.BaseX"
-    args "-c", project.hasProperty('dir') && project.hasProperty('db') ? "OPEN $db\nEXPORT ${file(dir)}" : "'Please provide a db and dir! Example: gradlew export -Pdb=foo -Pdir=bar'"
-    systemProperties System.getProperties()
-}
-
-task xqtest(type: JavaExec) {
-    description "Runs all tests."
-    def xqDir = file(System.properties['org.basex.WEBPATH'])
-    inputs.dir xqDir
-    classpath configurations.runtime
-    main = "org.basex.BaseX"
-    args "-t", file(System.properties['org.basex.WEBPATH'])
-    systemProperties System.getProperties()
-    ignoreExitValue true
-}
-
-task command(type: JavaExec) {
-    description "Execute BaseX commands from file or string provided as -Pc=<file|\"string\">"
-    classpath configurations.runtime
-    main = "org.basex.BaseX"
-    args "-c", project.hasProperty('c') ? c : "XQUERY 'Please provide command using -Pc=file.bxs or -Pc=&quot;string&quot;'"
-    systemProperties System.getProperties()
-}
-
 task gui {
+    description "Run BaseX GUI."
     doLast {
         ant.java(
             fork: true, 
@@ -162,4 +119,3 @@ task gui {
             clonevm: true)
     }
 }
-gui.description "Run BaseX GUI."
