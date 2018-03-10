@@ -1,0 +1,201 @@
+= basex-gradle-starter
+:toc:
+
+A simple build script template for using http://basex.org[BaseX] with Gradle. Also adds
+Saxon HE so you can use XSLT 2.0 and 3.0 out of the gate.
+
+The version of BaseX used is the name of the branch. The master will follow the
+latest released version but if you need to quickly test something with an older
+release then just switch to another branch.
+
+Installation steps:
+
+1. `git clone https://github.com/xokomola/basex-gradle-starter.git`
+
+Yep, that's right. There's only one step between wanting to use this
+and running queries with Basex. It even installs Gradle for you.
+
+To see what tasks are available:
+
+[source]
+----
+gradlew tasks
+----
+
+To execute other tasks:
+
+[source]
+----
+gradlew <taskname>
+----
+
+For more information on https://gradle.org[Gradle] have a look at it's extensive
+documentation.
+
+
+== Startup tasks
+
+Most of the familiar startup scripts are all available as tasks:
+
+- `gui`
+- `repl`
+- `server` and `serverstop`
+- `http`, `httpstart` and `httpstop`
+
+Configuration of BaseX is done in `gradle.properties`.
+
+== DBA module
+
+The DBA module allows administration on BaseX via a nice web interface.
+
+[source]
+----
+.\gradlew httpstart
+start http://localhost:8984/dba
+----
+
+== Create a database
+
+[source]
+----
+gradlew create -Pdb=dbname -Pdir=~/tmp/xml
+----
+
+== Export a database
+
+[source]
+----
+gradlew export -Pdb=dbname -Pdir=~/tmp/export
+----
+
+== XQuery tasks
+
+To run a simple query:
+
+[source]
+----
+gradlew query -Pq="1+1"
+----
+
+To run all tests under `basex/webapp`:
+
+[source]
+----
+gradlew xqtest
+----
+
+== Execute BaseX commands
+
+See the BaseX documentation on http://docs.basex.org/wiki/Commands[commands]. To
+execute BaseX commands from a file:
+
+[source]
+----
+gradle command -Pc=commands.bxs
+----
+
+To execute BaseX commands provided as a string on the command line:
+
+[source]
+----
+gradle command -Pc="get chop"
+----
+
+== Where to put XQuery code?
+
+For now the assumes that both source and tests are in `webapp` (or wherever you
+point `org.basex.WEBPATH` property in `gradle.properties` to).
+
+== Run tests automatically
+
+Gradle introduced "continous builds". If you want all tests to run automatically
+when test scripts or XQuery source code changes use this:
+
+[source]
+----
+gradlew -t xqtest
+----
+
+== Building an HTTP application distribution
+
+You've created an application, running and testing it using this build script.
+Now it's time to distribute the application.
+
+[source]
+----
+gradlew distZip
+----
+
+This creates a Zip with the application and start scripts.
+
+See also:
+http://gradle.org/docs/current/userguide/application_plugin.html[Gradle
+Application Plugin].
+
+
+== Create a runnable server jar
+
+You can combine all the needed jar files and create a so-called fat jar. This
+allows you to run BaseX as a jar (easy to deploy). You can already do that
+with the BaseX core distribution but with this it also includes the optional
+libraries.
+
+[source]
+----
+gradlew shadowJar
+----
+
+This will create a jar (we do not have local classes yet) inside `build/libs`.
+The task will build both a jar with local code and another one with all
+dependencies (postfixed with `-all`).
+
+Run the server:
+
+[source]
+----
+java -Dorg.basex.dbpath=basex/data
+     -Dorg.basex.repopath=basex/repo 
+     -Dorg.basex.webpath=basex/webapp
+     -jar build/libs/basex-gradle-starter-0.1-all.jar
+----
+
+Note that you will have to pass the paths (and possibly other
+settings). In this case I passed the paths to the project files. You
+can also use all the regular basexhttp command-line arguments if you
+wish.
+
+For example start the HTTP server on a different port:
+
+[source]
+----
+java -Dorg.basex.dbpath=basex/data
+     -Dorg.basex.repopath=basex/repo 
+     -Dorg.basex.webpath=basex/web
+     -jar build/libs/basex-gradle-starter-0.1-all.jar
+     -h1234
+----
+
+The name of the jar is the name of the project. The version is set from within
+`build.gradle`.
+
+To connect to this server you could also use the same jar (from another shell
+window):
+
+[source]
+----
+java -cp build/libs/basex-gradle-start-0.1-all.jar org.basex.BaseXClient
+----
+
+== Known issues
+
+- Sometimes I cannot access the server with `console` from another
+  shell. Run it with `-d` option and you'll see that it cannot acquire a lock
+  
+- Task `distZip` also packs `basex` directory but when running it it
+  still uses the dir from the project. Need to do better config to set
+  the paths.
+
+== Contributors
+
+- https://github.com/xokomola[xokomola]
+- https://github.com/vincentml[vincentml]

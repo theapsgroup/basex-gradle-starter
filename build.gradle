@@ -8,7 +8,6 @@ repositories {
     mavenLocal()
 }
 
-// distributions will be called basex-demo-0.1.zip
 applicationName = 'basex-demo'
 version = '0.1'
 mainClassName = 'org.basex.BaseXHTTP'
@@ -57,18 +56,7 @@ dependencies {
         exclude group: 'net.sf.saxon', module: 'saxon'
         exclude group: 'isorelax', module: 'isorelax'
     }
-    runtime "net.sf.saxon:Saxon-HE:9.7.0-1"
-
-	// MySQL database connector
-	// Connection example: sql:connect('jdbc:mysql://host:port/database', 'user', 'password')
-	// runtime 'mysql:mysql-connector-java:5.1.36'
-	
-	// Oracle database connector
-	// Download ojdbc7.jar from: http://www.oracle.com/technetwork/database/features/jdbc/default-2280470.html
-	// Then install in local maven repository by running:
-	// mvn install:install-file -DgroupId=com.oracle -DartifactId=ojdbc7 -Dversion=12.1.0.2 -Dpackaging=jar -DgeneratePom=true -Dfile=ojdbc7.jar
-	// Connection example: sql:connect('jdbc:oracle:thin:@host:port:service', 'user', 'password')
-	// runtime 'com.oracle:ojdbc7:12.1.0.2'
+    runtime "net.sf.saxon:Saxon-HE:9.8.0-8"
 }
 
 task server(type: JavaExec) {
@@ -91,16 +79,17 @@ task http(dependsOn: run) {
     description "Run BaseX HTTP and database server."
 }
 
-task httpstart << {
-	ant.java(
-		fork: true,
-		spawn: true,
-		classpath: configurations.runtime.asPath, 
-		className: "org.basex.BaseXHTTP",
-		clonevm: true
-	)
+task httpstart {
+    description "Start BaseX HTTP and database server in background."
+    doLast {
+        ant.java(
+            fork: true,
+            spawn: true,
+            classpath: configurations.runtime.asPath, 
+            className: "org.basex.BaseXHTTP",
+            clonevm: true)
+    }
 }
-httpstart.description "Start BaseX HTTP and database server in background."
 
 task httpstop(type: JavaExec) {
     description "Stop BaseX HTTP and database server."
@@ -163,12 +152,14 @@ task command(type: JavaExec) {
     systemProperties System.getProperties()
 }
 
-task gui << {
-    ant.java(
-        fork: true, 
-        spawn: true, 
-        classpath: configurations.runtime.asPath, 
-        classname: "org.basex.BaseXGUI",
-        clonevm: true)
+task gui {
+    doLast {
+        ant.java(
+            fork: true, 
+            spawn: true, 
+            classpath: configurations.runtime.asPath, 
+            classname: "org.basex.BaseXGUI",
+            clonevm: true)
+    }
 }
 gui.description "Run BaseX GUI."
