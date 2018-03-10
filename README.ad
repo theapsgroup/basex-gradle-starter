@@ -1,19 +1,19 @@
 = basex-gradle-starter
 :toc:
 
-A simple build script template for using http://basex.org[BaseX] with Gradle. Also adds
-Saxon HE so you can use XSLT 2.0 and 3.0 out of the gate.
+A simple build script template for using http://basex.org[BaseX] with Gradle.
+Also adds Saxon HE so you can use XSLT 2.0 and 3.0 out of the gate.
 
-The version of BaseX used is the name of the branch. The master will follow the
-latest released version but if you need to quickly test something with an older
+The version of BaseX used is also the name of a branch. The master is currently
+at BaseX 9.0-SNAPSHOT but if you need to quickly test something with an older
 release then just switch to another branch.
 
 Installation steps:
 
 1. `git clone https://github.com/xokomola/basex-gradle-starter.git`
 
-Yep, that's right. There's only one step between wanting to use this
-and running queries with Basex. It even installs Gradle for you.
+Yep, that's right. There's only one step between wanting to use this and running
+queries with Basex. It even installs Gradle for you.
 
 To see what tasks are available:
 
@@ -94,78 +94,6 @@ The DBA module allows administration on BaseX via a nice web interface.
 .\gradlew httpstart
 start http://localhost:8984/dba
 ----
-
-== Building
-
-You've created an application, running and testing it using this build script.
-Now it's time to distribute the application.
-
-=== Package the application as a ZIP
-
-[source]
-----
-gradlew distZip
-----
-
-This creates a Zip with the application and start scripts.
-
-See also:
-http://gradle.org/docs/current/userguide/application_plugin.html[Gradle
-Application Plugin].
-
-=== Create a runnable server jar [FIXME]
-
-You can combine all the needed jar files and create a so-called fat jar. This
-allows you to run BaseX as a jar (easy to deploy). You can already do that
-with the BaseX core distribution but with this it also includes the optional
-libraries.
-
-[source]
-----
-gradlew shadowJar
-----
-
-This will create a jar (we do not have local classes yet) inside `build/libs`.
-The task will build both a jar with local code and another one with all
-dependencies (postfixed with `-all`).
-
-Run the server:
-
-[source]
-----
-java -Dorg.basex.dbpath=basex/data
-     -Dorg.basex.repopath=basex/repo 
-     -Dorg.basex.webpath=basex/webapp
-     -jar build/libs/basex-gradle-starter-0.1-all.jar
-----
-
-Note that you will have to pass the paths (and possibly other
-settings). In this case I passed the paths to the project files. You
-can also use all the regular basexhttp command-line arguments if you
-wish.
-
-For example start the HTTP server on a different port:
-
-[source]
-----
-java -Dorg.basex.dbpath=basex/data
-     -Dorg.basex.repopath=basex/repo 
-     -Dorg.basex.webpath=basex/web
-     -jar build/libs/basex-gradle-starter-0.1-all.jar
-     -h1234
-----
-
-The name of the jar is the name of the project. The version is set from within
-`build.gradle`.
-
-To connect to this server you could also use the same jar (from another shell
-window):
-
-[source]
-----
-java -cp build/libs/basex-gradle-start-0.1-all.jar org.basex.BaseXClient
-----
-
 
 == Contributors
 

@@ -9,7 +9,7 @@ repositories {
 }
 
 applicationName = 'basex-demo'
-version = '0.1'
+version = '1.0'
 mainClassName = 'org.basex.BaseXHTTP'
 applicationDefaultJvmArgs = [
     "-Dorg.basex.dbpath=${System.properties['org.basex.DBPATH']}",
@@ -21,15 +21,9 @@ applicationDefaultJvmArgs = [
     "-Dorg.basex.cacherestxq=${System.properties['org.basex.CACHERESTXQ']}"
 ]
 
-applicationDistribution.from("basex") {
-  include "**/*.*"
-  into "basex"
-}
-
 def jettyVersion = '9.4.8.v20171121'
 
 dependencies {
-
     runtime "org.basex:basex-api:9.0-SNAPSHOT"
     runtime "net.xqj:basex-xqj:1.6.0"
     runtime "org.xmldb:xmldb-api:1.0"
@@ -130,9 +124,9 @@ task repl(type: JavaExec) {
 
 task xqtest(type: JavaExec) {
     description "Run XQuery tests"
+    group "XML"
     inputs.dir {
         project.hasProperty("dir") ? dir : null
-        //project.file("${project.projectDir}/test")
     }
     standardInput = System.in
     classpath configurations.runtime
