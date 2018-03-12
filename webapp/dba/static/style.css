@@ -1,7 +1,7 @@
 body {
-  font-family: Calibri, Helvetica, sans-serif;
+  font-family: Calibri, "Trebuchet MS", sans-serif;
   overflow-y: scroll;
-  margin: .5em 1em .5em 1em;
+  margin: 1em;
   font-size: 16px;
 }
 
@@ -27,21 +27,17 @@ table {
 }
 
 th {
-  padding: 0 1em 0em 0;
+  padding: 0 1.2em .2em 0;
 }
 
 td {
-  padding: 0 1em 0 0;
+  padding: 0 1.2em 0 0;
   vertical-align: top;
   border: 0;
 }
 
-.slick {
-  padding: 0 0 0 0;
-}
-
 textarea {
-  font-family: "Consolas", "Ubuntu Mono", Menlo, monospace;
+  font-family: "Consolas", "Ubuntu Mono", monospace;
   font-size: 90%;
   margin: 4px 0px 4px 0px;
   width: 100%;
@@ -52,7 +48,7 @@ select {
 }
 
 code {
-  font-family: "Consolas", "Ubuntu Mono", Menlo, monospace;
+  font-family: "Consolas", "Ubuntu Mono", monospace;
   border: 1px solid #E3E3FF;
   border-radius: 3px;
   padding: 0 4px 0 4px;
@@ -61,7 +57,7 @@ code {
 }
 
 pre {
-  font-family: "Consolas", "Ubuntu Mono", Menlo, monospace;
+  font-family: "Consolas", "Ubuntu Mono", monospace;
   font-size: 90%;
 }
 
@@ -81,12 +77,12 @@ h2 {
 h3 {
   font-size: 120%;
   color: #CC3333;
-  margin: 0.2em 0 0.4em 0;
+  margin: 0.2em 0 0.2em 0;
 }
 
 h4 {
-  font-size: 120%;
-  margin: 0.4em 0 0.2em 0;
+  font-size: 100%;
+  margin: 0 0 0.4em 0;
 }
 
 hr {
@@ -120,12 +116,6 @@ p {
 .info {
   color: #009900;
   font-weight: bold;
-}
-
-.ellipsis {
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
 }
 
 .warning {

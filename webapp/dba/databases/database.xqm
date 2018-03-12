@@ -1,144 +1,148 @@
 (:~
  : Database main page.
  :
- : @author Christian Grün, BaseX Team, 2014-18
+ : @author Christian Grün, BaseX Team, 2014-16
  :)
-module namespace dba = 'dba/databases';
+module namespace _ = 'dba/databases';
 
+import module namespace cons = 'dba/cons' at '../modules/cons.xqm';
 import module namespace html = 'dba/html' at '../modules/html.xqm';
+import module namespace tmpl = 'dba/tmpl' at '../modules/tmpl.xqm';
 import module namespace util = 'dba/util' at '../modules/util.xqm';
 
 (:~ Top category :)
-declare variable $dba:CAT := 'databases';
+declare variable $_:CAT := 'databases';
 (:~ Sub category :)
-declare variable $dba:SUB := 'database';
+declare variable $_:SUB := 'database';
 
 (:~
  : Manages a single database.
  : @param  $name      database
  : @param  $resource  resource
- : @param  $sort      table sort key
- : @param  $page      current page
- : @param  $info      info string
  : @param  $error     error string
+ : @param  $info      info string
  : @return page
  :)
 declare
   %rest:GET
   %rest:path("/dba/database")
-  %rest:query-param("name",     "{$name}", "")
+  %rest:query-param("name",     "{$name}")
   %rest:query-param("resource", "{$resource}")
-  %rest:query-param("sort",     "{$sort}", "")
-  %rest:query-param("page",     "{$page}", 1)
-  %rest:query-param("info",     "{$info}")
   %rest:query-param("error",    "{$error}")
+  %rest:query-param("info",     "{$info}")
   %output:method("html")
-function dba:database(
+function _:database(
   $name      as xs:string,
   $resource  as xs:string?,
-  $sort      as xs:string,
-  $page      as xs:integer,
-  $info      as xs:string?,
-  $error     as xs:string?
-) as element() {
-  if(not($name)) then web:redirect("databases") else
+  $error     as xs:string?,
+  $info      as xs:string?
+) as element(html) {
+  cons:check(),
 
-  let $db-exists := db:exists($name)
-  return html:wrap(
+  (: request data in a single step :)
+  let $data := try {
+    util:eval('element result {
+      let $found := db:exists($name)
+      return (
+        element found { $found },
+        if($found) then (
+          element databases { db:list-details($name)[position() = 1 to $max] },
+          element info { db:info($name) }
+        ) else (),
+        element backups { db:backups($name) }
+      )
+    }', map { 'name': $name, 'max': $cons:OPTION($cons:K-MAX-ROWS) + 1 })
+  } catch * {
+    element error { $cons:DATA-ERROR || ': ' || $err:description }
+  }
+  let $found := $data/found = 'true'
+  let $error := ($data/self::error/string(), $error)[1]
+
+  return tmpl:wrap(
     map {
-      'header': ($dba:CAT, $name), 'info': $info, 'error': $error,
+      'top': $_:CAT, 'info': $info, 'error': $error,
       'css': 'codemirror/lib/codemirror.css',
       'scripts': ('codemirror/lib/codemirror.js', 'codemirror/mode/xml/xml.js')
     },
     <tr>
-      <td>
-        <form action="{ $dba:SUB }" method="post" id="{ $dba:SUB }" class="update">
+      <td width='49%'>
+        <form action="{ $_:SUB }" method="post" id="{ $_:SUB }" class="update">
           <input type="hidden" name="name" value="{ $name }" id="name"/>
-          <h2>{
-            html:link('Databases', $dba:CAT), ' » ',
-            $name ! (if(empty($resource)) then . else html:link(., $dba:SUB, map { 'name': . } ))
+          <h2><a href="{ $_:CAT }">Databases</a> » {
+            $name ! (if(empty($resource)) then . else html:link(., $_:SUB, map { 'name': $name } ))
           }</h2>
           {
-            if($db-exists) then (
+            if(not($found)) then () else (
+              let $entries := $data/databases/* !
+                <e resource='{ . }' ct='{ @content-type }' raw='{
+                  if(@raw = 'true') then '✓' else '–'
+                }' size='{ @size }'/>
               let $headers := (
-                <resource>Name</resource>,
-                <type>Content type</type>,
+                <resource>{ html:label($entries, ('Resource', 'Resources')) }</resource>,
+                <ct>Content type</ct>,
                 <raw>Raw</raw>,
-                <size type='number' order='desc'>Size</size>
+                <size type='number' order='desc'>Size (factor)</size>
               )
-              let $rows :=
-                let $start := util:start($page, $sort)
-                let $end := util:end($page, $sort)
-                for $res in db:list-details($name)[position() = $start to $end]
-                return <row resource='{ $res }' type='{ $res/@content-type }'
-                            raw='{ if($res/@raw = 'true') then '✓' else '–' }'
-                            size='{ $res/@size }'/>
               let $buttons := (
-                html:button('db-add', 'Add…'),
-                html:button('db-delete', 'Delete', true()),
-                html:button('db-copy', 'Copy…', false()),
-                html:button('db-alter', 'Rename…', false()),
-                html:button('db-optimize', 'Optimize…', false(), map { 'class': 'global' })
+                html:button('add', 'Add…'),
+                html:button('delete', 'Delete', true()),
+                html:button('copy', 'Copy…', false()),
+                html:button('alter-db', 'Rename…', false()),
+                html:button('optimize', 'Optimize…', false(), 'global')
               )
               let $map := map { 'name': $name }
-              let $link := function($value) { $dba:SUB }
-              let $count := count(db:list($name))
-              return html:table($headers, $rows, $buttons, $map,
-                map { 'sort': $sort, 'link': $link, 'page': $page, 'count': $count })
-            ) else ()
+              let $link := function($value) { $_:SUB }
+              return html:table($entries, $headers, $buttons, $map, (), $link)
+            )
           }
         </form>
-        <form action="{ $dba:SUB }" method="post" class="update">
+        <form action="{ $_:SUB }" method="post" class="update">
           <input type="hidden" name="name" value="{ $name }"/>
           <h3>Backups</h3>
           {
-            let $headers := (
-              <backup order='desc'>Name</backup>,
-              <size type='bytes'>Size</size>,
-              <action type='xml'>Action</action>
-            )
-            let $rows :=
-              for $backup in db:backups($name)
+            let $entries :=
+              for $backup in $data/backups/*
               order by $backup descending
-              let $actions := (
-                html:link('Download', 'backup/' || encode-for-uri($backup) || '.zip')
-              )
-              return <row backup='{ $backup }' size='{ $backup/@size }'
-                action='{ serialize($actions) }'/>
+              return <e backup='{ $backup }' size='{ $backup/@size }'/>
+            let $headers := (
+              <backup order='desc'>{ html:label($entries, ('Backup', 'Backups')) }</backup>,
+              <size type='bytes'>Size</size>
+            )
             let $buttons := (
-              html:button('backup-create', 'Create', false(), map { 'class': 'global' }) update (
-                if($db-exists) then () else insert node attribute disabled { '' } into .
+              html:button('create-backup', 'Create', false(), 'global') update (
+                if($found) then () else insert node attribute disabled { '' } into .
               ),
-              html:button('backup-restore', 'Restore', true()),
-              html:button('backup-drop', 'Drop', true())
+              html:button('restore', 'Restore', true()),
+              html:button('drop-backup', 'Drop', true())
             )
             let $map := map { 'name': $name }
-            return html:table($headers, $rows, $buttons, $map, map { })
+            let $link := function($value) { 'backup/' || $value || '.zip' }
+            return html:table($entries, $headers, $buttons, $map, (), $link)
           }
         </form>
       </td>
       <td class='vertical'/>
-      <td>{
-        if($resource) then (
-          <h3>{ $resource }</h3>,
-          <form action="resource" method="post" id="resources">
+      <td width='49%'>{
+        if($resource) then <_>
+          <h3>{ $resource }</h3>
+          <form action="resource" method="post" id="resources" enctype="multipart/form-data">
             <input type="hidden" name="name" value="{ $name }"/>
             <input type="hidden" name="resource" value="{ $resource }" id="resource"/>
-            {
-              html:button('db-rename', 'Rename…'), ' ',
-              html:button('db-download', 'Download'), ' ',
-              html:button('db-replace', 'Replace…')
-            }
-          </form>,
-          <h4>Enter your query…</h4>,
-          <input style="width:100%" name="input" id="input" onkeyup='queryResource(false)'/>,
-          <div class='small'/>,
-          <textarea name='output' id='output' rows='20' readonly='' spellcheck='false'/>,
-          html:focus('input'),
-          html:js('loadCodeMirror(false); queryResource(true);')
-        ) else if($db-exists) then (
-          html:properties(db:info($name))
-        ) else ()
+            { html:button('rename', 'Rename…') }
+            { html:button('download', 'Download') }
+            { html:button('replace', 'Replace…') }
+          </form>
+          <b>XQuery:</b>
+          <input style="width:100%" name="input" id="input" onkeyup='queryResource()'/>
+          { html:focus('input') }
+          <textarea name='output' id='output' rows='20' readonly='' spellcheck='false'/>
+          <script type="text/javascript">
+            loadCodeMirror();
+            queryResource();
+          </script>
+        </_>/node() else (
+          $data/info/*/html:properties(.)
+        )
       }</td>
     </tr>
   )
@@ -150,7 +154,6 @@ function dba:database(
  : @param  $name       database
  : @param  $resources  resources
  : @param  $backups    backups
- : @return redirection
  :)
 declare
   %rest:POST
@@ -159,11 +162,13 @@ declare
   %rest:form-param("name",     "{$name}")
   %rest:form-param("resource", "{$resources}")
   %rest:form-param("backup",   "{$backups}")
-function dba:database-redirect(
+function _:action(
   $action     as xs:string,
   $name       as xs:string,
   $resources  as xs:string*,
   $backups    as xs:string*
-) as element(rest:response) {
-  web:redirect($action, map { 'name': $name, 'resource': $resources, 'backup': $backups })
+) {
+  web:redirect(
+    web:create-url($action, map { 'name': $name, 'resource': $resources, 'backup': $backups })
+  )
 };
