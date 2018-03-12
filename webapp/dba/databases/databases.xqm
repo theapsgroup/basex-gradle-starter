@@ -1,18 +1,16 @@
 (:~
  : Main page.
  :
- : @author Christian Grün, BaseX Team, 2014-18
+ : @author Christian Grün, BaseX Team, 2014-17
  :)
 module namespace dba = 'dba/databases';
 
+import module namespace cons = 'dba/cons' at '../modules/cons.xqm';
 import module namespace html = 'dba/html' at '../modules/html.xqm';
 import module namespace util = 'dba/util' at '../modules/util.xqm';
 
 (:~ Top category :)
 declare variable $dba:CAT := 'databases';
-
-(:~ Regular expression for backups. :)
-declare variable $dba:BACKUP-REGEX := '^(.*)-(\d{4}-\d\d-\d\d)-(\d\d)-(\d\d)-(\d\d)$';
 
 (:~
  : Main page.
@@ -36,6 +34,8 @@ function dba:databases(
   $info   as xs:string?,
   $error  as xs:string?
 ) as element(html) {
+  cons:check(),
+
   let $names := map:merge(db:list() ! map:entry(., true()))
   let $databases :=
     let $start := util:start($page, $sort)
@@ -44,11 +44,12 @@ function dba:databases(
     return <row name='{ $db }' resources='{ $db/@resources }' size='{ $db/@size }'
                 date='{ $db/@modified-date }'/>
   let $backups :=
+    let $regex := '^(.*)-(\d{4}-\d\d-\d\d)-(\d\d)-(\d\d)-(\d\d)$'
     for $backup in db:backups()
-    where matches($backup, $dba:BACKUP-REGEX)
-    group by $name := replace($backup, $dba:BACKUP-REGEX, '$1')
+    where matches($backup, $regex)
+    group by $name := replace($backup, $regex, '$1')
     where not($names($name))
-    let $date := replace(sort($backup)[last()], $dba:BACKUP-REGEX, '$2T$3:$4:$5Z')
+    let $date := replace(sort($backup)[last()], $regex, '$2T$3:$4:$5Z')
     return <row name='{ $name }' resources='' size='(backup)' date='{ $date }'/>
 
   return html:wrap(map { 'header': $dba:CAT, 'info': $info, 'error': $error },
@@ -91,6 +92,7 @@ declare
   %rest:path("/dba/databases")
   %rest:query-param("action", "{$action}")
   %rest:query-param("name",   "{$names}")
+  %output:method("html")
 function dba:databases-redirect(
   $action  as xs:string,
   $names   as xs:string*

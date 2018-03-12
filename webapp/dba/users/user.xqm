@@ -1,12 +1,13 @@
+
 (:~
- : User page.
+ : User main page.
  :
- : @author Christian Grün, BaseX Team, 2014-18
+ : @author Christian Grün, BaseX Team, 2014-17
  :)
 module namespace dba = 'dba/users';
 
+import module namespace cons = 'dba/cons' at '../modules/cons.xqm';
 import module namespace html = 'dba/html' at '../modules/html.xqm';
-import module namespace options = 'dba/options' at '../modules/options.xqm';
 
 (:~ Top category :)
 declare variable $dba:CAT := 'users';
@@ -14,7 +15,7 @@ declare variable $dba:CAT := 'users';
 declare variable $dba:SUB := 'user';
 
 (:~
- : Returns a single user page.
+ : Manage a single user.
  : @param  $name     user name
  : @param  $newname  new name
  : @param  $pw       password
@@ -41,6 +42,7 @@ function dba:user(
   $error    as xs:string?,
   $info     as xs:string?
 ) as element(html) {
+  cons:check(),
   let $user := user:list-details($name)
   let $admin := $name eq 'admin'
   return html:wrap(map { 'header': ($dba:CAT, $name), 'info': $info, 'error': $error },
@@ -85,7 +87,7 @@ function dba:user(
                   <td>
                     <select name="perm" size="5">{
                       let $perm := head(($perm, $user/@permission))
-                      for $p in $options:PERMISSIONS
+                      for $p in $cons:PERMISSIONS
                       return element option { attribute selected { }[$p = $perm], $p }
                     }</select>
                     <div class='small'/>

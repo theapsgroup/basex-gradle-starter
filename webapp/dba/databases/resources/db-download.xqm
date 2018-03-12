@@ -1,9 +1,11 @@
 (:~
  : Download resources.
  :
- : @author Christian Grün, BaseX Team, 2014-18
+ : @author Christian Grün, BaseX Team, 2014-17
  :)
 module namespace dba = 'dba/databases';
+
+import module namespace cons = 'dba/cons' at '../../modules/cons.xqm';
 
 (:~
  : Downloads a resource.
@@ -20,10 +22,12 @@ function dba:db-download(
   $name      as xs:string,
   $resource  as xs:string
 ) as item()+ {
+  cons:check(),
   try {
     web:response-header(
       map { 'media-type': db:content-type($name, $resource) },
-      map { 'Content-Disposition': 'attachment; filename=' || $resource }
+      map { 'Cache-Control': '',
+            'Content-Disposition': 'attachment; filename=' || $resource }
     ),
     if(db:is-raw($name, $resource)) then (
       db:retrieve($name, $resource)

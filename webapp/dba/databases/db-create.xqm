@@ -1,12 +1,12 @@
 (:~
  : Create new database.
  :
- : @author Christian Grün, BaseX Team, 2014-18
+ : @author Christian Grün, BaseX Team, 2014-17
  :)
 module namespace dba = 'dba/databases';
 
+import module namespace cons = 'dba/cons' at '../modules/cons.xqm';
 import module namespace html = 'dba/html' at '../modules/html.xqm';
-import module namespace util = 'dba/util' at '../modules/util.xqm';
 
 (:~ Top category :)
 declare variable $dba:CAT := 'databases';
@@ -35,6 +35,8 @@ function dba:db-create(
   $lang   as xs:string?,
   $error  as xs:string?
 ) as element(html) {
+  cons:check(),
+
   let $opts := if($opts = 'x') then $opts else ('textindex', 'attrindex')
   return html:wrap(map { 'header': $dba:CAT, 'error': $error },
     <tr>
@@ -103,6 +105,7 @@ function dba:create(
   $opts  as xs:string*,
   $lang  as xs:string?
 ) as empty-sequence() {
+  cons:check(),
   try {
     if(db:exists($name)) then (
       error((), 'Database already exists.')
@@ -113,11 +116,10 @@ function dba:create(
         return map:entry($option, $opts = $option),
         $lang ! map:entry('language', .)))
       ),
-      util:redirect($dba:SUB, map { 'name': $name,
-        'info': 'Database "' || $name || '"  was created.' })
+      cons:redirect($dba:SUB, map { 'name': $name, 'info': 'Database was created.' })
     )
   } catch * {
-    util:redirect('db-create', map {
+    cons:redirect('db-create', map {
       'name': $name, 'opts': $opts, 'lang': $lang, 'error': $err:description
     })
   }

@@ -1,11 +1,11 @@
 (:~
  : Download file.
  :
- : @author Christian Grün, BaseX Team, 2014-18
+ : @author Christian Grün, BaseX Team, 2014-17
  :)
 module namespace dba = 'dba/files';
 
-import module namespace session = 'dba/session' at '../modules/session.xqm';
+import module namespace cons = 'dba/cons' at '../modules/cons.xqm';
 
 (:~
  : Downloads a file.
@@ -18,6 +18,7 @@ declare
 function dba:files(
   $name  as xs:string
 ) as item()+ {
-  web:response-header(map { 'media-type': 'application/octet-stream' }),
-  file:read-binary(session:directory() || $name)
+  cons:check(),
+  web:response-header(map { }, map { 'Cache-Control': '' }),
+  file:read-binary($cons:DBA-DIR || $name)
 };

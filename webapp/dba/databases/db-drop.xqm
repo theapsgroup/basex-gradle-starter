@@ -1,10 +1,11 @@
 (:~
  : Drop databases.
  :
- : @author Christian Grün, BaseX Team, 2014-18
+ : @author Christian Grün, BaseX Team, 2014-17
  :)
 module namespace dba = 'dba/databases';
 
+import module namespace cons = 'dba/cons' at '../modules/cons.xqm';
 import module namespace util = 'dba/util' at '../modules/util.xqm';
 
 (:~ Top category :)
@@ -20,13 +21,15 @@ declare
   %rest:GET
   %rest:path("/dba/db-drop")
   %rest:query-param("name", "{$names}")
+  %output:method("html")
 function dba:db-drop(
   $names  as xs:string*
 ) as empty-sequence() {
+  cons:check(),
   try {
     $names ! db:drop(.),
-    util:redirect($dba:CAT, map { 'info': util:info($names, 'database', 'dropped') })
+    cons:redirect($dba:CAT, map { 'info': util:info($names, 'database', 'dropped') })
   } catch * {
-    util:redirect($dba:CAT, map { 'error': $err:description })
+    cons:redirect($dba:CAT, map { 'error': $err:description })
   }
 };

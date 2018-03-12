@@ -1,12 +1,11 @@
 (:~
  : Provides HTML components.
  :
- : @author Christian Grün, BaseX Team, 2014-18
+ : @author Christian Grün, BaseX Team, 2014-17
  :)
 module namespace html = 'dba/html';
 
-import module namespace options = 'dba/options' at 'options.xqm';
-import module namespace session = 'dba/session' at 'session.xqm';
+import module namespace cons = 'dba/cons' at '../modules/cons.xqm';
 import module namespace util = 'dba/util' at 'util.xqm';
 
 (: Number formats. :)
@@ -41,76 +40,57 @@ declare function html:wrap(
   $rows     as element(tr)+
 ) as element(html) {
   let $header := head($options?header) ! util:capitalize(.)
-  return <html xml:space="preserve">
+  return <html>
     <head>
       <meta charset="utf-8"/>
       <title>DBA{ ($header, tail($options?header)) ! (' » ' || .) }</title>
       <meta name="description" content="Database Administration"/>
-      <meta name="author" content="BaseX Team, 2014-18"/>
+      <meta name="author" content="BaseX Team, 2014-17"/>
       <link rel="stylesheet" type="text/css" href="static/style.css"/>
       { $options?css ! <link rel="stylesheet" type="text/css" href="static/{.}"/> }
       <script type="text/javascript" src="static/js.js"/>
       { $options?scripts ! <script type="text/javascript" src="static/{.}"/> }
     </head>
     <body>
-      <table cellpadding='0' cellspacing='0'>
-        <tr>
-          <td class='slick'>
-            <table width='100%' cellpadding='0' cellspacing='0'>
-              <tr>
-                <td>{
-                  <span style='float:left'>
-                    <h1>BaseX Database Administration</h1>
-                  </span>,
-                  for $name in $session:VALUE
-                  return <span style='float:right'>
-                    <b>{ $name }</b> (<a href='logout'>logout</a>)
-                  </span>
-                }</td>
-              </tr>
-              <tr>
-                <td>
-                  <div class='ellipsis'>{
-                    let $emph := <span>{
-                      element b {
-                        attribute id { 'info' },
-                        let $error := $options?error[.], $info := $options?info[.]
-                        return if($error) then (
-                          attribute class { 'error' }, $error
-                        ) else if($info) then (
-                          attribute class { 'info' }, $info
-                        ) else ()
-                      }
-                    }</span>
-                    let $cats :=
-                      for $cat in ('Logs', 'Databases', 'Queries', 'Files', 'Jobs',
-                        'Users', 'Sessions', 'Settings')
-                      let $link := <a href="{ lower-case($cat) }">{ $cat }</a>
-                      return if($link = $header) then (
-                        <b>{ $link }</b>
-                      ) else (
-                        $link
-                      )
-                    return (
-                      head($cats),
-                      tail($cats) ! (' · ', .),
-                      (1 to 3) ! '&#x2000;',
-                      $emph
-                    )
-                  }</div>
-                  <hr/>
-                </td>
-              </tr>
-            </table>
-          </td>
-          <td class='slick'>
-            <img src="static/basex.svg"/>
-          </td>
-        </tr>
-      </table>
+      <div class="right"><img style='padding-left:10px;padding-bottom:10px;'
+        src="static/basex.svg"/></div>
+      <h1>Database Administration</h1>
+      <div>{
+        let $emph := <span>{
+          element b {
+            attribute id { 'info' },
+            let $error := $options?error[.], $info := $options?info[.]
+            return if($error) then (
+              attribute class { 'error' }, $error
+            ) else if($info) then (
+              attribute class { 'info' }, $info
+            ) else (),
+            '&#xa0;'
+          }
+        }</span>
+        return try {
+          cons:check(),
+          let $cats :=
+            for $cat in ('Databases', 'Queries', 'Files', 'Logs',  'Users',
+              'Settings', 'Logout')
+            let $link := <a href="{ lower-case(replace($cat, ' &amp; ', '-')) }">{ $cat }</a>
+            return if($link = $header) then (
+              <b>{ $link }</b>
+            ) else (
+              $link
+            )
+          return (head($cats), tail($cats) ! (' | ', .)),
+          (1 to 3) ! '&#x2000;',
+          $emph
+        } catch basex:login {
+          $emph
+        },
+        $cons:SESSION-VALUE ! <span style='float:right'>User: <b>{ . }</b></span>
+      }</div>
+      <hr/>
       <table width='100%'>{ $rows }</table>
       <hr/>
-      <div class='right'><sup>BaseX Team, 2014-18</sup></div>
+      <div class='right'><sup>BaseX Team, 2014-17</sup></div>
       <div class='small'/>
       { html:js('buttons();') }
     </body>
@@ -204,24 +184,20 @@ declare function html:button(
  : @param  $value    button value
  : @param  $label    label
  : @param  $confirm  confirm click
- : @param  $atts     additional attributes
+ : @param  $class    button class
  : @return button
  :)
 declare function html:button(
   $value    as xs:string,
   $label    as xs:string,
   $confirm  as xs:boolean,
-  $atts     as map(xs:string, xs:string)?
+  $class    as xs:string?
 ) as element(button) {
   element button {
     attribute name { 'action' },
     attribute value { $value },
-    if($confirm) then (
-      attribute onclick { 'return confirm("Are you sure?");' }
-    ) else (),
-    if(exists($atts)) then (
-      map:for-each($atts, function($key, $value) { attribute { $key } { $value } })
-    ) else (),
+    $confirm[.] ! attribute onclick { 'return confirm("Are you sure?");' },
+    $class ! attribute class { . },
     $label
   }
 };
@@ -280,7 +256,7 @@ declare function html:properties(
  :   * 'sort': argument contains the key of the ordered column.
  :   * 'link': argument contains a function for generating a link reference.
  :   * 'page': currently displayed page
- :   * 'count': maximum number of results
+ :   * 'count': maximum number of results (if not set, )
  :
  : @param  $entries  table entries: values are represented via attributes
  : @param  $headers  table headers:
@@ -296,12 +272,7 @@ declare function html:table(
   $param    as map(*),
   $options  as map(*)
 ) as element()+ {
-  if($buttons) then (
-    for $button in $buttons
-    return ($button, <span> </span>),
-    <br/>,
-    <div class='small'/>
-  ) else (),
+  if($buttons) then ($buttons, <br/>, <div class='small'/>) else (),
 
   let $sort := $options?sort
   let $page := $options?page
@@ -332,15 +303,14 @@ declare function html:table(
       ) else (
         function($a) { $a }
       )
-    return (
+    return
       for $row in $rows
       order by string($row/@*[name() = $sort-key])[.] ! $order(.)
         empty greatest collation '?lang=en'
       return $row
-    )
   )
 
-  let $max := options:get($options:MAXROWS)
+  let $max := $cons:OPTION($cons:K-MAXROWS)
   let $start := head((($page - 1) * $max + 1, 1))
 
   let $entries := if($count) then (
@@ -385,12 +355,11 @@ declare function html:table(
             },
 
             if($pos = 1 and $buttons) then (
-              <input type='checkbox' onclick='toggle(this)'/>,
-              ' '
+              <input type='checkbox' onclick='toggle(this)'/>, ''
             ) else (),
 
             if($header/@type = 'id') then (
-            ) else if(empty($sort) or $name = $sort-key or $header/@type = 'xml') then (
+            ) else if(empty($sort) or $name = $sort-key) then (
               $value
             ) else (
               html:link($value, '', ($param, map { 'sort': $name, 'page': $page }))
@@ -424,9 +393,7 @@ declare function html:table(
           return element td {
             attribute align { if($header/@type = $html:NUMBER) then 'right' else 'left' },
             if($pos = 1 and $buttons) then (
-              <input type='checkbox' name='{ $name }' value='{ data($value) }'
-                onclick='buttons(this)'/>,
-              ' '
+              <input type='checkbox' name='{ $name }' value='{ $col }' onclick='buttons(this)'/>, ''
             ) else (),
             if($pos = 1 and exists($link)) then (
               html:link($value, $link($value), ($param, map { $name: $value }))
@@ -486,24 +453,11 @@ declare function html:link(
  : @return string
  :)
 declare function html:date(
-  $date  as xs:dateTime
+  $date as xs:dateTime
 ) as xs:string {
   let $zone := timezone-from-dateTime(current-dateTime())
   let $dt := fn:adjust-dateTime-to-timezone(xs:dateTime($date), $zone)
-  return format-dateTime($dt, '[Y0000]-[M00]-[D00], [H00]:[m00]:[s00]')
-};
-
-(:~
- : Formats a duration.
- : @param  $seconds  seconds
- : @return string
- :)
-declare function html:duration(
-  $seconds  as xs:decimal
-) as xs:string {
-  let $min := $seconds idiv 60
-  let $sec := $seconds - $min * 60
-  return (format-number($min, '00') || ':' || format-number($sec, '00'))
+  return format-dateTime($dt, '[Y00]/[M00]/[D00], [H00]:[m00]:[s00]')
 };
 
 (:~

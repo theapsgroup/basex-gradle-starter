@@ -1,10 +1,11 @@
 (:~
  : Database main page.
  :
- : @author Christian Grün, BaseX Team, 2014-18
+ : @author Christian Grün, BaseX Team, 2014-17
  :)
 module namespace dba = 'dba/databases';
 
+import module namespace cons = 'dba/cons' at '../modules/cons.xqm';
 import module namespace html = 'dba/html' at '../modules/html.xqm';
 import module namespace util = 'dba/util' at '../modules/util.xqm';
 
@@ -41,6 +42,7 @@ function dba:database(
   $info      as xs:string?,
   $error     as xs:string?
 ) as element() {
+  cons:check(),
   if(not($name)) then web:redirect("databases") else
 
   let $db-exists := db:exists($name)
@@ -51,7 +53,7 @@ function dba:database(
       'scripts': ('codemirror/lib/codemirror.js', 'codemirror/mode/xml/xml.js')
     },
     <tr>
-      <td>
+      <td width='49%'>
         <form action="{ $dba:SUB }" method="post" id="{ $dba:SUB }" class="update">
           <input type="hidden" name="name" value="{ $name }" id="name"/>
           <h2>{
@@ -78,7 +80,7 @@ function dba:database(
                 html:button('db-delete', 'Delete', true()),
                 html:button('db-copy', 'Copy…', false()),
                 html:button('db-alter', 'Rename…', false()),
-                html:button('db-optimize', 'Optimize…', false(), map { 'class': 'global' })
+                html:button('db-optimize', 'Optimize…', false(), 'global')
               )
               let $map := map { 'name': $name }
               let $link := function($value) { $dba:SUB }
@@ -94,41 +96,35 @@ function dba:database(
           {
             let $headers := (
               <backup order='desc'>Name</backup>,
-              <size type='bytes'>Size</size>,
-              <action type='xml'>Action</action>
+              <size type='bytes'>Size</size>
             )
             let $rows :=
               for $backup in db:backups($name)
               order by $backup descending
-              let $actions := (
-                html:link('Download', 'backup/' || encode-for-uri($backup) || '.zip')
-              )
-              return <row backup='{ $backup }' size='{ $backup/@size }'
-                action='{ serialize($actions) }'/>
+              return <row backup='{ $backup }' size='{ $backup/@size }'/>
             let $buttons := (
-              html:button('backup-create', 'Create', false(), map { 'class': 'global' }) update (
+              html:button('backup-create', 'Create', false(), 'global') update (
                 if($db-exists) then () else insert node attribute disabled { '' } into .
               ),
               html:button('backup-restore', 'Restore', true()),
               html:button('backup-drop', 'Drop', true())
             )
             let $map := map { 'name': $name }
-            return html:table($headers, $rows, $buttons, $map, map { })
+            let $link := function($value) { 'backup/' || $value || '.zip' }
+            return html:table($headers, $rows, $buttons, $map, map { 'link': $link })
           }
         </form>
       </td>
       <td class='vertical'/>
-      <td>{
+      <td width='49%'>{
         if($resource) then (
           <h3>{ $resource }</h3>,
-          <form action="resource" method="post" id="resources">
+          <form action="resource" method="post" id="resources" enctype="multipart/form-data">
             <input type="hidden" name="name" value="{ $name }"/>
             <input type="hidden" name="resource" value="{ $resource }" id="resource"/>
-            {
-              html:button('db-rename', 'Rename…'), ' ',
-              html:button('db-download', 'Download'), ' ',
-              html:button('db-replace', 'Replace…')
-            }
+            { html:button('db-rename', 'Rename…') }
+            { html:button('db-download', 'Download') }
+            { html:button('db-replace', 'Replace…') }
           </form>,
           <h4>Enter your query…</h4>,
           <input style="width:100%" name="input" id="input" onkeyup='queryResource(false)'/>,

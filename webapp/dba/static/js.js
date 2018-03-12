@@ -73,7 +73,7 @@ function setWarning(message) {
 };
 
 /**
- * Displays an error message. Stack trace info will be removed.
+ * Displays an error message. Stack trace info will be replaced.
  * @param {string} message  error message
  */
 function setError(message) {
@@ -88,9 +88,7 @@ function setError(message) {
 function setText(message, type) {
   var info = document.getElementById("info");
   info.className = type;
-  var msg = message.replace(/^\[.*?\] /, "");
-  info.textContent = msg.length > 80 ? msg.substring(0, 80) + "…" : msg;
-  info.title = message;
+  info.textContent = message;
 };
 
 /** Indicates how many queries are being evaluated. */
@@ -150,6 +148,7 @@ function setErrorFromResponse(request) {
   var s = msg.indexOf("["), e1 = msg.indexOf("\n", s);
   if(s > -1) msg = msg.substring(s, e1 > s ? e1 : msg.length);
   msg = msg.replace(/\s+/g, " ");
+  if(msg.length > 100) msg = msg.substring(0, 100) + "…";
   // display correctly escaped feedback
   var html = document.createElement("div");
   html.innerHTML = msg;
@@ -201,7 +200,7 @@ var _updating;
 function runQuery(reverse) {
   // decide if query is read-only or updating
   var updating = (document.getElementById("mode").selectedIndex == 1) ^ reverse;
-  var path = updating ? "query-update" : "query-eval";
+  var path = updating ? "update-query" : "eval-query";
 
   // stop old query if mode was changed (each has its own %rest:single function)
   if(_running && _updating != updating) stopQuery();
@@ -218,7 +217,7 @@ function runQuery(reverse) {
  */
 function stopQuery() {
   // stop query by sending empty sequence
-  query(_updating ? "query-update" : "query-eval", "()", function(text) {
+  query(_updating ? "update-query" : "eval-query", "()", function(text) {
     setInfo("Query was stopped.");
   });
 };

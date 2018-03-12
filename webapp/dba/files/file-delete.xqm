@@ -1,11 +1,11 @@
 (:~
  : Delete files.
  :
- : @author Christian Grün, BaseX Team, 2014-18
+ : @author Christian Grün, BaseX Team, 2014-17
  :)
 module namespace dba = 'dba/files';
 
-import module namespace session = 'dba/session' at '../modules/session.xqm';
+import module namespace cons = 'dba/cons' at '../modules/cons.xqm';
 import module namespace util = 'dba/util' at '../modules/util.xqm';
 
 (:~ Top category :)
@@ -20,14 +20,13 @@ declare
   %rest:GET
   %rest:path("/dba/file-delete")
   %rest:query-param("name", "{$names}")
+  %output:method("html")
 function dba:file-delete(
   $names  as xs:string*
 ) as element(rest:response) {
+  cons:check(),
   try {
-    (: delete all files, ignore reference to parent directory :)
-    for $name in $names
-    where $name != '..'
-    return file:delete(session:directory() || $name),
+    $names ! file:delete($cons:DBA-DIR || .),
     web:redirect($dba:CAT, map { 'info': util:info($names, 'file', 'deleted') })
   } catch * {
     web:redirect($dba:CAT, map { 'error': $err:description })

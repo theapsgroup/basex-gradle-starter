@@ -1,12 +1,12 @@
 (:~
  : Add resources.
  :
- : @author Christian Grün, BaseX Team, 2014-18
+ : @author Christian Grün, BaseX Team, 2014-17
  :)
 module namespace dba = 'dba/databases';
 
+import module namespace cons = 'dba/cons' at '../../modules/cons.xqm';
 import module namespace html = 'dba/html' at '../../modules/html.xqm';
-import module namespace util = 'dba/util' at '../../modules/util.xqm';
 
 (:~ Top category :)
 declare variable $dba:CAT := 'databases';
@@ -38,6 +38,7 @@ function dba:db-add(
   $binary  as xs:string?,
   $error   as xs:string?
 ) as element(html) {
+  cons:check(),
   let $opts := if($opts = 'x') then $opts else 'chop'
   return html:wrap(map { 'header': ($dba:CAT, $name), 'error': $error },
     <tr>
@@ -111,6 +112,7 @@ function dba:db-add-post(
   $file    as map(*),
   $binary  as xs:string?
 ) as empty-sequence() {
+  cons:check(),
   try {
     let $key := map:keys($file)
     let $path := if(not($path) or ends-with($path, '/')) then ($path || $key) else $path
@@ -127,12 +129,12 @@ function dba:db-add-post(
           ('intparse', 'dtd', 'stripns', 'chop', 'xinclude') ! map:entry(., $opts = .))
         )
       ),
-      util:redirect($dba:SUB,
+      cons:redirect($dba:SUB,
         map { 'name': $name, 'path': $path, 'info': 'Resource was added.' }
       )
     )
   } catch * {
-    util:redirect('db-add', map {
+    cons:redirect('db-add', map {
       'name': $name, 'opts': $opts, 'path': $path, 'binary': $binary, 'error': $err:description
     })
   }

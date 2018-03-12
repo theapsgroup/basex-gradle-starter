@@ -1,12 +1,12 @@
 (:~
  : Rename database.
  :
- : @author Christian Grün, BaseX Team, 2014-18
+ : @author Christian Grün, BaseX Team, 2014-17
  :)
 module namespace dba = 'dba/databases';
 
+import module namespace cons = 'dba/cons' at '../modules/cons.xqm';
 import module namespace html = 'dba/html' at '../modules/html.xqm';
-import module namespace util = 'dba/util' at '../modules/util.xqm';
 
 (:~ Top category :)
 declare variable $dba:CAT := 'databases';
@@ -32,6 +32,7 @@ function dba:alter(
   $newname  as xs:string?,
   $error    as xs:string?
 ) as element(html) {
+  cons:check(),
   html:wrap(map { 'header': ($dba:CAT, $name), 'error': $error },
     <tr>
       <td>
@@ -74,14 +75,15 @@ function dba:alter(
   $name     as xs:string,
   $newname  as xs:string
 ) {
+  cons:check(),
   try {
     if(db:exists($newname)) then (
       error((), 'Database already exists.')
     ) else (
       db:alter($name, $newname)
     ),
-    util:redirect($dba:SUB, map { 'name': $newname, 'info': 'Database was renamed.' })
+    cons:redirect($dba:SUB, map { 'name': $newname, 'info': 'Database was renamed.' })
   } catch * {
-    util:redirect('db-alter', map { 'name': $name, 'newname': $newname, 'error': $err:description })
+    cons:redirect('db-alter', map { 'name': $name, 'newname': $newname, 'error': $err:description })
   }
 };

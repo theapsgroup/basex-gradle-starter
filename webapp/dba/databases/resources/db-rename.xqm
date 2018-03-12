@@ -1,12 +1,12 @@
 (:~
  : Rename resource.
  :
- : @author Christian Grün, BaseX Team, 2014-18
+ : @author Christian Grün, BaseX Team, 2014-17
  :)
 module namespace dba = 'dba/databases';
 
+import module namespace cons = 'dba/cons' at '../../modules/cons.xqm';
 import module namespace html = 'dba/html' at '../../modules/html.xqm';
-import module namespace util = 'dba/util' at '../../modules/util.xqm';
 
 (:~ Top category :)
 declare variable $dba:CAT := 'databases';
@@ -35,6 +35,7 @@ function dba:db-rename(
   $target    as xs:string?,
   $error     as xs:string?
 ) as element(html) {
+  cons:check(),
   html:wrap(map { 'header': ($dba:CAT, $name), 'error': $error },
     <tr>
       <td>
@@ -83,17 +84,18 @@ function dba:db-rename(
   $resource  as xs:string,
   $target    as xs:string
 ) as empty-sequence() {
+  cons:check(),
   try {
     if(db:exists($name, $target)) then (
       error((), 'Resource already exists.')
     ) else (
       db:rename($name, $resource, $target),
-      util:redirect($dba:SUB, map {
+      cons:redirect($dba:SUB, map {
         'name': $name, 'resource': $target, 'info': 'Resource was renamed.'
       })
     )
   } catch * {
-    util:redirect('db-rename', map {
+    cons:redirect('db-rename', map {
       'name': $name, 'resource': $resource, 'target': $target, 'error': $err:description
     })
   }

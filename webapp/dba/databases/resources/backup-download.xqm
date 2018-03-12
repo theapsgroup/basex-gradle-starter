@@ -1,9 +1,11 @@
 (:~
  : Download resources.
  :
- : @author Christian Grün, BaseX Team, 2014-18
+ : @author Christian Grün, BaseX Team, 2014-17
  :)
 module namespace dba = 'dba/databases';
+
+import module namespace cons = 'dba/cons' at '../../modules/cons.xqm';
 
 (:~
  : Downloads a database backup.
@@ -16,5 +18,6 @@ declare
 function dba:backup-download(
   $backup  as xs:string
 ) as xs:base64Binary {
-  file:read-binary(db:option('dbpath') || '/' || $backup)
+  cons:check(),
+  file:read-binary(db:system()/globaloptions/dbpath || '/' || $backup)
 };

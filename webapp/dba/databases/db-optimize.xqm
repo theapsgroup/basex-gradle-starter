@@ -1,10 +1,11 @@
 (:~
  : Optimize databases.
  :
- : @author Christian Grün, BaseX Team, 2014-18
+ : @author Christian Grün, BaseX Team, 2014-17
  :)
 module namespace dba = 'dba/databases';
 
+import module namespace cons = 'dba/cons' at '../modules/cons.xqm';
 import module namespace html = 'dba/html' at '../modules/html.xqm';
 import module namespace util = 'dba/util' at '../modules/util.xqm';
 
@@ -38,6 +39,7 @@ function dba:create(
   $lang   as xs:string?,
   $error  as xs:string?
 ) as element(html) {
+  cons:check(),
   let $opts := if($opts = 'x') then $opts else db:info($name)//*[text() = 'true']/name()
   let $lang := if($opts = 'x') then $lang else 'en'
   return html:wrap(map { 'header': ($dba:CAT, $name), 'error': $error },
@@ -104,14 +106,15 @@ function dba:db-optimize(
   $lang  as xs:string?
 ) as empty-sequence() {
   try {
+    cons:check(),
     db:optimize($name, boolean($all), map:merge((
       ('textindex','attrindex','tokenindex','ftindex','stemming','casesens','diacritics') !
         map:entry(., $opts = .),
       $lang ! map:entry('language', .)
     ))),
-    util:redirect($dba:SUB, map { 'name': $name, 'info': 'Database was optimized.' })
+    cons:redirect($dba:SUB, map { 'name': $name, 'info': 'Database was optimized.' })
   } catch * {
-    util:redirect($dba:SUB, map {
+    cons:redirect($dba:SUB, map {
       'name': $name, 'opts': $opts, 'lang': $lang, 'error': $err:description
     })
   }
@@ -127,13 +130,15 @@ declare
   %rest:GET
   %rest:path("/dba/db-optimize-all")
   %rest:query-param("name", "{$names}")
+  %output:method("html")
 function dba:drop(
   $names  as xs:string*
 ) as empty-sequence() {
+  cons:check(),
   try {
     $names ! db:optimize(.),
-    util:redirect($dba:CAT, map { 'info': util:info($names, 'database', 'optimized') })
+    cons:redirect($dba:CAT, map { 'info': util:info($names, 'database', 'optimized') })
   } catch * {
-    util:redirect($dba:CAT, map { 'error': $err:description })
+    cons:redirect($dba:CAT, map { 'error': $err:description })
   }
 };

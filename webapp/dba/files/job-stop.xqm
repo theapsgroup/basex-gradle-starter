@@ -1,10 +1,11 @@
 (:~
  : Stop jobs.
  :
- : @author Christian Grün, BaseX Team, 2014-18
+ : @author Christian Grün, BaseX Team, 2014-17
  :)
-module namespace dba = 'dba/files';
+module namespace dba = 'dba/jobs-users';
 
+import module namespace cons = 'dba/cons' at '../modules/cons.xqm';
 import module namespace util = 'dba/util' at '../modules/util.xqm';
 
 (:~ Top category :)
@@ -17,14 +18,16 @@ declare variable $dba:CAT := 'files';
  :)
 declare
   %rest:GET
-  %rest:path("/dba/file-stop")
-  %rest:query-param("id",  "{$id}")
-function dba:file-stop(
-  $id  as xs:string
+  %rest:path("/dba/job-stop")
+  %rest:query-param("id",  "{$ids}")
+  %output:method("html")
+function dba:job-stop(
+  $ids  as xs:string*
 ) as element(rest:response) {
+  cons:check(),
   let $params := try {
-    jobs:stop($id),
-    map { 'info': util:info($id, 'job', 'stopped') }
+    $ids ! jobs:stop(.),
+    map { 'info': util:info($ids, 'job', 'stopped') }
   } catch * {
     map { 'error': $err:description }
   }

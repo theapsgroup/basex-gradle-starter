@@ -1,9 +1,11 @@
 (:~
  : Download log file.
  :
- : @author Christian Grün, BaseX Team, 2014-18
+ : @author Christian Grün, BaseX Team, 2014-17
  :)
 module namespace dba = 'dba/databases';
+
+import module namespace cons = 'dba/cons' at '../modules/cons.xqm';
 
 (:~ Top category :)
 declare variable $dba:CAT := 'logs';
@@ -19,14 +21,19 @@ declare
   %rest:path("/dba/log-download")
   %rest:query-param("name",  "{$name}")
   %rest:query-param("input", "{$input}")
+  %output:method("html")
 function dba:drop(
   $name   as xs:string,
   $input  as xs:string
 ) as element()+ {
-  let $ext := if($input) then ('-' || encode-for-uri($input)) else ()
+  cons:check(),
+
+  let $ext := if($input) then ('-' || web:encode-url($input)) else ()
   return web:response-header(
     map { 'media-type': 'text/xml' },
-    map { 'Content-Disposition': 'attachment; filename=logs' || $name || $ext || '.xml' }
+    map { 'Cache-Control': '',
+          'Content-Disposition': 'attachment; filename=logs' || $name || $ext || '.xml'
+    }
   ),
   element entries {
     admin:logs($name, true())[matches(., $input, 'i')]

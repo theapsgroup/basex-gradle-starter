@@ -1,3 +1,4 @@
+
 /**
  * Opens a query file.
  * @param {string} file  optional file name
@@ -13,11 +14,11 @@ function openQuery(file) {
   } else {
     name = fileName();
   }
-  request("POST", "query-open?name=" + encodeURIComponent(name),
+  request("POST", "open-query?name=" + encodeURIComponent(name),
     null,
-    function(request) {
+    function(req) {
+      _editorMirror.setValue(req.responseText);
       setInfo("Query was opened.");
-      _editorMirror.setValue(request.responseText);
       _editorMirror.focus();
     },
     function(req) {
@@ -30,54 +31,30 @@ function openQuery(file) {
  * Saves a query file.
  */
 function saveQuery() {
-  // append file suffix
-  var value = fileName();
-  if(value.indexOf(".") === -1) {
-    value += ".xq";
-    document.getElementById("file").value = value;
-  }
   if(queryExists() && !confirm("Overwrite existing query?")) return;
 
-  request("POST", "query-save?name=" + encodeURIComponent(value),
+  request("POST", "save-query?name=" + encodeURIComponent(fileName()),
     document.getElementById("editor").value,
     function(req) {
       refreshDataList(req);
       setInfo("Query was saved.");
     },
     function(req) {
-      setErrorFromResponse(req);
+      setError("Query could not be saved.");
     }
   )
 };
 
 /**
- * Closes a query file.
- */
-function closeQuery() {
-  request("POST", "query-close?name=" + encodeURIComponent(fileName()),
-    null,
-    function(req) {
-      document.getElementById("file").value = "";
-      _editorMirror.setValue("");
-      _editorMirror.focus();
-      checkButtons();
-    },
-    function(req) {
-      setErrorFromResponse(req);
-    }
-  );
-};
-
-/**
  * Refreshes the list of available query files.
- * @param {object} request  HTTP request
+ * @param {object} req  HTTP request
  */
-function refreshDataList(request) {
+function refreshDataList(req) {
   var files = document.getElementById("files");
   while(files.firstChild) {
     files.removeChild(files.firstChild);
   }
-  var names = request.responseText.split("/");
+  var names = req.responseText.split("/");
   for (var i = 0; i < names.length; i++) {
     var opt = document.createElement("option");
     opt.value = names[i];
@@ -92,7 +69,6 @@ function refreshDataList(request) {
 function checkButtons() {
   document.getElementById("open").disabled = !queryExists();
   document.getElementById("save").disabled = fileName().length == 0;
-  document.getElementById("close").disabled = !queryExists();
 };
 
 /**
@@ -113,5 +89,5 @@ function queryExists() {
  * @returns {string} file name
  */
 function fileName() {
-  return document.getElementById("file").value.trim();
+  return document.getElementById("file").value.trim().replace(/\.xq$/, '');
 };

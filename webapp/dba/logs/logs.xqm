@@ -1,10 +1,13 @@
+
+
 (:~
  : Logging page.
  :
- : @author Christian Grün, BaseX Team, 2014-18
+ : @author Christian Grün, BaseX Team, 2014-17
  :)
 module namespace dba = 'dba/logs';
 
+import module namespace cons = 'dba/cons' at '../modules/cons.xqm';
 import module namespace html = 'dba/html' at '../modules/html.xqm';
 
 (:~ Top category :)
@@ -38,6 +41,8 @@ function dba:logs(
   $info   as xs:string?,
   $page   as xs:string
 ) as element(html) {
+  cons:check(),
+
   let $files := (
     for $file in admin:logs()
     order by $file descending
@@ -46,7 +51,7 @@ function dba:logs(
   let $name := if($name) then $name else string(head($files))
   return html:wrap(map { 'header': $dba:CAT, 'info': $info, 'error': $error },
     <tr>
-      <td width='205'>
+      <td width='190'>
         <h2>{ html:link('Logs', $dba:CAT) }</h2>
         <form action="{ $dba:CAT }" method="post" class="update">
           <input type='hidden' name='name' id='name' value='{ $name }'/>
@@ -78,16 +83,15 @@ function dba:logs(
       <td>{
         if($name) then (
           <form action='log-download' method='post' id='resources' autocomplete='off'>
-            <h3>{
-              $name, ':&#xa0;',
-              <input type='hidden' name='name' value='{ $name }'/>,
+            <h3>
+              { $name }:&#xa0;
+              <input type='hidden' name='name' value='{ $name }'/>
               <input size='40' id='input' name='input' value='{ $input }'
-                title='Enter regular expression'
+                placeholder='regular expression'
                 onkeydown='if(event.keyCode == 13) {{ logEntries(true); event.preventDefault(); }}'
-                onkeyup='logEntries(false);'/>,
-              ' ',
-              html:button('download', 'Download')
-            }</h3>
+                onkeyup='logEntries(false);'/>
+              { html:button('download', 'Download') }
+            </h3>
           </form>,
           <div id='output'/>,
           html:js('logEntries(true);')
@@ -121,35 +125,19 @@ function dba:log(
   $sort   as xs:string,
   $page   as xs:string
 ) as element()+ {
+  cons:check(),
   let $headers := (
     <time type='time' order='desc'>Time</time>,
     <address>Address</address>,
-    <user type='xml'>User</user>,
+    <user>User</user>,
     <type>Type</type>,
     <ms type='decimal' order='desc'>ms</ms>,
-    <message type='xml'>Message</message>
+    <message>Message</message>
   )
-  let $rows := (
-    let $input-exists := boolean($input)
-    let $highlight := function($string, $found) {
-      if($found) then serialize(
-        for $match in analyze-string($string, $input, 'i')/*
-        let $text := string($match)
-        return if(local-name($match) = 'match') then element b { $text } else $text
-      ) else (
-        $string
-      )
-    }
-    for $log in admin:logs($name, true())
-    let $message := data($log/text())
-    let $user := data($log/@user)
-    let $user-found := $input-exists and contains($log/@user, $input)
-    let $message-found := $input-exists and matches($message, $input, 'i')
-    where not($input-exists) or $user-found or $message-found
-    return <row time='{ $log/@time }' address='{ $log/@address }'
-                user='{ $highlight($user, $user-found) }' type='{ $log/@type }'
-                ms='{ $log/@ms }' message='{ $highlight($message, $message-found) }'/>
-  )
+  let $rows :=
+    for $log in admin:logs($name, true())[matches(., $input, 'i')]
+    return <row time='{ $log/@time }' address='{ $log/@address }' user='{ $log/@user}'
+                type='{ $log/@type }' ms='{ $log/@ms }' message='{ $log }'/>
   return html:table($headers, $rows, (),
     map { 'name': $name, 'input': $input },
     map { 'sort': head(($sort[.], 'time')), 'page': xs:integer($page[.]) }
@@ -167,6 +155,7 @@ declare
   %rest:path("/dba/logs")
   %rest:query-param("action", "{$action}")
   %rest:query-param("name",   "{$names}")
+  %output:method("html")
 function dba:logs-redirect(
   $action  as xs:string,
   $names   as xs:string*

@@ -1,12 +1,12 @@
 (:~
  : Settings page.
  :
- : @author Christian Grün, BaseX Team, 2014-18
+ : @author Christian Grün, BaseX Team, 2014-17
  :)
 module namespace dba = 'dba/settings';
 
 import module namespace Request = 'http://exquery.org/ns/request';
-import module namespace options = 'dba/options' at '../modules/options.xqm';
+import module namespace cons = 'dba/cons' at '../modules/cons.xqm';
 import module namespace html = 'dba/html' at '../modules/html.xqm';
 
 (:~ Top category :)
@@ -28,6 +28,7 @@ function dba:settings(
   $error  as xs:string?,
   $info   as xs:string?
 ) as element(html) {
+  cons:check(),
   let $system := html:properties(db:system())
   return html:wrap(map { 'header': $dba:CAT, 'info': $info, 'error': $error },
     <tr>
@@ -37,9 +38,9 @@ function dba:settings(
           <h3>Querying</h3>
           <table>
             {
-              dba:input($options:TIMEOUT, 'Timeout, in seconds (0 = disabled)'),
-              dba:input($options:MEMORY, 'Memory limit, in MB (0 = disabled)'),
-              dba:input($options:MAXCHARS, 'Maximum output size')
+              dba:input($cons:K-TIMEOUT, 'Timeout, in seconds (0 = disabled)'),
+              dba:input($cons:K-MEMORY, 'Memory limit, in MB (0 = disabled)'),
+              dba:input($cons:K-MAXCHARS, 'Maximum output size')
             }
             <tr>
               <td colspan='2'>Permission:</td>
@@ -47,8 +48,8 @@ function dba:settings(
             <tr>
               <td>
                 <select name="permission">{
-                  let $pm := options:get($options:PERMISSION)
-                  for $p in $options:PERMISSIONS
+                  let $pm := $cons:OPTION($cons:K-PERMISSION)
+                  for $p in $cons:PERMISSIONS
                   return element option { attribute selected { }[$p = $pm], $p }
                 }</select>
               </td>
@@ -56,7 +57,7 @@ function dba:settings(
           </table>
           <h3>Tables</h3>
           <table>
-            { dba:input($options:MAXROWS,  'Displayed table rows') }
+            { dba:input($cons:K-MAXROWS,  'Displayed table rows') }
           </table>
         </form>
       </td>
@@ -90,7 +91,7 @@ declare %private function dba:input(
 ) as element(tr)* {
   <tr>
     <td>{ $value }:<br/>
-      <input name="{ $key }" type="number" value="{ options:get($key) }"/>
+      <input name="{ $key }" type="number" value="{ $cons:OPTION($key) }"/>
     </td>
   </tr>
 };
@@ -102,8 +103,17 @@ declare %private function dba:input(
 declare
   %rest:POST
   %rest:path("/dba/settings")
+  %output:method("html")
 function dba:settings-save(
 ) as element(rest:response) {
-  options:save(map:merge(Request:parameter-names() ! map:entry(., Request:parameter(.)))),
-  web:redirect($dba:CAT, map { 'info': 'Settings were saved.' })
+  cons:check(),
+  let $config := element config {
+    for $key in Request:parameter-names()
+    return element { $key } { Request:parameter($key) }
+  }
+  return (
+    file:create-dir($cons:DBA-DIR),
+    file:write($cons:DBA-SETTINGS-FILE, $config),
+    web:redirect($dba:CAT, map { 'info': 'Settings were saved.' })
+  )
 };
