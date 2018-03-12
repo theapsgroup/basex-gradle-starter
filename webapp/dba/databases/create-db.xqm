@@ -1,17 +1,19 @@
 (:~
  : Create new database.
  :
- : @author Christian Grün, BaseX Team, 2014-18
+ : @author Christian Grün, BaseX Team, 2014-16
  :)
-module namespace dba = 'dba/databases';
+module namespace _ = 'dba/databases';
 
+import module namespace cons = 'dba/cons' at '../modules/cons.xqm';
 import module namespace html = 'dba/html' at '../modules/html.xqm';
+import module namespace tmpl = 'dba/tmpl' at '../modules/tmpl.xqm';
 import module namespace util = 'dba/util' at '../modules/util.xqm';
 
 (:~ Top category :)
-declare variable $dba:CAT := 'databases';
+declare variable $_:CAT := 'databases';
 (:~ Sub category :)
-declare variable $dba:SUB := 'database';
+declare variable $_:SUB := 'database';
 
 (:~
  : Form for creating a new database.
@@ -23,27 +25,29 @@ declare variable $dba:SUB := 'database';
  :)
 declare
   %rest:GET
-  %rest:path("/dba/db-create")
+  %rest:path("/dba/create-db")
   %rest:query-param("name",  "{$name}")
   %rest:query-param("opts",  "{$opts}")
   %rest:query-param("lang",  "{$lang}", "en")
   %rest:query-param("error", "{$error}")
   %output:method("html")
-function dba:db-create(
+function _:create(
   $name   as xs:string?,
   $opts   as xs:string*,
   $lang   as xs:string?,
   $error  as xs:string?
 ) as element(html) {
+  cons:check(),
+
   let $opts := if($opts = 'x') then $opts else ('textindex', 'attrindex')
-  return html:wrap(map { 'header': $dba:CAT, 'error': $error },
+  return tmpl:wrap(map { 'top': $_:CAT, 'error': $error },
     <tr>
       <td>
-        <form action="db-create" method="post" autocomplete="off">
-          <h2>{
-            html:link('Databases', $dba:CAT), ' » ',
-            html:button('create', 'Create')
-          }</h2>
+        <form action="create-db" method="post" autocomplete="off">
+          <h2>
+            <a href="{ $_:CAT }">Databases</a> »
+            { html:button('create', 'Create') }
+          </h2>
           <!-- dummy value; prevents reset of options when nothing is selected -->
           <input type="hidden" name="opts" value="x"/>
           <table>
@@ -89,36 +93,40 @@ function dba:db-create(
  : @param  $name  database
  : @param  $opts  database options
  : @param  $lang  language
- : @return redirection
  :)
 declare
   %updating
   %rest:POST
-  %rest:path("/dba/db-create")
+  %rest:path("/dba/create-db")
   %rest:query-param("name", "{$name}")
   %rest:query-param("opts", "{$opts}")
   %rest:query-param("lang", "{$lang}")
-function dba:create(
+function _:create(
   $name  as xs:string,
   $opts  as xs:string*,
   $lang  as xs:string?
-) as empty-sequence() {
+) {
+  cons:check(),
   try {
-    if(db:exists($name)) then (
-      error((), 'Database already exists.')
-    ) else (
-      db:create($name, (), (), map:merge((
-        for $option in ('textindex', 'attrindex', 'tokenindex', 'ftindex',
-          'stemming', 'casesens', 'diacritics', 'updindex')
-        return map:entry($option, $opts = $option),
-        $lang ! map:entry('language', .)))
-      ),
-      util:redirect($dba:SUB, map { 'name': $name,
-        'info': 'Database "' || $name || '"  was created.' })
-    )
+    util:update("if(db:exists($name)) then (
+  error((), 'Database already exists: ' || $name || '.')
+) else (
+  db:create($name, (), (), map:merge((
+  (('textindex','attrindex','tokenindex','ftindex','stemming','casesens','diacritics','updindex') !
+    map:entry(., $opts = .)),
+    $lang ! map:entry('language', .))
+  ))
+)", map { 'name': $name, 'lang': $lang, 'opts': $opts }),
+    db:output(web:redirect($_:SUB, map {
+      'info': 'Created Database: ' || $name,
+      'name': $name
+    }))
   } catch * {
-    util:redirect('db-create', map {
-      'name': $name, 'opts': $opts, 'lang': $lang, 'error': $err:description
-    })
+    db:output(web:redirect("create-db", map {
+      'error': $err:description,
+      'name': $name,
+      'opts': $opts,
+      'lang': $lang
+    }))
   }
 };

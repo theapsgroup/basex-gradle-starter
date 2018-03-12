@@ -1,153 +1,135 @@
 (:~
- : Utility functions.
+ : Web functions.
  :
- : @author Christian Grün, BaseX Team, 2014-18
+ : @author Christian Grün, BaseX Team, 2014-16
  :)
 module namespace util = 'dba/util';
 
-import module namespace options = 'dba/options' at 'options.xqm';
-import module namespace session = 'dba/session' at 'session.xqm';
+import module namespace Request = 'http://exquery.org/ns/request';
+import module namespace cons = 'dba/cons' at 'cons.xqm';
 
 (:~
  : Evaluates a query and returns the result.
- : @param  $query    query string
- : @param  $context  initial context value
- : @return serialized result of query
+ : @param  $query  query
+ : @return result of query
  :)
 declare function util:query(
-  $query    as xs:string?,
-  $context  as item()*
+  $query  as xs:string?
 ) as xs:string {
-  let $limit := options:get($options:MAXCHARS)
-  let $result := xquery:eval($query, map { '': $context }, util:query-options())
-  (: serialize more characters than requested, because limit represents number of bytes :)
-  return util:chop(serialize($result, map { 'limit': $limit * 2 + 1, 'method': 'basex' }), $limit)
+  util:query($query, '', map {})
+};
+
+(:~
+ : Evaluates a query and returns the result.
+ : @param  $query  query
+ : @param  $map    bindings
+ : @param  $vars   variable bindings
+ : @return result of query
+ :)
+declare function util:query(
+  $query  as xs:string?,
+  $map    as xs:string,
+  $vars   as map(*)
+) as xs:string {
+  let $limit := $cons:OPTION($cons:K-MAX-CHARS)
+  let $query := if($query) then $query else '()'
+  let $q := "xquery:eval($query, map {" || $map || "}, " || util:query-options() || ")"
+  let $s := "serialize(" || $q || ", map{ 'limit': $limit*2, 'method': 'basex' })"
+  return util:eval(
+    $s ||
+    "! (if(string-length(.) > $limit) then substring(., 1, $limit) || '...' else .)",
+    map:merge((map { 'query': $query, 'limit': $limit }, $vars))
+  )
 };
 
 (:~
  : Runs an updating query.
- : @param  $query  query string
+ : @param  $query  query
  : @return empty sequence
  :)
 declare %updating function util:update-query(
   $query  as xs:string?
-) as empty-sequence() {
-  xquery:eval-update($query, map { }, util:query-options())
+) {
+  let $q := "xquery:update($query, map { }, " || util:query-options() || ")"
+  return util:update($q, map { 'query': if($query) then $query else '()' })
 };
 
 (:~
  : Returns the options for evaluating a query.
  : @return options
  :)
-declare %private function util:query-options() as map(*) {
-  map {
-    'timeout'   : options:get($options:TIMEOUT),
-    'memory'    : options:get($options:MEMORY),
-    'permission': options:get($options:PERMISSION),
-    'base-uri'  : session:directory()
-  }
+declare %private function util:query-options() {
+  "map { 'timeout':" || $cons:OPTION($cons:K-TIMEOUT) ||
+       ",'memory':" || $cons:OPTION($cons:K-MEMORY) ||
+       ",'permission':'" || $cons:OPTION($cons:K-PERMISSION) || "' }"
 };
 
 (:~
- : Returns the index of the first result to generate.
- : @param  $page  current page
- : @param  $sort  sort key
- : @return last result
- :)
-declare function util:start(
-  $page  as xs:integer,
-  $sort  as xs:string
-) as xs:integer {
-  if($page and not($sort)) then (
-    ($page - 1) * options:get($options:MAXROWS) + 1
-  ) else (
-    1
-  )
-};
-
-(:~
- : Returns the index of the last result to generate.
- : @param  $page  current page
- : @param  $sort  sort key
- : @return last result
- :)
-declare function util:end(
-  $page  as xs:integer,
-  $sort  as xs:string
-) as xs:integer {
-  if($page and not($sort)) then (
-    $page * options:get($options:MAXROWS)
-  ) else (
-    999999999
-  )
-};
-
-(:~
- : Chops a string result to the maximum number of allowed characters.
- : @param  $string  string
- : @param  $max     maximum number of characters
- : @return string
- :)
-declare function util:chop(
-  $string  as xs:string,
-  $max     as xs:integer
-) as xs:string {
-  if(string-length($string) > $max) then (
-    substring($string, 1, $max) || '...'
-  ) else (
-    $string
-  )
-};
-
-(:~
- : Joins sequence entries.
- : @param  $items  items
- : @param  $sep    separator
+ : Evaluates the specified query locally or on a remote server and returns the results.
+ : @param  $query  query to be executed
  : @return result
  :)
-declare function util:item-join(
-  $items  as item()*,
-  $sep    as item()
+declare function util:eval(
+  $query  as xs:string
 ) as item()* {
-  for $item at $pos in $items
-  return ($sep[$pos > 1], $item)
+  util:eval($query, map {})
 };
 
 (:~
- : Returns a count info for the specified items.
- : @param  $items   items
- : @param  $name    name of item (singular form)
- : @param  $action  action label (past tense)
+ : Evaluates the specified query locally or remotely and returns the resulting items.
+ : @param  $query  query to be executed
+ : @param  $vars   variables
  : @return result
  :)
-declare function util:info(
-  $items   as item()*,
-  $name    as xs:string,
-  $action  as xs:string
-) as xs:string {
-  let $count := count($items)
-  return $count || ' ' || $name || (if($count > 1) then 's were ' else ' was ') || $action || '.'
+declare function util:eval(
+  $query  as xs:string,
+  $vars   as map(*)
+) as item()* {
+  let $query := string-join((
+    map:keys($vars) ! ('declare variable $' || . || ' external;'), $query
+  ))
+  return if($cons:SESSION/host) then (
+    util:remote-query($query, $vars)
+  ) else (
+    xquery:eval($query, $vars)
+  )
 };
 
 (:~
- : Capitalizes a string.
- : @param  $string  string
- : @return capitalized string
+ : Evaluates the specified updating query locally or remotely.
+ : @param  $query  query to be executed
+ : @param  $vars   variables
  :)
-declare function util:capitalize(
-  $string  as xs:string
-) as xs:string {
-  upper-case(substring($string, 1, 1)) || substring($string, 2)
+declare %updating function util:update(
+  $query  as xs:string,
+  $vars   as map(*)
+) {
+  let $query := string-join((
+    map:keys($vars) ! ('declare variable $' || . || ' external;'), $query
+  ))
+  return if($cons:SESSION/host) then (
+    prof:void(util:remote-query($query, $vars))
+  ) else (
+    xquery:update($query, $vars)
+  )
 };
 
 (:~
- : Convenience function for redirecting to another page from update operations.
- : @param  $url     URL
- : @param  $params  query parameters
+ : Evaluates the specified query on a remote server and returns the results.
+ : @param  $query  query to be executed
+ : @param  $vars   variables
+ : @return result
  :)
-declare %updating function util:redirect(
-  $url     as xs:string,
-  $params  as map(*)
-) as empty-sequence() {
-  update:output(web:redirect($url, $params))
+declare %private function util:remote-query(
+  $query  as xs:string,
+  $vars   as map(*)
+) as item()* {
+  let $id := client:connect(
+    $cons:SESSION/host, $cons:SESSION/port,
+    $cons:SESSION/name, $cons:SESSION/pass
+  )
+  return (
+    client:query($id, $query, $vars),
+    client:close($id)
+  )
 };
