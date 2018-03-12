@@ -1,10 +1,11 @@
 (:~
  : Query resources.
  :
- : @author Christian Grün, BaseX Team, 2014-18
+ : @author Christian Grün, BaseX GmbH, 2014-15
  :)
-module namespace dba = 'dba/databases';
+module namespace _ = 'dba/databases';
 
+import module namespace cons = 'dba/cons' at '../../modules/cons.xqm';
 import module namespace util = 'dba/util' at '../../modules/util.xqm';
 
 (:~
@@ -16,15 +17,18 @@ import module namespace util = 'dba/util' at '../../modules/util.xqm';
  :)
 declare
   %rest:POST("{$query}")
-  %rest:path("/dba/db-query")
+  %rest:path("/dba/query-resource")
   %rest:query-param("name",     "{$name}")
   %rest:query-param("resource", "{$resource}")
-  %rest:single
   %output:method("text")
-function dba:db-query(
+function _:query-resource(
   $name      as xs:string,
   $resource  as xs:string,
   $query     as xs:string
 ) as xs:string {
-  util:query(if($query) then $query else '.', db:open($name, $resource))
+  cons:check(),
+  let $query := if($query) then $query else '.'
+  return util:query($query, "'': db:open($name, $resource)", map {
+    'name': $name, 'resource': $resource
+  })
 };

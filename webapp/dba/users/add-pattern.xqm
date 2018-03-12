@@ -1,18 +1,19 @@
 (:~
  : Add new pattern.
  :
- : @author Christian Grün, BaseX Team, 2014-18
+ : @author Christian Grün, BaseX GmbH, 2014-15
  :)
-module namespace dba = 'dba/users';
+module namespace _ = 'dba/users';
 
+import module namespace cons = 'dba/cons' at '../modules/cons.xqm';
 import module namespace html = 'dba/html' at '../modules/html.xqm';
-import module namespace options = 'dba/options' at '../modules/options.xqm';
+import module namespace tmpl = 'dba/tmpl' at '../modules/tmpl.xqm';
 import module namespace util = 'dba/util' at '../modules/util.xqm';
 
 (:~ Top category :)
-declare variable $dba:CAT := 'users';
+declare variable $_:CAT := 'users';
 (:~ Sub category :)
-declare variable $dba:SUB := 'user';
+declare variable $_:SUB := 'user';
 
 (:~
  : Form for adding a new pattern.
@@ -20,7 +21,6 @@ declare variable $dba:SUB := 'user';
  : @param  $pattern  entered pattern
  : @param  $perm     chosen permission
  : @param  $error    error string
- : @return page
  :)
 declare
   %rest:GET
@@ -30,21 +30,22 @@ declare
   %rest:query-param("perm",    "{$perm}", "write")
   %rest:query-param("error",   "{$error}")
   %output:method("html")
-function dba:pattern-add(
+function _:create(
   $name     as xs:string,
   $pattern  as xs:string?,
   $perm     as xs:string,
   $error    as xs:string?
-) as element(html) {
-  html:wrap(map { 'header': ($dba:CAT, $name), 'error': $error },
+) as element() {
+  cons:check(),
+  tmpl:wrap(map { 'top': $_:CAT, 'error': $error },
     <tr>
       <td>
-        <form action="pattern-add" method="post" autocomplete="off">
-          <h2>{
-            html:link('Users', $dba:CAT), ' » ',
-            html:link($name, $dba:SUB, map { 'name': $name }), ' » ',
-            html:button('create', 'Add Pattern')
-          }</h2>
+        <form action="add-pattern" method="post" autocomplete="off">
+          <h2>
+            <a href="{ $_:CAT }">Users</a> »
+            { html:link($name, $_:SUB, map { 'name': $name } ) } »
+            { html:button('create', 'Add Pattern') }
+          </h2>
           <input type="hidden" name="name" value="{ $name }"/>
           <table>
             <tr>
@@ -52,8 +53,7 @@ function dba:pattern-add(
               <td>
                 <input type="text" name="pattern" value="{ $pattern }" id="pattern"/>
                 { html:focus('pattern') } &#xa0;
-                <span class='note'>…support for <a target='_blank'
-                  href='http://docs.basex.org/wiki/Commands#Glob_Syntax'>glob syntax</a>.</span>
+                <span class='note'>…support for <a target='_blank' href='http://docs.basex.org/wiki/Commands#Glob_Syntax'>glob syntax</a>.</span>
                 <div class='small'/>
               </td>
             </tr>
@@ -61,7 +61,7 @@ function dba:pattern-add(
               <td>Permission:</td>
               <td>
                 <select name="perm" size="3">{
-                  for $p in $options:PERMISSIONS[position() = 1 to 3]
+                  for $p in $cons:PERMISSIONS[position() = 1 to 3]
                   return element option { attribute selected { }[$p = $perm], $p }
                 }</select>
                 <div class='small'/>
@@ -76,29 +76,39 @@ function dba:pattern-add(
 
 (:~
  : Creates a pattern.
- : @param  $name     user name
- : @param  $perm     permission
+ : @param  $name     user
  : @param  $pattern  pattern
- : @return redirection
+ : @param  $perm     permission
  :)
 declare
   %updating
   %rest:POST
-  %rest:path("/dba/pattern-add")
+  %rest:path("/dba/add-pattern")
   %rest:query-param("name",    "{$name}")
   %rest:query-param("perm",    "{$perm}")
   %rest:query-param("pattern", "{$pattern}")
-function dba:create(
+function _:create(
   $name     as xs:string,
   $perm     as xs:string,
   $pattern  as xs:string
-) as empty-sequence() {
+) {
+  cons:check(),
   try {
-    user:grant($name, $perm, $pattern),
-    util:redirect($dba:SUB, map { 'name': $name, 'info': 'Pattern was created.' })
+    util:update("user:grant($name, $perm, $pattern)", map {
+      'name':    $name,
+      'perm':    $perm,
+      'pattern': $pattern
+    }),
+    db:output(web:redirect($_:SUB, map {
+      'info': 'Created Pattern: ' || $pattern,
+      'name': $name
+    }))
   } catch * {
-    util:redirect('pattern-add', map {
-      'name': $name, 'perm': $perm, 'pattern': $pattern, 'error': $err:description
-    })
+    db:output(web:redirect("add-pattern", map {
+      'error': $err:description,
+      'name': $name,
+      'perm': $perm,
+      'pattern': $pattern
+    }))
   }
 };

@@ -1,89 +1,87 @@
 (:~
  : Backup operations.
  :
- : @author Christian Grün, BaseX Team, 2014-18
+ : @author Christian Grün, BaseX GmbH, 2014-15
  :)
-module namespace dba = 'dba/databases';
+module namespace _ = 'dba/databases';
 
+import module namespace cons = 'dba/cons' at '../modules/cons.xqm';
 import module namespace util = 'dba/util' at '../modules/util.xqm';
 
 (:~ Sub category :)
-declare variable $dba:SUB := 'database';
+declare variable $_:SUB := 'database';
 
 (:~
  : Creates a database backup.
  : @param  $name  name of database
- : @return redirection
  :)
 declare
   %updating
   %rest:GET
-  %rest:path("/dba/backup-create")
+  %rest:path("/dba/create-backup")
   %rest:query-param("name", "{$name}")
-function dba:backup-create(
+function _:create-backup(
   $name  as xs:string
-) as empty-sequence() {
-  dba:action($name, 'Backup was created.', function() {
-    db:create-backup($name)
-  })
+) {
+  _:action($name, 'Backup was created.', "db:create-backup($n)", map { 'n': $name })
 };
 
 (:~
  : Drops a database backup.
  : @param  $name     name of database
  : @param  $backups  backup files
- : @return redirection
  :)
 declare
   %updating
   %rest:GET
-  %rest:path("/dba/backup-drop")
+  %rest:path("/dba/drop-backup")
   %rest:query-param("name",   "{$name}")
   %rest:query-param("backup", "{$backups}")
-function dba:backup-drop(
+function _:drop-backup(
   $name     as xs:string,
   $backups  as xs:string*
-) as empty-sequence() {
-  dba:action($name, util:info($backups, 'backup', 'dropped'), function() {
-    $backups ! db:drop-backup(.)
-  })
+) {
+  let $n := count($backups)
+  let $info := if($n = 1) then 'Backup was dropped.' else $n || ' backups were dropped.'
+  return _:action($name, $info, "$b ! db:drop-backup(.)", map { 'b': $backups })
 };
 
 (:~
  : Restores a database backup.
  : @param  $name    database
  : @param  $backup  backup file
- : @return redirection
  :)
 declare
   %updating
   %rest:GET
-  %rest:path("/dba/backup-restore")
+  %rest:path("/dba/restore")
   %rest:query-param("name",   "{$name}")
   %rest:query-param("backup", "{$backup}")
-function dba:backup-restore(
+function _:restore(
   $name    as xs:string,
   $backup  as xs:string
-) as empty-sequence() {
-  dba:action($name, 'Database was restored.', function() { db:restore($backup) })
+) {
+  _:action($name, 'Database was restored.', "db:restore($b)", map { 'b': $backup })
 };
 
 (:~
  : Performs a backup operation.
- : @param  $name    database
- : @param  $info    info string
- : @param  $action  updating function
- : @return redirection
+ : @param  $name   database
+ : @param  $info   info string
+ : @param  $query  query to execute 
+ : @param  $args   query arguments
  :)
-declare %updating function dba:action(
-  $name    as xs:string,
-  $info    as xs:string,
-  $action  as %updating function(*)
-) as empty-sequence() {
+declare %updating function _:action(
+  $name   as xs:string,
+  $info   as xs:string,
+  $query  as xs:string,
+  $args   as map(*)
+) {
+  cons:check(),
   try {
-    updating $action(),
-    util:redirect($dba:SUB, map { 'name': $name, 'info': $info })
+    util:update($query, $args),
+    db:output(web:redirect($_:SUB, map { 'name': $name, 'info': $info }))
   } catch * {
-    util:redirect($dba:SUB, map { 'name': $name, 'error': $err:description })
+    db:output(web:redirect($_:SUB, map { 'name': $name, 'error': $err:description }))
   }
 };
