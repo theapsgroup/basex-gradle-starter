@@ -6,9 +6,8 @@
 A simple build script template for using http://basex.org[BaseX] with Gradle.
 Also adds Saxon HE so you can use XSLT 2.0 and 3.0 out of the gate.
 
-The version of BaseX used is also the name of a branch. The master is currently
-at BaseX {basexVersion} but if you need to quickly test something with an older
-release then just switch to another branch.
+This is version {basexVersion} if you want to test with a different version then
+choose one of the other branches (only from 8.0 onwards).
 
 Installation steps:
 
