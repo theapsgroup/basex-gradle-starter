@@ -28,15 +28,15 @@ applicationDefaultJvmArgs = [
     "-Dorg.basex.cacherestxq=${System.properties['org.basex.CACHERESTXQ']}"
 ]
 
-def jettyVersion = '9.4.8.v20171121'
+def jettyVersion = '8.1.18.v20150929'
 
 dependencies {
-    runtime "org.basex:basex-api:9.0-SNAPSHOT"
-    runtime "net.xqj:basex-xqj:1.6.0"
+    runtime "org.basex:basex-api:8.3.1"
+    runtime "net.xqj:basex-xqj:1.5.0"
     runtime "org.xmldb:xmldb-api:1.0"
     runtime "commons-fileupload:commons-fileupload:1.3.1"
     runtime "com.vividsolutions:jts:1.13"
-    runtime "org.slf4j:slf4j-simple:1.7.13"
+    runtime "org.slf4j:slf4j-simple:1.7.12"
     runtime "org.eclipse.jetty:jetty-webapp:${jettyVersion}"
     runtime("com.ettrema:milton-api:1.8.1.4") {
         exclude group: 'commons-logging', module: 'commons-logging'
