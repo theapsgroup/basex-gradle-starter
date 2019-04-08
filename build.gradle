@@ -18,7 +18,7 @@ jar {
 def jettyVersion = '9.4.12.v20180830'
 
 dependencies {
-    runtime "org.basex:basex-api:9.1.2"
+    runtime "org.basex:basex-api:9.1"
     runtime "org.eclipse.jetty:jetty-webapp:${jettyVersion}"
     runtime "jp.sourceforge.igo:igo:0.4.3"
     runtime "org.apache:lucene-stemmers:3.4.0"
