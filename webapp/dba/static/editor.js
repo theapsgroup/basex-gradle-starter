@@ -1,12 +1,30 @@
 function openQuery() {
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+  if(!confirm('Replace editor contents?')) return;
+
+>>>>>>> basex-8.4
+>>>>>>> basex-8.3
   var file = document.getElementById("file");
   request("POST", "open-query?name=" + encodeURIComponent(file.value.trim()),
     null,
     function(req) {
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> basex-8.3
       document.getElementById("editor").value = req.responseText;
       var evt = document.createEvent("HTMLEvents");
       evt.initEvent("change",false,false);
       document.getElementById("editor").dispatchEvent(evt);
+<<<<<<< HEAD
+=======
+=======
+      _editorMirror.setValue(req.responseText);
+>>>>>>> basex-8.4
+>>>>>>> basex-8.3
     },
     function(req) {
       setError('Query could not be opened.');
@@ -77,6 +95,7 @@ function queryExists() {
   }
   return false;
 };
+<<<<<<< HEAD
 
 function loadCodeMirror() {
   if (CodeMirror && dispatchEvent) {
@@ -122,3 +141,8 @@ function setDisplayHeight() {
     cm.CodeMirror.setSize("100%",Math.max(200,s-(p-c)));
   });
 }
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> basex-8.4
+>>>>>>> basex-8.3

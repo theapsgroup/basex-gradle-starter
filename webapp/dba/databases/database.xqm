@@ -1,7 +1,15 @@
 (:~
  : Database main page.
  :
+<<<<<<< HEAD
  : @author Christian Grün, BaseX GmbH, 2014-15
+=======
+<<<<<<< HEAD
+ : @author Christian Grün, BaseX GmbH, 2014-15
+=======
+ : @author Christian Grün, BaseX Team, 2014-16
+>>>>>>> basex-8.4
+>>>>>>> basex-8.3
  :)
 module namespace _ = 'dba/databases';
 
@@ -58,7 +66,20 @@ function _:database(
   let $found := $data/found = 'true'
   let $error := ($data/self::error/string(), $error)[1]
 
+<<<<<<< HEAD
   return tmpl:wrap(map { 'top': $_:CAT, 'info': $info, 'error': $error },
+=======
+<<<<<<< HEAD
+  return tmpl:wrap(map { 'top': $_:CAT, 'info': $info, 'error': $error },
+=======
+  return tmpl:wrap(
+    map {
+      'top': $_:CAT, 'info': $info, 'error': $error,
+      'css': 'codemirror/lib/codemirror.css',
+      'scripts': ('codemirror/lib/codemirror.js', 'codemirror/mode/xml/xml.js')
+    },
+>>>>>>> basex-8.4
+>>>>>>> basex-8.3
     <tr>
       <td width='49%'>
         <form action="{ $_:SUB }" method="post" id="{ $_:SUB }" class="update">
@@ -128,11 +149,27 @@ function _:database(
             { html:button('replace', 'Replace…') }
           </form>
           <b>XQuery:</b>
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> basex-8.3
           <input style="width:100%" name="input" id="input"
             onkeyup='queryResource("Please wait…", "Query was successful.")'/>
           { html:focus('input') }
           <textarea name='output' id='output' rows='20' readonly='' spellcheck='false'/>
           <script type="text/javascript">queryResource('', '');</script>
+<<<<<<< HEAD
+=======
+=======
+          <input style="width:100%" name="input" id="input" onkeyup='queryResource()'/>
+          { html:focus('input') }
+          <textarea name='output' id='output' rows='20' readonly='' spellcheck='false'/>
+          <script type="text/javascript">
+            loadCodeMirror();
+            queryResource();
+          </script>
+>>>>>>> basex-8.4
+>>>>>>> basex-8.3
         </_>/node() else (
           $data/info/*/html:properties(.)
         )

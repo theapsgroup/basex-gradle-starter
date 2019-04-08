@@ -1,7 +1,15 @@
 (:~
  : Queries page.
  :
+<<<<<<< HEAD
  : @author Christian Grün, BaseX GmbH, 2014-15
+=======
+<<<<<<< HEAD
+ : @author Christian Grün, BaseX GmbH, 2014-15
+=======
+ : @author Christian Grün, BaseX Team, 2014-16
+>>>>>>> basex-8.4
+>>>>>>> basex-8.3
  :)
 module namespace _ = 'dba/queries';
 
@@ -33,8 +41,17 @@ function _:queries(
 ) as element() {
   cons:check(),
 
+<<<<<<< HEAD
   let $f := function($b) { "editor('Please wait…', 'Query was successful.', " || $b || ");" }
   return tmpl:wrap(
+=======
+<<<<<<< HEAD
+  let $f := function($b) { "editor('Please wait…', 'Query was successful.', " || $b || ");" }
+  return tmpl:wrap(
+=======
+  tmpl:wrap(
+>>>>>>> basex-8.4
+>>>>>>> basex-8.3
     map {
       'top': $_:CAT, 'info': $info, 'error': $error,
       'css': 'codemirror/lib/codemirror.css',
@@ -46,17 +63,39 @@ function _:queries(
         <table width='100%'>
           <tr>
             <td width='80%'>
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> basex-8.3
               <select id='mode' onchange='{ $f(false()) }'>{
                 ('Standard', 'Realtime', 'Updating') ! element option { . }
               }</select>
               <button id='run' onclick="{ $f(true()) }">Run</button>
+<<<<<<< HEAD
+=======
+=======
+              <select id='mode'>{
+                ('Read-Only', 'Updating') ! element option { . }
+              }</select>
+              <button id='run' onclick="evalQuery()"
+                title='Ctrl-Enter'>Run</button>
+>>>>>>> basex-8.4
+>>>>>>> basex-8.3
             </td>
             <td width='20%' align='right'>
               <h2>Editor</h2>
             </td>
           </tr>
         </table>
+<<<<<<< HEAD
         <textarea id='editor' name='editor' rows='20' spellcheck='false' onkeyup="{ $f(false()) }"/>
+=======
+<<<<<<< HEAD
+        <textarea id='editor' name='editor' rows='20' spellcheck='false' onkeyup="{ $f(false()) }"/>
+=======
+        <textarea id='editor' name='editor' rows='20' spellcheck='false'/>
+>>>>>>> basex-8.4
+>>>>>>> basex-8.3
         <table width='100%'>
           <tr>
             <td>
@@ -86,7 +125,15 @@ function _:queries(
             </td>
           </tr>
         </table>
+<<<<<<< HEAD
         <textarea id='output' rows='20' readonly='' spellcheck='false'/>
+=======
+<<<<<<< HEAD
+        <textarea id='output' rows='20' readonly='' spellcheck='false'/>
+=======
+        <textarea name='output' id='output' rows='20' readonly='' spellcheck='false'/>
+>>>>>>> basex-8.4
+>>>>>>> basex-8.3
         <script type="text/javascript">loadCodeMirror();</script>
       </td>
     </tr>
@@ -101,6 +148,13 @@ function _:queries(
 declare
   %rest:POST("{$query}")
   %rest:path("/dba/eval-query")
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+  %rest:single
+>>>>>>> basex-8.4
+>>>>>>> basex-8.3
   %output:method("text")
 function _:eval-query(
   $query  as xs:string?
@@ -168,8 +222,13 @@ function _:save-query(
  :)
 declare
   %updating
+<<<<<<< HEAD
   %rest:path("/dba/update-query")
   %rest:query-param("query", "{$query}")
+=======
+  %rest:POST("{$query}")
+  %rest:path("/dba/update-query")
+>>>>>>> basex-8.3
   %output:method("text")
 function _:update-query(
   $query  as xs:string?

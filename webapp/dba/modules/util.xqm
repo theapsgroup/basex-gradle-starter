@@ -1,7 +1,15 @@
 (:~
  : Web functions.
  :
+<<<<<<< HEAD
  : @author Christian Grün, BaseX GmbH, 2014-15
+=======
+<<<<<<< HEAD
+ : @author Christian Grün, BaseX GmbH, 2014-15
+=======
+ : @author Christian Grün, BaseX Team, 2014-16
+>>>>>>> basex-8.4
+>>>>>>> basex-8.3
  :)
 module namespace util = 'dba/util';
 
@@ -34,7 +42,15 @@ declare function util:query(
   let $limit := $cons:OPTION($cons:K-MAX-CHARS)
   let $query := if($query) then $query else '()'
   let $q := "xquery:eval($query, map {" || $map || "}, " || util:query-options() || ")"
+<<<<<<< HEAD
   let $s := "serialize(" || $q || ", map{ 'limit': $limit*2, 'method': 'adaptive' })"
+=======
+<<<<<<< HEAD
+  let $s := "serialize(" || $q || ", map{ 'limit': $limit*2, 'method': 'adaptive' })"
+=======
+  let $s := "serialize(" || $q || ", map{ 'limit': $limit*2, 'method': 'basex' })"
+>>>>>>> basex-8.4
+>>>>>>> basex-8.3
   return util:eval(
     $s ||
     "! (if(string-length(.) > $limit) then substring(., 1, $limit) || '...' else .)",

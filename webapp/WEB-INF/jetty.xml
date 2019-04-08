@@ -19,11 +19,14 @@
     </Arg>
   </Call>
 
+<<<<<<< HEAD
   <!-- Debugging
   <Get class="org.eclipse.jetty.util.log.Log" name="log">
     <Set name="debugEnabled">true</Set>
   </Get> -->
 
+=======
+>>>>>>> basex-8.3
   <!-- Support for SSL connections.
   <Call name="addConnector">
     <Arg>
@@ -38,4 +41,13 @@
       </New>
     </Arg>
   </Call>-->
+<<<<<<< HEAD
+=======
+
+  <!-- Debugging
+  <Get class="org.eclipse.jetty.util.log.Log" name="log">
+    <Set name="debugEnabled">true</Set>
+  </Get> -->
+
+>>>>>>> basex-8.3
 </Configure>

@@ -1,7 +1,18 @@
 /* BASICS */
 
 .CodeMirror {
+<<<<<<< HEAD
   font-family: "Consolas", "Ubuntu Mono", monospace; 
+=======
+<<<<<<< HEAD
+  font-family: "Consolas", "Ubuntu Mono", monospace; 
+=======
+  /* Set height, width, borders, and global font properties here */
+  font-family: monospace;
+  height: 300px;
+  color: black;
+>>>>>>> basex-8.4
+>>>>>>> basex-8.3
 }
 
 /* PADDING */
@@ -276,11 +287,22 @@ div.CodeMirror span.CodeMirror-nonmatchingbracket {color: #f22;}
 }
 .CodeMirror-measure pre { position: static; }
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> basex-8.3
 .CodeMirror div.CodeMirror-cursor {
   position: absolute;
   border-right: none;
   width: 0;
 }
+<<<<<<< HEAD
+=======
+=======
+.CodeMirror-cursor { position: absolute; }
+.CodeMirror-measure pre { position: static; }
+>>>>>>> basex-8.4
+>>>>>>> basex-8.3
 
 div.CodeMirror-cursors {
   visibility: hidden;
