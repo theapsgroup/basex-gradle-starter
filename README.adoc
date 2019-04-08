@@ -14,25 +14,44 @@ Installation steps:
 1. `git clone https://github.com/xokomola/basex-gradle-starter.git`
 2. There is no step 2
 
-That's right. There's just one step between cloning this and running
-queries with BaseX.
+That's right. There's just one step between cloning this and using this.
 
-== Startup tasks
+== Usage
 
 This build script provides the following tasks for running BaseX.
 
 - `gui`
+- `client`
 - `http`
 
 Configuration is done in `gradle.properties`.
 
-== Standalone JAR
+.BaseX HTTP server
+[source]
+----
+gradlew http
+----
+
+.BaseX client console
+[source]
+----
+gradlew http
+----
+
+.BaseX GUI
+[source]
+----
+gradlew gui
+----
+
+== Using a standalone JAR
 
 You can combine all the needed jar files and create a so-called fat JAR. This
 allows you to run BaseX as a JAR (easy to deploy). You can already do that
 with the BaseX core distribution but with this it also includes the optional
 libraries.
 
+.Build fat JAR
 [source]
 ----
 gradlew shadowJar
@@ -40,39 +59,38 @@ gradlew shadowJar
 
 The JAR file will be created in the `build/libs` directory.
 
-This wil not contain the `data`, `repo` and `webapp` directories, you will have
-to pass the paths (and possibly other settings). In this case I pass the paths
-to the project files.
+Note that you will still have to deploy the `data`, `repo` and `webapp`
+directories (and other resources) separately.
 
-.Run HTTP server from JAR
+.HTTP server
 [source,subs="attributes"]
 ----
-java -Dorg.basex.dbpath=data
-     -Dorg.basex.repopath=repo 
-     -Dorg.basex.webpath=webapp
+java -Dorg.basex.dbpath=data \
+     -Dorg.basex.repopath=repo \ 
+     -Dorg.basex.webpath=webapp \
      -jar build/libs/{shadowJarName}
 ----
 
 You can also use all the regular basex
 http://docs.basex.org/wiki/Command-Line_Options[command-line arguments]. For
 example start the HTTP server on a different port.
-You can connect to this server (from another shell window).
 
-.Start the REPL
+.BaseX client console
 [source,subs="attributes"]
 ----
-java -cp build/libs/{shadowJarName} org.basex.BaseXClient
+java -Dorg.basex.dbpath=data \
+     -Dorg.basex.repopath=repo \ 
+     -Dorg.basex.webpath=webapp \
+     -cp build/libs/{shadowJarName} \
+     org.basex.BaseXClient
 ----
 
-Or, start the GUI client.
-
-.Start the GUI
+.BaseX GUI
 [source,subs="attributes"]
 ----
-java -cp build/libs/{shadowJarName} org.basex.BaseXGUI
+java -Dorg.basex.dbpath=data \
+     -Dorg.basex.repopath=repo \ 
+     -Dorg.basex.webpath=webapp \
+     -cp build/libs/{shadowJarName} \
+     org.basex.BaseXGUI
 ----
-
-== Contributors
-
-- https://github.com/xokomola[xokomola]
-- https://github.com/vincentml[vincentml]

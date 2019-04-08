@@ -34,14 +34,23 @@ dependencies {
 }
 
 task http(type: JavaExec) {
-    description "Start BaseX HTTP server"
+    description "BaseX HTTP server"
     group "XML"
     classpath configurations.runtime
+    standardInput = System.in
     main = "org.basex.BaseXHTTP"
 }
 
+task client(type: JavaExec) {
+    description "BaseX console"
+    group "XML"
+    classpath configurations.runtime
+    standardInput = System.in
+    main = "org.basex.BaseXClient"
+}
+
 task gui {
-    description "Run BaseX GUI."
+    description "BaseX GUI"
     group "XML"
     doLast {
         ant.java(
