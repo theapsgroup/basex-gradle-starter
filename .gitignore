@@ -1,6 +1,10 @@
 .gradle/
-build/
 .basex
 .basexgui
 .basexhistory
+build/
 data/
+logs/
+*~
+\#*\#
+.\#*

@@ -1,6 +1,5 @@
 plugins {
-  id "com.github.johnrengelman.shadow" version "2.0.2"
-  id "application"
+  id "com.github.johnrengelman.shadow" version "5.0.0"
   id "java"
 }
 
@@ -8,45 +7,19 @@ repositories {
     maven { url "http://files.basex.org/maven" }
     maven { url "http://xqj.net/maven" }
     mavenCentral()
-    mavenLocal()
 }
 
-applicationName = 'basex-demo'
-version = '1.0'
-mainClassName = 'org.basex.BaseXHTTP'
-applicationDefaultJvmArgs = [
-    "-Dorg.basex.port=${System.properties['org.basex.PORT']}",
-    "-Dorg.basex.serverport=${System.properties['org.basex.SERVERPORT']}",
-    "-Dorg.basex.stopport=${System.properties['org.basex.STOPPORT']}",
-    "-Dorg.basex.logpath=${System.properties['org.basex.LOGPATH']}",
-    "-Dorg.basex.dbpath=${System.properties['org.basex.DBPATH']}",
-    "-Dorg.basex.repopath=${System.properties['org.basex.REPOPATH']}",
-    "-Dorg.basex.webpath=${System.properties['org.basex.WEBPATH']}",
-    "-Dorg.basex.mixupdates=${System.properties['org.basex.MIXUPDATES']}",
-    "-Dorg.basex.globallock=${System.properties['org.basex.GLOBALLOCK']}",
-    "-Dorg.basex.chop=${System.properties['org.basex.CHOP']}",
-    "-Dorg.basex.cacherestxq=${System.properties['org.basex.CACHERESTXQ']}"
-]
+jar {
+   manifest {
+       attributes 'Main-Class': 'org.basex.BaseXHTTP'
+   }
+}
 
 def jettyVersion = '8.1.16.v20140903'
 
 dependencies {
-    runtime "org.basex:basex-api:8.0.3"
-    runtime "net.xqj:basex-xqj:1.4.0"
-    runtime "org.xmldb:xmldb-api:1.0"
-    runtime "commons-fileupload:commons-fileupload:1.3.1"
-    runtime "com.vividsolutions:jts:1.13"
-    runtime "org.slf4j:slf4j-simple:1.7.10"
+    runtime "org.basex:basex-api:8.0"
     runtime "org.eclipse.jetty:jetty-webapp:${jettyVersion}"
-    runtime("com.ettrema:milton-api:1.8.1.4") {
-        exclude group: 'commons-logging', module: 'commons-logging'
-        exclude group: 'commons-beanutils', module: 'commons-beanutils'
-        exclude group: 'org.slf4j', module: 'slf4j-log4j12'
-        exclude group: 'log4j', module: 'log4j'
-        exclude group: 'org.slf4j', module: 'slf4j-api'
-    }
-	
-    // optional
     runtime "jp.sourceforge.igo:igo:0.4.3"
     runtime "org.apache:lucene-stemmers:3.4.0"
     runtime "org.ccil.cowan.tagsoup:tagsoup:1.2.1"
@@ -57,95 +30,27 @@ dependencies {
         exclude group: 'net.sf.saxon', module: 'saxon'
         exclude group: 'isorelax', module: 'isorelax'
     }
-    runtime "net.sf.saxon:Saxon-HE:9.8.0-8"
+    runtime "net.sf.saxon:Saxon-HE:9.9.1-2"
 }
 
-task server(type: JavaExec) {
-    description "Start BaseX database server."
+task http(type: JavaExec) {
+    description "BaseX HTTP server"
     group "XML"
     classpath configurations.runtime
-    main = "org.basex.BaseXServer"
-    systemProperties System.getProperties()
-}
-
-task serverstart {
-    description "Start BaseX database server in background."
-    group "XML"
-    doLast {
-        ant.java(
-            fork: true,
-            spawn: true,
-            classpath: configurations.runtime.asPath, 
-            className: "org.basex.BaseXServer",
-            clonevm: true)
-    }
-}
-
-task serverstop(type: JavaExec) {
-    description "Stop BaseX database server."
-    group "XML"
-    classpath configurations.runtime
-    main = "org.basex.BaseXServer"
-    args "stop"
-    systemProperties System.getProperties()
-}
-
-// alias for gradlew run
-task http(dependsOn: run) {
-    description "Run BaseX HTTP and database server."
-    group "XML"
-}
-
-task httpstart {
-    description "Start BaseX HTTP and database server in background."
-    group "XML"
-    doLast {
-        ant.java(
-            fork: true,
-            spawn: true,
-            classpath: configurations.runtime.asPath, 
-            className: "org.basex.BaseXHTTP",
-            clonevm: true)
-    }
-}
-
-task httpstop(type: JavaExec) {
-    description "Stop BaseX HTTP and database server."
-    group "XML"
-    classpath configurations.runtime
+    standardInput = System.in
     main = "org.basex.BaseXHTTP"
-    args "stop"
-    systemProperties System.getProperties()
 }
 
-// run with (or use repl.bat)
-// gradlew repl --no-daemon --console plain
-task repl(type: JavaExec) {
-    description "Start BaseX client console (use with --no-daemon --console plain)."
+task client(type: JavaExec) {
+    description "BaseX console"
     group "XML"
-    standardInput = System.in
     classpath configurations.runtime
-    main = "org.basex.BaseX"
-    systemProperties System.getProperties()
-}
-
-task xqtest(type: JavaExec) {
-    description "Run XQuery tests"
-    group "XML"
-    inputs.dir {
-        project.hasProperty("dir") ? dir : null
-    }
     standardInput = System.in
-    classpath configurations.runtime
-    main = "org.basex.BaseX"
-    args "-t", project.hasProperty("dir") ? dir : '.'
-    systemProperties System.getProperties()
+    main = "org.basex.BaseXClient"
 }
-test.dependsOn xqtest
-test.group "XML"
 
 task gui {
-    description "Run BaseX GUI."
+    description "BaseX GUI"
     group "XML"
     doLast {
         ant.java(
