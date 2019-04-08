@@ -22,7 +22,11 @@ declare variable $_:CAT := 'users';
  :)
 declare
   %rest:GET
+<<<<<<< HEAD:webapp/dba/users/create-user.xqm
   %rest:path("dba/create-user")
+=======
+  %rest:path("/dba/create-user")
+>>>>>>> basex-8.2:webapp/dba/users/create-user.xqm
   %rest:query-param("name",  "{$name}")
   %rest:query-param("pw",    "{$pw}")
   %rest:query-param("perm",  "{$perm}", "none")
@@ -91,7 +95,11 @@ function _:create(
 declare
   %updating
   %rest:POST
+<<<<<<< HEAD:webapp/dba/users/create-user.xqm
   %rest:path("dba/create-user")
+=======
+  %rest:path("/dba/create-user")
+>>>>>>> basex-8.2:webapp/dba/users/create-user.xqm
   %rest:query-param("name", "{$name}")
   %rest:query-param("pw",   "{$pw}")
   %rest:query-param("perm", "{$perm}")

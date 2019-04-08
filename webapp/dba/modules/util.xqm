@@ -1,7 +1,19 @@
 (:~
  : Web functions.
  :
+<<<<<<< HEAD
  : @author Christian Grün, BaseX GmbH, 2014-15
+=======
+<<<<<<< HEAD
+ : @author Christian Grün, BaseX GmbH, 2014-15
+=======
+<<<<<<< HEAD
+ : @author Christian Grün, BaseX GmbH, 2014-15
+=======
+ : @author Christian Grün, BaseX Team, 2014-16
+>>>>>>> basex-8.4
+>>>>>>> basex-8.3
+>>>>>>> basex-8.2
  :)
 module namespace util = 'dba/util';
 
@@ -31,10 +43,25 @@ declare function util:query(
   $map    as xs:string,
   $vars   as map(*)
 ) as xs:string {
+<<<<<<< HEAD
   let $limit := $cons:MAX-CHARS
   let $query := if($query) then $query else '()'
   let $q := "xquery:eval($query, map {" || $map || "}, " || util:query-options() || ")"
   let $s := "serialize(" || $q || ", map{ 'limit': $limit*2, 'method': 'adaptive' })"
+=======
+  let $limit := $cons:OPTION($cons:K-MAX-CHARS)
+  let $query := if($query) then $query else '()'
+  let $q := "xquery:eval($query, map {" || $map || "}, " || util:query-options() || ")"
+<<<<<<< HEAD
+  let $s := "serialize(" || $q || ", map{ 'limit': $limit*2, 'method': 'adaptive' })"
+=======
+<<<<<<< HEAD
+  let $s := "serialize(" || $q || ", map{ 'limit': $limit*2, 'method': 'adaptive' })"
+=======
+  let $s := "serialize(" || $q || ", map{ 'limit': $limit*2, 'method': 'basex' })"
+>>>>>>> basex-8.4
+>>>>>>> basex-8.3
+>>>>>>> basex-8.2
   return util:eval(
     $s ||
     "! (if(string-length(.) > $limit) then substring(., 1, $limit) || '...' else .)",
@@ -59,9 +86,15 @@ declare %updating function util:update-query(
  : @return options
  :)
 declare %private function util:query-options() {
+<<<<<<< HEAD
   "map { 'timeout':" || $cons:TIMEOUT ||
        ",'memory':" || $cons:MEMORY ||
        ",'permission':'" || $cons:PERMISSION || "' }"
+=======
+  "map { 'timeout':" || $cons:OPTION($cons:K-TIMEOUT) ||
+       ",'memory':" || $cons:OPTION($cons:K-MEMORY) ||
+       ",'permission':'" || $cons:OPTION($cons:K-PERMISSION) || "' }"
+>>>>>>> basex-8.2
 };
 
 (:~

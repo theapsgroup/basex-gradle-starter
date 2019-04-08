@@ -1,7 +1,19 @@
 (:~
  : Database main page.
  :
+<<<<<<< HEAD
  : @author Christian Grün, BaseX GmbH, 2014-15
+=======
+<<<<<<< HEAD
+ : @author Christian Grün, BaseX GmbH, 2014-15
+=======
+<<<<<<< HEAD
+ : @author Christian Grün, BaseX GmbH, 2014-15
+=======
+ : @author Christian Grün, BaseX Team, 2014-16
+>>>>>>> basex-8.4
+>>>>>>> basex-8.3
+>>>>>>> basex-8.2
  :)
 module namespace _ = 'dba/databases';
 
@@ -25,7 +37,11 @@ declare variable $_:SUB := 'database';
  :)
 declare
   %rest:GET
+<<<<<<< HEAD
   %rest:path("dba/database")
+=======
+  %rest:path("/dba/database")
+>>>>>>> basex-8.2
   %rest:query-param("name",     "{$name}")
   %rest:query-param("resource", "{$resource}")
   %rest:query-param("error",    "{$error}")
@@ -51,14 +67,35 @@ function _:database(
         ) else (),
         element backups { db:backups($name) }
       )
+<<<<<<< HEAD
     }', map { 'name': $name, 'max': $cons:MAX-ROWS + 1 })
+=======
+    }', map { 'name': $name, 'max': $cons:OPTION($cons:K-MAX-ROWS) + 1 })
+>>>>>>> basex-8.2
   } catch * {
     element error { $cons:DATA-ERROR || ': ' || $err:description }
   }
   let $found := $data/found = 'true'
   let $error := ($data/self::error/string(), $error)[1]
 
+<<<<<<< HEAD
   return tmpl:wrap(map { 'top': $_:CAT, 'info': $info, 'error': $error },
+=======
+<<<<<<< HEAD
+  return tmpl:wrap(map { 'top': $_:CAT, 'info': $info, 'error': $error },
+=======
+<<<<<<< HEAD
+  return tmpl:wrap(map { 'top': $_:CAT, 'info': $info, 'error': $error },
+=======
+  return tmpl:wrap(
+    map {
+      'top': $_:CAT, 'info': $info, 'error': $error,
+      'css': 'codemirror/lib/codemirror.css',
+      'scripts': ('codemirror/lib/codemirror.js', 'codemirror/mode/xml/xml.js')
+    },
+>>>>>>> basex-8.4
+>>>>>>> basex-8.3
+>>>>>>> basex-8.2
     <tr>
       <td width='49%'>
         <form action="{ $_:SUB }" method="post" id="{ $_:SUB }" class="update">
@@ -71,11 +108,20 @@ function _:database(
               let $entries := $data/databases/* !
                 <e resource='{ . }' ct='{ @content-type }' raw='{
                   if(@raw = 'true') then '✓' else '–'
+<<<<<<< HEAD
                 }'/>
               let $headers := (
                 <resource>{ html:label($entries, ('Resource', 'Resources')) }</resource>,
                 <ct>Content type</ct>,
                 <raw>Raw</raw>
+=======
+                }' size='{ @size }'/>
+              let $headers := (
+                <resource>{ html:label($entries, ('Resource', 'Resources')) }</resource>,
+                <ct>Content type</ct>,
+                <raw>Raw</raw>,
+                <size type='number' order='desc'>Size (factor)</size>
+>>>>>>> basex-8.2
               )
               let $buttons := (
                 html:button('add', 'Add…'),
@@ -127,11 +173,33 @@ function _:database(
             { html:button('replace', 'Replace…') }
           </form>
           <b>XQuery:</b>
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> basex-8.3
+>>>>>>> basex-8.2
           <input style="width:100%" name="input" id="input"
             onkeyup='queryResource("Please wait…", "Query was successful.")'/>
           { html:focus('input') }
           <textarea name='output' id='output' rows='20' readonly='' spellcheck='false'/>
           <script type="text/javascript">queryResource('', '');</script>
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+=======
+          <input style="width:100%" name="input" id="input" onkeyup='queryResource()'/>
+          { html:focus('input') }
+          <textarea name='output' id='output' rows='20' readonly='' spellcheck='false'/>
+          <script type="text/javascript">
+            loadCodeMirror();
+            queryResource();
+          </script>
+>>>>>>> basex-8.4
+>>>>>>> basex-8.3
+>>>>>>> basex-8.2
         </_>/node() else (
           $data/info/*/html:properties(.)
         )

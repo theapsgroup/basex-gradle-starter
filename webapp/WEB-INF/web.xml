@@ -7,11 +7,50 @@
 
   <display-name>BaseX: The XML Database and XQuery Processor</display-name>
   <description>HTTP Services</description>
+<<<<<<< HEAD
 
   <!-- All BaseX options can be overwritten  prefixing the key with "org.basex."
        and specifying them in <context-param/> elements, as shown below. Please
        check out http://docs.basex.org/wiki/Options for a list of all options. -->
 
+=======
+<<<<<<< HEAD
+
+  <!-- All BaseX options can be overwritten  prefixing the key with "org.basex."
+       and specifying them in <context-param/> elements, as shown below. Please
+       check out http://docs.basex.org/wiki/Options for a list of all options. -->
+
+=======
+<<<<<<< HEAD
+
+  <!-- All BaseX options can be overwritten  prefixing the key with "org.basex."
+       and specifying them in <context-param/> elements, as shown below. Please
+       check out http://docs.basex.org/wiki/Options for a list of all options. -->
+
+=======
+<<<<<<< HEAD
+
+  <!-- All BaseX options can be overwritten  prefixing the key with "org.basex."
+       and specifying them in <context-param/> elements, as shown below. Please
+       check out http://docs.basex.org/wiki/Options for a list of all options. -->
+
+=======
+<<<<<<< HEAD
+=======
+
+  <!-- A BaseX option can be overwritten by prefixing the key with "org.basex."
+       and specifying it in <context-param/> elements, as shown below. Please
+       check out http://docs.basex.org/wiki/Options for a list of all options.
+>>>>>>> basex-8.6
+
+  <!-- All BaseX options can be overwritten  prefixing the key with "org.basex."
+       and specifying them in <context-param/> elements, as shown below. Please
+       check out http://docs.basex.org/wiki/Options for a list of all options. -->
+
+>>>>>>> basex-8.5
+>>>>>>> basex-8.4
+>>>>>>> basex-8.3
+>>>>>>> basex-8.2
   <!--
   <context-param>
     <param-name>org.basex.restxqpath</param-name>
@@ -56,8 +95,56 @@
   <!-- Global session listener -->
   <listener>
     <listener-class>org.basex.http.SessionListener</listener-class>
+<<<<<<< HEAD
   </listener>
 
+=======
+    <listener-class>org.basex.http.ServletListener</listener-class>
+  </listener>
+
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+  <!-- CORS in Jetty: Access-Control-Allow-Origin: *
+  <filter>
+    <filter-name>cross-origin</filter-name>
+    <filter-class>org.eclipse.jetty.servlets.CrossOriginFilter</filter-class>
+    <init-param>
+      <param-name>allowedOrigins</param-name>
+      <param-value>*</param-value>
+    </init-param>
+  </filter>
+  <filter-mapping>
+    <filter-name>cross-origin</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+  -->
+
+  <!-- Dynamic compression of contents:
+  <filter>
+    <filter-name>GzipFilter</filter-name>
+    <filter-class>org.eclipse.jetty.servlets.GzipFilter</filter-class>
+    <init-param>
+      <param-name>mimeTypes</param-name>
+      <param-value>text/html,text/xml,application/xhtml+xml,image/svg+xml</param-value>
+    </init-param>
+  </filter>
+  <filter-mapping>
+    <filter-name>GzipFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+  -->
+
+>>>>>>> basex-8.6
+>>>>>>> basex-8.5
+>>>>>>> basex-8.4
+>>>>>>> basex-8.3
+>>>>>>> basex-8.2
   <!-- RESTXQ Service (can be deactivated by removing this entry) -->
   <servlet>
     <servlet-name>RESTXQ</servlet-name>

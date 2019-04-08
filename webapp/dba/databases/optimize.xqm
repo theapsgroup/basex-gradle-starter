@@ -1,7 +1,7 @@
 (:~
  : Optimize databases.
  :
- : @author Christian Grün, BaseX GmbH, 2014-15
+ : @author Christian Grün, BaseX Team, 2014-16
  :)
 module namespace _ = 'dba/databases';
 
@@ -26,7 +26,7 @@ declare variable $_:SUB := 'database';
  :)
 declare
   %rest:GET
-  %rest:path("dba/optimize")
+  %rest:path("/dba/optimize")
   %rest:query-param("name",  "{$name}")
   %rest:query-param("all",   "{$all}")
   %rest:query-param("opts",  "{$opts}")
@@ -48,16 +48,11 @@ function _:create(
     element error { $cons:DATA-ERROR || ': ' || $err:description }
   }
   let $error := ($data/self::error/string(), $error)[1]
+  let $opts := if($opts = 'x') then $opts else $data//*[text() = 'true']/name()
+  let $lang := if($opts = 'x') then $lang else 'en'
 
   return tmpl:wrap(map { 'top': $_:CAT, 'error': $error },
-    let $first := not($opts = 'x')
-    let $cb := function($option, $label) {
-      let $c := if($first)
-                then $data//*[name() = $option] = 'true'
-                else $opts = $option
-      return html:checkbox("opts", $option, $c, $label)
-    }
-    return <tr>
+    <tr>
       <td>
         <form action="optimize" method="post">
           <h2>
@@ -66,29 +61,28 @@ function _:create(
             { html:button('optimize', 'Optimize') }
           </h2>
           <!-- dummy value; prevents reset of options when nothing is selected -->
-          <input type="hidden" name="name" value="{ $name }"/>
           <input type="hidden" name="opts" value="x"/>
+          <input type="hidden" name="name" value="{ $name }"/>
           <table>
             <tr>
               <td colspan="2">
                 { html:checkbox("all", 'all', exists($all), 'Full optimization') }
-                <h3>{ $cb('textindex', 'Text Index') }</h3>
-                <h3>{ $cb('attrindex', 'Attribute Index') }</h3>
-                <h3>{ $cb('ftindex', 'Fulltext Index') }</h3>
+                <h3>{ html:option('textindex', 'Text Index', $opts) }</h3>
+                <h3>{ html:option('attrindex', 'Attribute Index', $opts) }</h3>
+                <h3>{ html:option('tokenindex', 'Token Index', $opts) }</h3>
+                <h3>{ html:option('ftindex', 'Fulltext Index', $opts) }</h3>
               </td>
             </tr>
             <tr>
-              <td colspan="2">
-                { $cb('stemming', 'Stemming') }<br/>
-                { $cb('casesens', 'Case Sensitivity') }<br/>
-                { $cb('diacritics', 'Diacritics') }<br/>
-              </td>
+              <td colspan="2">{
+                html:option('stemming', 'Stemming', $opts),
+                html:option('casesens', 'Case Sensitivity', $opts),
+                html:option('diacritics', 'Diacritics', $opts)
+              }</td>
             </tr>
             <tr>
               <td>Language:</td>
-              <td><input type="text" name="lang" id="lang" value="{
-                if($first) then $data//language else $lang
-              }"/></td>
+              <td><input type="text" name="lang" id="lang" value="{ $lang }"/></td>
               { html:focus('lang') }
             </tr>
           </table>
@@ -108,11 +102,11 @@ function _:create(
 declare
   %updating
   %rest:POST
-  %rest:path("dba/optimize")
-  %rest:query-param("name", "{$name}")
-  %rest:query-param("all",  "{$all}")
-  %rest:query-param("opts", "{$opts}")
-  %rest:query-param("lang", "{$lang}")
+  %rest:path("/dba/optimize")
+  %rest:form-param("name", "{$name}")
+  %rest:form-param("all",  "{$all}")
+  %rest:form-param("opts", "{$opts}")
+  %rest:form-param("lang", "{$lang}")
 function _:optimize(
   $name  as xs:string,
   $all   as xs:string?,
@@ -122,7 +116,7 @@ function _:optimize(
   try {
     cons:check(),
     util:update("db:optimize($name, boolean($all), map:merge((
-  (('textindex','attrindex','ftindex','stemming','casesens','diacritics') !
+  (('textindex','attrindex','tokenindex','ftindex','stemming','casesens','diacritics') !
     map:entry(., $opts = .)),
     $lang ! map:entry('language', .)
   )
@@ -149,7 +143,7 @@ function _:optimize(
 declare
   %updating
   %rest:GET
-  %rest:path("dba/optimize-all")
+  %rest:path("/dba/optimize-all")
   %rest:query-param("name", "{$names}")
   %output:method("html")
 function _:drop(
@@ -157,7 +151,7 @@ function _:drop(
 ) {
   cons:check(),
   try {
-    util:update("$names ! db:optimize(.)", map { 'n': $names }),
+    util:update("$n ! db:optimize(.)", map { 'n': $names }),
     db:output(web:redirect($_:CAT, map { 'info': 'Optimized databases: ' || count($names) }))
   } catch * {
     db:output(web:redirect($_:CAT, map { 'error': $err:description }))

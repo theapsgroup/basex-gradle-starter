@@ -1,7 +1,19 @@
 (:~
  : Logging page.
  :
+<<<<<<< HEAD
  : @author Christian Grün, BaseX GmbH, 2014-15
+=======
+<<<<<<< HEAD
+ : @author Christian Grün, BaseX GmbH, 2014-15
+=======
+<<<<<<< HEAD
+ : @author Christian Grün, BaseX GmbH, 2014-15
+=======
+ : @author Christian Grün, BaseX Team, 2014-16
+>>>>>>> basex-8.4
+>>>>>>> basex-8.3
+>>>>>>> basex-8.2
  :)
 module namespace _ = 'dba/logs';
 
@@ -25,7 +37,11 @@ declare variable $_:CAT := 'logs';
  :)
 declare
   %rest:GET
+<<<<<<< HEAD
   %rest:path("dba/logs")
+=======
+  %rest:path("/dba/logs")
+>>>>>>> basex-8.2
   %rest:query-param("sort",    "{$sort}", "")
   %rest:query-param("name",    "{$name}")
   %rest:query-param("loglist", "{$loglist}")
@@ -51,7 +67,20 @@ function _:logs(
         <form action="javascript:void(0);">
           <h2>{ if($name) then <a href="{ $_:CAT }">Logs</a> else 'Logs' }:
             <input size="14" name="loglist" id="loglist" value="{ $loglist }"
+<<<<<<< HEAD
               onkeyup="logslist('Please wait…', 'Query was successful.');"/>
+=======
+<<<<<<< HEAD
+              onkeyup="logslist('Please wait…', 'Query was successful.');"/>
+=======
+              placeholder="regular expression"
+<<<<<<< HEAD
+              onkeyup="logslist('Please wait…', 'Query was successful.');"/>
+=======
+              onkeyup="logList();"/>
+>>>>>>> basex-8.4
+>>>>>>> basex-8.3
+>>>>>>> basex-8.2
           </h2>
         </form>
         <form action="{ $_:CAT }" method="post" class="update" autocomplete="off">
@@ -66,10 +95,30 @@ function _:logs(
           <h3>
             { $name }:
             <input size="40" id="logs" value="{ ($loglist, $logs)[1] }"
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+              placeholder="regular expression"
+<<<<<<< HEAD
+>>>>>>> basex-8.3
+>>>>>>> basex-8.2
               onkeyup="logentries('Please wait…', 'Query was successful.');"/>
           </h3>,
           <div id='output'/>,
           <script type="text/javascript">(function(){{ logentries('', ''); }})();</script>
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+=======
+              onkeyup="logEntries();"/>
+          </h3>,
+          <div id='output'/>,
+          <script type="text/javascript">(function(){{ logEntries(); }})();</script>
+>>>>>>> basex-8.4
+>>>>>>> basex-8.3
+>>>>>>> basex-8.2
         ) else (),
         html:focus(if($name) then 'logs' else 'loglist')
       }</td>
@@ -79,6 +128,10 @@ function _:logs(
 
 (:~
  : Returns log entries of a specific log file.
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> basex-8.2
  : @param  $names    name of selected log files
  : @param  $sort     table sort key
  : @param  $loglist  loglist
@@ -87,6 +140,7 @@ function _:logs(
  :)
 declare
   %rest:POST
+<<<<<<< HEAD
   %rest:path("dba/log")
   %rest:query-param("name",    "{$name}")
   %rest:query-param("sort",    "{$sort}")
@@ -94,6 +148,35 @@ declare
   %rest:query-param("query",   "{$query}")
   %output:method("html")
 function _:query(
+=======
+=======
+ : @param  $query    query
+ : @param  $names    name of selected log files
+ : @param  $sort     table sort key
+ : @param  $loglist  loglist
+ : @return html elements
+ :)
+declare
+  %rest:POST("{$query}")
+>>>>>>> basex-8.3
+  %rest:path("/dba/log")
+  %rest:query-param("name",    "{$name}")
+  %rest:query-param("sort",    "{$sort}")
+  %rest:query-param("loglist", "{$loglist}")
+<<<<<<< HEAD
+  %rest:query-param("query",   "{$query}")
+  %output:method("html")
+function _:query(
+=======
+  %output:method("html")
+<<<<<<< HEAD
+function _:query(
+=======
+  %rest:single
+function _:log(
+>>>>>>> basex-8.4
+>>>>>>> basex-8.3
+>>>>>>> basex-8.2
   $name     as xs:string,
   $sort     as xs:string?,
   $query    as xs:string?,
@@ -129,11 +212,30 @@ function _:query(
  : @return html elements
  :)
 declare
+<<<<<<< HEAD
   %rest:POST
   %rest:path("dba/loglist")
   %rest:query-param("sort",  "{$sort}")
   %rest:query-param("query", "{$query}")
   %output:method("html")
+=======
+<<<<<<< HEAD
+  %rest:POST
+  %rest:path("/dba/loglist")
+  %rest:query-param("sort",  "{$sort}")
+  %rest:query-param("query", "{$query}")
+  %output:method("html")
+=======
+  %rest:POST("{$query}")
+  %rest:path("/dba/loglist")
+  %rest:query-param("sort",  "{$sort}")
+  %output:method("html")
+<<<<<<< HEAD
+=======
+  %rest:single
+>>>>>>> basex-8.4
+>>>>>>> basex-8.3
+>>>>>>> basex-8.2
 function _:loglist(
   $sort   as xs:string?,
   $query  as xs:string?

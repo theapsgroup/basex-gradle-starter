@@ -1,6 +1,7 @@
 (:~
  : Provides HTML components.
  :
+<<<<<<< HEAD
  : @author Christian Grün, BaseX GmbH, 2014-15
  :)
 module namespace html = 'dba/html';
@@ -10,8 +11,47 @@ import module namespace cons = 'dba/cons' at '../modules/cons.xqm';
 
 (: Number formats. :)
 declare variable $html:NUMBER := ('decimal','number', 'bytes');
+=======
+<<<<<<< HEAD
+ : @author Christian Grün, BaseX GmbH, 2014-15
+=======
+<<<<<<< HEAD
+ : @author Christian Grün, BaseX GmbH, 2014-15
+=======
+ : @author Christian Grün, BaseX Team, 2014-16
+>>>>>>> basex-8.4
+>>>>>>> basex-8.3
+ :)
+module namespace html = 'dba/html';
+
+import module namespace cons = 'dba/cons' at '../modules/cons.xqm';
+
+(: Number formats. :)
+declare variable $html:NUMBER := ('decimal', 'number', 'bytes');
 
 (:~
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+ : Creates an option checkbox.
+ : @param  $value  value
+ : @param  $label  label
+ : @param  $opts   checked options
+ : @return checkbox
+ :)
+declare function html:option(
+  $value  as xs:string,
+  $label  as xs:string,
+  $opts   as xs:string*
+) as node()+ {
+  html:checkbox("opts", $value, $opts = $value, $label)
+};
+>>>>>>> basex-8.2
+
+(:~
+>>>>>>> basex-8.4
+>>>>>>> basex-8.3
  : Creates a checkbox.
  : @param  $name     name of checkbox
  : @param  $value    value
@@ -213,7 +253,11 @@ declare function html:table(
           if(empty($sort) or $name = $sort) then (
             $value
           ) else (
+<<<<<<< HEAD
             html:link($value, Request:path(), map:merge(($param, map { 'sort': $name })))
+=======
+            html:link($value, "", map:merge(($param, map { 'sort': $name })))
+>>>>>>> basex-8.2
           )
         }
       }
@@ -243,14 +287,45 @@ declare function html:table(
             ) else (
               function($a) { $a }
             )
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> basex-8.4
+>>>>>>> basex-8.3
+>>>>>>> basex-8.2
           return for $entry in $entries
                  let $key := $entry/@*[name() eq $sort]
                  order by $order($key) empty greatest collation '?lang=en'
                  return $entry
+<<<<<<< HEAD
         )
 
         for $entry at $c in $entries
         return if($c <= $cons:MAX-ROWS) then (
+=======
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+=======
+          return
+            for $entry in $entries
+            order by string($entry/@*[name() = $sort])[.] ! $order(.)
+              empty greatest collation '?lang=en'
+            return $entry
+>>>>>>> basex-8.5
+>>>>>>> basex-8.4
+>>>>>>> basex-8.3
+        )
+
+        let $max := $cons:OPTION($cons:K-MAX-ROWS)
+        for $entry at $c in $entries
+        return if($c <= $max) then (
+>>>>>>> basex-8.2
           <tr>{
             for $header at $pos in $headers
             let $name := $header/name()
@@ -260,11 +335,37 @@ declare function html:table(
               if($header/@type = 'bytes') then (
                 try { prof:human(xs:integer(.)) } catch * { . }
               ) else if($header/@type = 'decimal') then (
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
                 try { format-number(number(.), '#.00') } catch * { . }
               ) else if($header/@type = 'dateTime') then (
                 let $zone := timezone-from-dateTime(current-dateTime())
                 let $dt := fn:adjust-dateTime-to-timezone(xs:dateTime(.), $zone)
                 return format-dateTime($dt, '[Y0000]-[M00]-[D00], [H00]:[m00]')
+=======
+<<<<<<< HEAD
+>>>>>>> basex-8.3
+>>>>>>> basex-8.2
+                try { format-number(number(.), '#.00') } catch * { . }
+              ) else if($header/@type = 'dateTime') then (
+                let $zone := timezone-from-dateTime(current-dateTime())
+                let $dt := fn:adjust-dateTime-to-timezone(xs:dateTime(.), $zone)
+                return format-dateTime($dt, '[Y0000]-[M00]-[D00], [H00]:[m00]')
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+=======
+                try { format-number(number(.), '0.00') } catch * { . }
+              ) else if($header/@type = 'dateTime') then (
+                html:date(xs:dateTime(.))
+>>>>>>> basex-8.5
+>>>>>>> basex-8.4
+>>>>>>> basex-8.3
+>>>>>>> basex-8.2
               )
               else .
             )
@@ -281,7 +382,11 @@ declare function html:table(
               )
             }
           }</tr>
+<<<<<<< HEAD
         ) else if($c = $cons:MAX-ROWS + 1) then (
+=======
+        ) else if($c = $max + 1) then (
+>>>>>>> basex-8.2
           <tr>
             <td>{
               if($buttons) then <input type="checkbox" disabled=""/> else ()
@@ -328,6 +433,7 @@ declare function html:focus(
 
 (:~
  : Creates a link to the specified target.
+<<<<<<< HEAD
  : @param  $text   link text
  : @param  $target target
  : @return link
@@ -335,12 +441,38 @@ declare function html:focus(
 declare function html:link(
   $text   as xs:string,
   $target as xs:string
+=======
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> basex-8.3
+ : @param  $text   link text
+ : @param  $target target
+ : @return link
+ :)
+declare function html:link(
+  $text   as xs:string,
+  $target as xs:string
+<<<<<<< HEAD
+=======
+=======
+ : @param  $text    link text
+ : @param  $target  target
+ : @return link
+ :)
+declare function html:link(
+  $text    as xs:string,
+  $target  as xs:string
+>>>>>>> basex-8.4
+>>>>>>> basex-8.3
+>>>>>>> basex-8.2
 ) as element(a) {
   <a href="{ $target }">{ $text }</a>
 };
 
 (:~
  : Creates a link to the specified target.
+<<<<<<< HEAD
  : @param  $text   link text
  : @param  $target target
  : @param  $params map with query parameters
@@ -353,3 +485,63 @@ declare function html:link(
 ) as element(a) {
   html:link($text, web:create-url($target, $params))
 };
+=======
+<<<<<<< HEAD
+ : @param  $text   link text
+ : @param  $target target
+ : @param  $params map with query parameters
+ : @return link
+ :)
+declare function html:link(
+  $text   as xs:string,
+  $target as xs:string,
+  $params as map(*)
+) as element(a) {
+  html:link($text, web:create-url($target, $params))
+};
+=======
+<<<<<<< HEAD
+ : @param  $text   link text
+ : @param  $target target
+ : @param  $params map with query parameters
+ : @return link
+ :)
+declare function html:link(
+  $text   as xs:string,
+  $target as xs:string,
+  $params as map(*)
+) as element(a) {
+  html:link($text, web:create-url($target, $params))
+};
+=======
+ : @param  $text    link text
+ : @param  $target  target
+ : @param  $params  map with query parameters
+ : @return link
+ :)
+declare function html:link(
+  $text    as xs:string,
+  $target  as xs:string,
+  $params  as map(*)
+) as element(a) {
+  html:link($text, web:create-url($target, $params))
+};
+<<<<<<< HEAD
+=======
+
+(:~ 
+ : Formats a date.
+ : @param  $date  date
+ : @return string
+ :)
+declare function html:date(
+  $date as xs:dateTime
+) {
+  let $zone := timezone-from-dateTime(current-dateTime())
+  let $dt := fn:adjust-dateTime-to-timezone(xs:dateTime($date), $zone)
+  return format-dateTime($dt, '[Y0000]-[M00]-[D00], [H00]:[m00]:[s00]')
+};
+>>>>>>> basex-8.5
+>>>>>>> basex-8.4
+>>>>>>> basex-8.3
+>>>>>>> basex-8.2

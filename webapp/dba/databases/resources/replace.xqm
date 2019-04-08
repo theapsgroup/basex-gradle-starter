@@ -1,7 +1,19 @@
 (:~
  : Replace resource.
  :
+<<<<<<< HEAD
  : @author Christian Grün, BaseX GmbH, 2014-15
+=======
+<<<<<<< HEAD
+ : @author Christian Grün, BaseX GmbH, 2014-15
+=======
+<<<<<<< HEAD
+ : @author Christian Grün, BaseX GmbH, 2014-15
+=======
+ : @author Christian Grün, BaseX Team, 2014-16
+>>>>>>> basex-8.4
+>>>>>>> basex-8.3
+>>>>>>> basex-8.2
  :)
 module namespace _ = 'dba/databases';
 
@@ -24,7 +36,11 @@ declare variable $_:SUB := 'database';
  :)
 declare
   %rest:GET
+<<<<<<< HEAD
   %rest:path("dba/replace")
+=======
+  %rest:path("/dba/replace")
+>>>>>>> basex-8.2
   %rest:query-param("name",     "{$name}")
   %rest:query-param("resource", "{$resource}")
   %rest:query-param("error",    "{$error}")
@@ -71,7 +87,11 @@ function _:replace(
 declare
   %updating
   %rest:POST
+<<<<<<< HEAD
   %rest:path("dba/replace")
+=======
+  %rest:path("/dba/replace")
+>>>>>>> basex-8.2
   %rest:form-param("name",     "{$name}")
   %rest:form-param("resource", "{$resource}")
   %rest:form-param("input",    "{$input}")

@@ -1,7 +1,19 @@
 (:~
  : User main page.
  :
+<<<<<<< HEAD
  : @author Christian Grün, BaseX GmbH, 2014-15
+=======
+<<<<<<< HEAD
+ : @author Christian Grün, BaseX GmbH, 2014-15
+=======
+<<<<<<< HEAD
+ : @author Christian Grün, BaseX GmbH, 2014-15
+=======
+ : @author Christian Grün, BaseX Team, 2014-16
+>>>>>>> basex-8.4
+>>>>>>> basex-8.3
+>>>>>>> basex-8.2
  :)
 module namespace _ = 'dba/users';
 
@@ -172,7 +184,11 @@ function _:action(
 declare
   %updating
   %rest:POST
+<<<<<<< HEAD
   %rest:path("dba/edit-user")
+=======
+  %rest:path("/dba/edit-user")
+>>>>>>> basex-8.2
   %rest:query-param("name",    "{$name}")
   %rest:query-param("newname", "{$newname}")
   %rest:query-param("pw",      "{$pw}")

@@ -1,7 +1,19 @@
 (:~
  : Code for logging in and out.
  :
+<<<<<<< HEAD
  : @author Christian Grün, BaseX GmbH, 2014-15
+=======
+<<<<<<< HEAD
+ : @author Christian Grün, BaseX GmbH, 2014-15
+=======
+<<<<<<< HEAD
+ : @author Christian Grün, BaseX GmbH, 2014-15
+=======
+ : @author Christian Grün, BaseX Team, 2014-16
+>>>>>>> basex-8.4
+>>>>>>> basex-8.3
+>>>>>>> basex-8.2
  :)
 module namespace _ = 'dba/login';
 
@@ -49,6 +61,10 @@ function _:welcome(
               <td><b>Password:</b></td>
               <td>
                 <input size="30" type="password" name="pass"/>
+<<<<<<< HEAD
+=======
+                { html:button('login', 'Login') }
+>>>>>>> basex-8.2
               </td>
             </tr>
             <tr>
@@ -114,7 +130,23 @@ function _:login(
       _:reject($name, $url, 'Please check the syntax of your URL.')
     )
   ) else (
+<<<<<<< HEAD
     let $user := user:list-details($name)
+=======
+<<<<<<< HEAD
+    let $user := user:list-details($name)
+=======
+<<<<<<< HEAD
+    let $user := user:list-details($name)
+=======
+<<<<<<< HEAD
+    let $user := user:list-details($name)
+=======
+    let $user := user:list-details()[@name = $name]
+>>>>>>> basex-8.5
+>>>>>>> basex-8.4
+>>>>>>> basex-8.3
+>>>>>>> basex-8.2
     let $pw := $user/password[@algorithm = 'salted-sha256']
     let $salt := $pw/salt
     let $hash := $pw/hash
@@ -135,15 +167,41 @@ function _:login(
  : Ends a session and redirects to the login page.
  : @return redirect
  :)
+<<<<<<< HEAD
 declare %rest:path("dba/logout") function _:logout(
+=======
+declare %rest:path("/dba/logout") function _:logout(
+>>>>>>> basex-8.2
 ) as element(rest:response) {
   let $name := $cons:SESSION/name
   let $url := string-join($cons:SESSION/(host, port), ':')
   return (
+<<<<<<< HEAD
     admin:write-log('User was logged out: ' || $name),
     Session:delete($cons:SESSION-KEY),
     Session:close(),
     web:redirect('login', map { 'nane': $name, 'url': $url })
+=======
+<<<<<<< HEAD
+    admin:write-log('User was logged out: ' || $name),
+    Session:delete($cons:SESSION-KEY),
+    Session:close(),
+=======
+<<<<<<< HEAD
+    admin:write-log('User was logged out: ' || $name),
+    Session:delete($cons:SESSION-KEY),
+    Session:close(),
+=======
+    admin:write-log('DBA user was logged out: ' || $name),
+    Session:delete($cons:SESSION-KEY),
+<<<<<<< HEAD
+    Session:close(),
+=======
+>>>>>>> basex-8.5
+>>>>>>> basex-8.4
+>>>>>>> basex-8.3
+    web:redirect("/dba/login", map { 'nane': $name, 'url': $url })
+>>>>>>> basex-8.2
   )
 };
 
@@ -159,15 +217,44 @@ declare %private function _:accept(
   $port  as xs:string
 ) {
   Session:set($cons:SESSION-KEY,
+<<<<<<< HEAD
     element session {
+=======
+<<<<<<< HEAD
+    element session {
+=======
+<<<<<<< HEAD
+    element session {
+=======
+<<<<<<< HEAD
+    element session {
+=======
+    element dba-session {
+>>>>>>> basex-8.5
+>>>>>>> basex-8.4
+>>>>>>> basex-8.3
+>>>>>>> basex-8.2
       element name { $name },
       element pass { $pass },
       element host { $host }[$host],
       element port { $port }[$port]
     }
   ),
+<<<<<<< HEAD
   admin:write-log('User was logged in: ' || $name),
   web:redirect('databases')
+=======
+<<<<<<< HEAD
+  admin:write-log('User was logged in: ' || $name),
+=======
+<<<<<<< HEAD
+  admin:write-log('User was logged in: ' || $name),
+=======
+  admin:write-log('DBA user was logged in: ' || $name),
+>>>>>>> basex-8.4
+>>>>>>> basex-8.3
+  web:redirect("databases")
+>>>>>>> basex-8.2
 };
 
 (:~
@@ -182,6 +269,19 @@ declare %private function _:reject(
   $url      as xs:string,
   $message  as xs:string
 ) as element(rest:response) {
+<<<<<<< HEAD
   admin:write-log('Login was denied: ' || $name),
   web:redirect('login', map { 'name': $name, 'url': $url, 'error': $message })
+=======
+<<<<<<< HEAD
+  admin:write-log('Login was denied: ' || $name),
+=======
+<<<<<<< HEAD
+  admin:write-log('Login was denied: ' || $name),
+=======
+  admin:write-log('DBA login was denied: ' || $name),
+>>>>>>> basex-8.4
+>>>>>>> basex-8.3
+  web:redirect("login", map { 'name': $name, 'url': $url, 'error': $message })
+>>>>>>> basex-8.2
 };

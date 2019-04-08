@@ -1,7 +1,19 @@
 (:~
  : Backup operations.
  :
+<<<<<<< HEAD
  : @author Christian Grün, BaseX GmbH, 2014-15
+=======
+<<<<<<< HEAD
+ : @author Christian Grün, BaseX GmbH, 2014-15
+=======
+<<<<<<< HEAD
+ : @author Christian Grün, BaseX GmbH, 2014-15
+=======
+ : @author Christian Grün, BaseX Team, 2014-16
+>>>>>>> basex-8.4
+>>>>>>> basex-8.3
+>>>>>>> basex-8.2
  :)
 module namespace _ = 'dba/databases';
 
@@ -18,7 +30,11 @@ declare variable $_:SUB := 'database';
 declare
   %updating
   %rest:GET
+<<<<<<< HEAD
   %rest:path("dba/create-backup")
+=======
+  %rest:path("/dba/create-backup")
+>>>>>>> basex-8.2
   %rest:query-param("name", "{$name}")
 function _:create-backup(
   $name  as xs:string
@@ -34,7 +50,11 @@ function _:create-backup(
 declare
   %updating
   %rest:GET
+<<<<<<< HEAD
   %rest:path("dba/drop-backup")
+=======
+  %rest:path("/dba/drop-backup")
+>>>>>>> basex-8.2
   %rest:query-param("name",   "{$name}")
   %rest:query-param("backup", "{$backups}")
 function _:drop-backup(
@@ -54,7 +74,11 @@ function _:drop-backup(
 declare
   %updating
   %rest:GET
+<<<<<<< HEAD
   %rest:path("dba/restore")
+=======
+  %rest:path("/dba/restore")
+>>>>>>> basex-8.2
   %rest:query-param("name",   "{$name}")
   %rest:query-param("backup", "{$backup}")
 function _:restore(

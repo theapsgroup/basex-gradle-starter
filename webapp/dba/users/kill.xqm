@@ -17,7 +17,11 @@ declare variable $_:CAT := 'users';
  :)
 declare
   %rest:GET
+<<<<<<< HEAD
   %rest:path("dba/kill-dba")
+=======
+  %rest:path("/dba/kill-dba")
+>>>>>>> basex-8.2
   %rest:query-param("id", "{$ids}")
   %output:method("html")
 function _:drop(

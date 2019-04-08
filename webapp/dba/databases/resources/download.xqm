@@ -1,7 +1,19 @@
 (:~
  : Download resources.
  :
+<<<<<<< HEAD
  : @author Christian Grün, BaseX GmbH, 2014-15
+=======
+<<<<<<< HEAD
+ : @author Christian Grün, BaseX GmbH, 2014-15
+=======
+<<<<<<< HEAD
+ : @author Christian Grün, BaseX GmbH, 2014-15
+=======
+ : @author Christian Grün, BaseX Team, 2014-16
+>>>>>>> basex-8.4
+>>>>>>> basex-8.3
+>>>>>>> basex-8.2
  :)
 module namespace _ = 'dba/databases';
 
@@ -16,7 +28,11 @@ import module namespace util = 'dba/util' at '../../modules/util.xqm';
  : @return rest response and file content
  :)
 declare
+<<<<<<< HEAD
   %rest:path("dba/download/{$file}")
+=======
+  %rest:path("/dba/download/{$file}")
+>>>>>>> basex-8.2
   %rest:query-param("name",     "{$name}")
   %rest:query-param("resource", "{$resource}")
 function _:download(
@@ -28,6 +44,13 @@ function _:download(
   try {
     let $options := map { 'n': $name, 'r': $resource }
     let $raw := util:eval("db:is-raw($n, $r)", $options)
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> basex-8.3
+>>>>>>> basex-8.2
     return (
       <rest:response>
         <output:serialization-parameters>
@@ -35,6 +58,17 @@ function _:download(
           <output:media-type value='{ util:eval("db:content-type($n, $r)", $options) }'/>
         </output:serialization-parameters>
       </rest:response>,
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+=======
+    let $ct := util:eval("db:content-type($n, $r)", $options)
+    return (
+      web:response-header(map { 'media-type': $ct }),
+>>>>>>> basex-8.4
+>>>>>>> basex-8.3
+>>>>>>> basex-8.2
       util:eval(if($raw) then "db:retrieve($n, $r)" else "db:open($n, $r)", $options)
     )
   } catch * {
@@ -50,8 +84,20 @@ function _:download(
  : @return zip file
  :)
 declare
+<<<<<<< HEAD
   %rest:path("dba/backup/{$backup}")
   %output:method("raw")
+=======
+  %rest:path("/dba/backup/{$backup}")
+<<<<<<< HEAD
+  %output:method("raw")
+=======
+<<<<<<< HEAD
+  %output:method("raw")
+=======
+>>>>>>> basex-8.4
+>>>>>>> basex-8.3
+>>>>>>> basex-8.2
   %output:media-type("application/octet-stream")
 function _:download(
   $backup  as xs:string

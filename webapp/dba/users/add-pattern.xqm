@@ -83,7 +83,11 @@ function _:create(
 declare
   %updating
   %rest:POST
+<<<<<<< HEAD:webapp/dba/users/add-pattern.xqm
   %rest:path("dba/add-pattern")
+=======
+  %rest:path("/dba/add-pattern")
+>>>>>>> basex-8.2:webapp/dba/users/add-pattern.xqm
   %rest:query-param("name",    "{$name}")
   %rest:query-param("perm",    "{$perm}")
   %rest:query-param("pattern", "{$pattern}")

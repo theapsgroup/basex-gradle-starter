@@ -24,7 +24,11 @@ declare variable $_:SUB := 'database';
  :)
 declare
   %rest:GET
+<<<<<<< HEAD:webapp/dba/databases/copy.xqm
   %rest:path("dba/copy")
+=======
+  %rest:path("/dba/copy")
+>>>>>>> basex-8.2:webapp/dba/databases/copy.xqm
   %rest:query-param("name",    "{$name}")
   %rest:query-param("newname", "{$newname}")
   %rest:query-param("error",   "{$error}")
@@ -70,7 +74,11 @@ function _:copy(
 declare
   %updating
   %rest:POST
+<<<<<<< HEAD:webapp/dba/databases/copy.xqm
   %rest:path("dba/copy")
+=======
+  %rest:path("/dba/copy")
+>>>>>>> basex-8.2:webapp/dba/databases/copy.xqm
   %rest:query-param("name",    "{$name}")
   %rest:query-param("newname", "{$newname}")
 function _:copy(
