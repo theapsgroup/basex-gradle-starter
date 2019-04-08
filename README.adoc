@@ -1,12 +1,7 @@
 = basex-gradle-starter
 :toc:
-<<<<<<< HEAD
-:shadowJarName: basex-gradle-starter-1.0.jar
-:basexVersion: 8.0.3
-=======
 :shadowJarName: basex-gradle-starter-all.jar
-:basexVersion: 8.1
->>>>>>> basex-8.1
+:basexVersion: 8.0
 
 A simple build script template for using http://basex.org[BaseX] from a
 https://gradle.org[Gradle] buildscript (also adds Saxon HE).
