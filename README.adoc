@@ -1,7 +1,7 @@
 = basex-gradle-starter
 :toc:
 :shadowJarName: basex-gradle-starter-all.jar
-:basexVersion: 9.1.2
+:basexVersion: 9.2-SNAPSHOT
 
 A simple build script template for using http://basex.org[BaseX] from a
 https://gradle.org[Gradle] buildscript (also adds Saxon HE).
