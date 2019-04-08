@@ -258,10 +258,18 @@ declare function html:table(
             ) else (
               function($a) { $a }
             )
+<<<<<<< HEAD
           return for $entry in $entries
                  let $key := $entry/@*[name() eq $sort]
                  order by $order($key) empty greatest collation '?lang=en'
                  return $entry
+=======
+          return
+            for $entry in $entries
+            order by string($entry/@*[name() = $sort])[.] ! $order(.)
+              empty greatest collation '?lang=en'
+            return $entry
+>>>>>>> basex-8.5
         )
 
         let $max := $cons:OPTION($cons:K-MAX-ROWS)
@@ -276,11 +284,17 @@ declare function html:table(
               if($header/@type = 'bytes') then (
                 try { prof:human(xs:integer(.)) } catch * { . }
               ) else if($header/@type = 'decimal') then (
+<<<<<<< HEAD
                 try { format-number(number(.), '#.00') } catch * { . }
               ) else if($header/@type = 'dateTime') then (
                 let $zone := timezone-from-dateTime(current-dateTime())
                 let $dt := fn:adjust-dateTime-to-timezone(xs:dateTime(.), $zone)
                 return format-dateTime($dt, '[Y0000]-[M00]-[D00], [H00]:[m00]')
+=======
+                try { format-number(number(.), '0.00') } catch * { . }
+              ) else if($header/@type = 'dateTime') then (
+                html:date(xs:dateTime(.))
+>>>>>>> basex-8.5
               )
               else .
             )
@@ -369,3 +383,19 @@ declare function html:link(
 ) as element(a) {
   html:link($text, web:create-url($target, $params))
 };
+<<<<<<< HEAD
+=======
+
+(:~ 
+ : Formats a date.
+ : @param  $date  date
+ : @return string
+ :)
+declare function html:date(
+  $date as xs:dateTime
+) {
+  let $zone := timezone-from-dateTime(current-dateTime())
+  let $dt := fn:adjust-dateTime-to-timezone(xs:dateTime($date), $zone)
+  return format-dateTime($dt, '[Y0000]-[M00]-[D00], [H00]:[m00]:[s00]')
+};
+>>>>>>> basex-8.5

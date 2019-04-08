@@ -11,7 +11,11 @@ import module namespace Session = 'http://basex.org/modules/session';
 declare variable $cons:DATA-ERROR := 'Could not retrieve data';
 
 (:~ Session key. :)
+<<<<<<< HEAD
 declare variable $cons:SESSION-KEY := "session";
+=======
+declare variable $cons:SESSION-KEY := "dba-session";
+>>>>>>> basex-8.5
 (:~ Current session. :)
 declare variable $cons:SESSION := Session:get($cons:SESSION-KEY);
 
@@ -41,7 +45,11 @@ declare variable $cons:OPTION :=
     'maxchars': 100000,
     'maxrows': 500,
     'timeout': 10,
+<<<<<<< HEAD
     'memory': 200,
+=======
+    'memory': 300,
+>>>>>>> basex-8.5
     'permission': 'admin'
   }
   return try {

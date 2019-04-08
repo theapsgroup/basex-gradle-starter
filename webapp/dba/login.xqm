@@ -114,7 +114,11 @@ function _:login(
       _:reject($name, $url, 'Please check the syntax of your URL.')
     )
   ) else (
+<<<<<<< HEAD
     let $user := user:list-details($name)
+=======
+    let $user := user:list-details()[@name = $name]
+>>>>>>> basex-8.5
     let $pw := $user/password[@algorithm = 'salted-sha256']
     let $salt := $pw/salt
     let $hash := $pw/hash
@@ -142,7 +146,10 @@ declare %rest:path("/dba/logout") function _:logout(
   return (
     admin:write-log('DBA user was logged out: ' || $name),
     Session:delete($cons:SESSION-KEY),
+<<<<<<< HEAD
     Session:close(),
+=======
+>>>>>>> basex-8.5
     web:redirect("/dba/login", map { 'nane': $name, 'url': $url })
   )
 };
@@ -159,7 +166,11 @@ declare %private function _:accept(
   $port  as xs:string
 ) {
   Session:set($cons:SESSION-KEY,
+<<<<<<< HEAD
     element session {
+=======
+    element dba-session {
+>>>>>>> basex-8.5
       element name { $name },
       element pass { $pass },
       element host { $host }[$host],

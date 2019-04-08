@@ -15,9 +15,15 @@ function buttons() {
       if(n == 'global') continue;
 
       if(s == "optimize" || s == "optimize-all" || s == "drop-backup" ||
+<<<<<<< HEAD
          s == "drop-db" || s == "drop-pattern" || s == "drop-user" ||
          s == "kill-session" || s == "restore" || s == "backup" || s == "delete" ||
          s == "delete-files" || s == "delete-logs" || s == "kill") {
+=======
+         s == "drop-db" || s == "drop-pattern" || s == "drop-user" || s == "stop-job" ||
+         s == "kill-session" || s == "restore" || s == "backup" || s == "delete" ||
+         s == "delete-files" || s == "delete-logs" || s == "kill-session") {
+>>>>>>> basex-8.5
         e = c > 0;
       }
       button.disabled = !e;

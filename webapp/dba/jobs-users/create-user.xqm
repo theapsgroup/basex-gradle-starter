@@ -3,7 +3,11 @@
  :
  : @author Christian Grün, BaseX Team, 2014-16
  :)
+<<<<<<< HEAD:webapp/dba/jobs-users/create-user.xqm
 module namespace _ = 'dba/users';
+=======
+module namespace _ = 'dba/jobs-users';
+>>>>>>> basex-8.5:webapp/dba/jobs-users/create-user.xqm
 
 import module namespace cons = 'dba/cons' at '../modules/cons.xqm';
 import module namespace html = 'dba/html' at '../modules/html.xqm';
@@ -11,7 +15,11 @@ import module namespace tmpl = 'dba/tmpl' at '../modules/tmpl.xqm';
 import module namespace util = 'dba/util' at '../modules/util.xqm';
 
 (:~ Top category :)
+<<<<<<< HEAD:webapp/dba/jobs-users/create-user.xqm
 declare variable $_:CAT := 'users';
+=======
+declare variable $_:CAT := 'jobs-users';
+>>>>>>> basex-8.5:webapp/dba/jobs-users/create-user.xqm
 
 (:~
  : Form for creating a new user.
