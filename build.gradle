@@ -18,16 +18,7 @@ jar {
 def jettyVersion = '8.1.18.v20150929'
 
 dependencies {
-<<<<<<< HEAD
-    runtime "org.basex:basex-api:8.5.4"
-    runtime "net.xqj:basex-xqj:1.7.0"
-    runtime "org.xmldb:xmldb-api:1.0"
-    runtime "commons-fileupload:commons-fileupload:1.3.1"
-    runtime "com.vividsolutions:jts:1.13"
-    runtime "org.slf4j:slf4j-simple:1.7.13"
-=======
-    runtime "org.basex:basex-api:8.6"
->>>>>>> basex-8.6
+    runtime "org.basex:basex-api:8.5"
     runtime "org.eclipse.jetty:jetty-webapp:${jettyVersion}"
     runtime "jp.sourceforge.igo:igo:0.4.3"
     runtime "org.apache:lucene-stemmers:3.4.0"
