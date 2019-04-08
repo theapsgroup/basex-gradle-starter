@@ -8,7 +8,6 @@ repositories {
     maven { url "http://files.basex.org/maven" }
     maven { url "http://xqj.net/maven" }
     mavenCentral()
-    mavenLocal()
 }
 
 applicationName = 'basex-demo'
@@ -28,25 +27,11 @@ applicationDefaultJvmArgs = [
     "-Dorg.basex.cacherestxq=${System.properties['org.basex.CACHERESTXQ']}"
 ]
 
-def jettyVersion = '9.4.8.v20171121'
+def jettyVersion = '9.4.12.v20180830'
 
 dependencies {
-    runtime "org.basex:basex-api:9.0-SNAPSHOT"
-    runtime "net.xqj:basex-xqj:1.6.0"
-    runtime "org.xmldb:xmldb-api:1.0"
-    runtime "commons-fileupload:commons-fileupload:1.3.1"
-    runtime "com.vividsolutions:jts:1.13"
-    runtime "org.slf4j:slf4j-simple:1.7.13"
+    runtime "org.basex:basex-api:9.1.2"
     runtime "org.eclipse.jetty:jetty-webapp:${jettyVersion}"
-    runtime("com.ettrema:milton-api:1.8.1.4") {
-        exclude group: 'commons-logging', module: 'commons-logging'
-        exclude group: 'commons-beanutils', module: 'commons-beanutils'
-        exclude group: 'org.slf4j', module: 'slf4j-log4j12'
-        exclude group: 'log4j', module: 'log4j'
-        exclude group: 'org.slf4j', module: 'slf4j-api'
-    }
-	
-    // optional
     runtime "jp.sourceforge.igo:igo:0.4.3"
     runtime "org.apache:lucene-stemmers:3.4.0"
     runtime "org.ccil.cowan.tagsoup:tagsoup:1.2.1"
@@ -57,7 +42,7 @@ dependencies {
         exclude group: 'net.sf.saxon', module: 'saxon'
         exclude group: 'isorelax', module: 'isorelax'
     }
-    runtime "net.sf.saxon:Saxon-HE:9.8.0-8"
+    runtime "net.sf.saxon:Saxon-HE:9.9.1-2"
 }
 
 task server(type: JavaExec) {
