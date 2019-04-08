@@ -1,12 +1,21 @@
 function openQuery() {
+<<<<<<< HEAD
+=======
+  if(!confirm('Replace editor contents?')) return;
+
+>>>>>>> basex-8.4
   var file = document.getElementById("file");
   request("POST", "open-query?name=" + encodeURIComponent(file.value.trim()),
     null,
     function(req) {
+<<<<<<< HEAD
       document.getElementById("editor").value = req.responseText;
       var evt = document.createEvent("HTMLEvents");
       evt.initEvent("change",false,false);
       document.getElementById("editor").dispatchEvent(evt);
+=======
+      _editorMirror.setValue(req.responseText);
+>>>>>>> basex-8.4
     },
     function(req) {
       setError('Query could not be opened.');
@@ -77,6 +86,7 @@ function queryExists() {
   }
   return false;
 };
+<<<<<<< HEAD
 
 function loadCodeMirror() {
   if (CodeMirror && dispatchEvent) {
@@ -122,3 +132,5 @@ function setDisplayHeight() {
     cm.CodeMirror.setSize("100%",Math.max(200,s-(p-c)));
   });
 }
+=======
+>>>>>>> basex-8.4

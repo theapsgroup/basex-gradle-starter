@@ -1,7 +1,11 @@
 (:~
  : Queries page.
  :
+<<<<<<< HEAD
  : @author Christian Grün, BaseX GmbH, 2014-15
+=======
+ : @author Christian Grün, BaseX Team, 2014-16
+>>>>>>> basex-8.4
  :)
 module namespace _ = 'dba/queries';
 
@@ -33,8 +37,12 @@ function _:queries(
 ) as element() {
   cons:check(),
 
+<<<<<<< HEAD
   let $f := function($b) { "editor('Please wait…', 'Query was successful.', " || $b || ");" }
   return tmpl:wrap(
+=======
+  tmpl:wrap(
+>>>>>>> basex-8.4
     map {
       'top': $_:CAT, 'info': $info, 'error': $error,
       'css': 'codemirror/lib/codemirror.css',
@@ -46,17 +54,29 @@ function _:queries(
         <table width='100%'>
           <tr>
             <td width='80%'>
+<<<<<<< HEAD
               <select id='mode' onchange='{ $f(false()) }'>{
                 ('Standard', 'Realtime', 'Updating') ! element option { . }
               }</select>
               <button id='run' onclick="{ $f(true()) }">Run</button>
+=======
+              <select id='mode'>{
+                ('Read-Only', 'Updating') ! element option { . }
+              }</select>
+              <button id='run' onclick="evalQuery()"
+                title='Ctrl-Enter'>Run</button>
+>>>>>>> basex-8.4
             </td>
             <td width='20%' align='right'>
               <h2>Editor</h2>
             </td>
           </tr>
         </table>
+<<<<<<< HEAD
         <textarea id='editor' name='editor' rows='20' spellcheck='false' onkeyup="{ $f(false()) }"/>
+=======
+        <textarea id='editor' name='editor' rows='20' spellcheck='false'/>
+>>>>>>> basex-8.4
         <table width='100%'>
           <tr>
             <td>
@@ -86,7 +106,11 @@ function _:queries(
             </td>
           </tr>
         </table>
+<<<<<<< HEAD
         <textarea id='output' rows='20' readonly='' spellcheck='false'/>
+=======
+        <textarea name='output' id='output' rows='20' readonly='' spellcheck='false'/>
+>>>>>>> basex-8.4
         <script type="text/javascript">loadCodeMirror();</script>
       </td>
     </tr>
@@ -101,6 +125,10 @@ function _:queries(
 declare
   %rest:POST("{$query}")
   %rest:path("/dba/eval-query")
+<<<<<<< HEAD
+=======
+  %rest:single
+>>>>>>> basex-8.4
   %output:method("text")
 function _:eval-query(
   $query  as xs:string?

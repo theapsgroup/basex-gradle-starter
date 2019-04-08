@@ -1,28 +1,24 @@
 (:~
- : Drop databases.
+ : Drop users.
  :
-<<<<<<< HEAD
- : @author Christian Grün, BaseX GmbH, 2014-15
-=======
  : @author Christian Grün, BaseX Team, 2014-16
->>>>>>> basex-8.4
  :)
-module namespace _ = 'dba/databases';
+module namespace _ = 'dba/users';
 
 import module namespace cons = 'dba/cons' at '../modules/cons.xqm';
 import module namespace util = 'dba/util' at '../modules/util.xqm';
 
 (:~ Top category :)
-declare variable $_:CAT := 'databases';
+declare variable $_:CAT := 'users';
 
 (:~
- : Drops databases.
- : @param  $names  names of databases
+ : Drops users.
+ : @param  $names  names of users
  :)
 declare
   %updating
   %rest:GET
-  %rest:path("/dba/drop-db")
+  %rest:path("/dba/drop-user")
   %rest:query-param("name", "{$names}")
   %output:method("html")
 function _:drop(
@@ -30,8 +26,8 @@ function _:drop(
 ) {
   cons:check(),
   try {
-    util:update("$n ! db:drop(.)", map { 'n': $names }),
-    db:output(web:redirect($_:CAT, map { 'info': 'Dropped databases: ' || count($names) }))
+    util:update("$n ! user:drop(.)", map { 'n': $names }),
+    db:output(web:redirect($_:CAT, map { 'info': 'Dropped users: ' || count($names) }))
   } catch * {
     db:output(web:redirect($_:CAT, map { 'error': $err:description }))
   }

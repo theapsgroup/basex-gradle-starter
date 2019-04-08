@@ -1,7 +1,11 @@
 (:~
  : Global constants and functions.
  :
+<<<<<<< HEAD
  : @author Christian Grün, BaseX GmbH, 2014-15
+=======
+ : @author Christian Grün, BaseX Team, 2014-16
+>>>>>>> basex-8.4
  :)
 module namespace cons = 'dba/cons';
 
@@ -11,7 +15,15 @@ import module namespace Session = 'http://basex.org/modules/session';
 declare variable $cons:DATA-ERROR := 'Could not retrieve data';
 
 (:~ Session key. :)
+<<<<<<< HEAD
 declare variable $cons:SESSION-KEY := "session";
+=======
+<<<<<<< HEAD
+declare variable $cons:SESSION-KEY := "session";
+=======
+declare variable $cons:SESSION-KEY := "dba-session";
+>>>>>>> basex-8.5
+>>>>>>> basex-8.4
 (:~ Current session. :)
 declare variable $cons:SESSION := Session:get($cons:SESSION-KEY);
 
@@ -40,8 +52,17 @@ declare variable $cons:OPTION :=
   let $defaults := map {
     'maxchars': 100000,
     'maxrows': 500,
+<<<<<<< HEAD
     'timeout': 5,
     'memory': 100,
+=======
+    'timeout': 10,
+<<<<<<< HEAD
+    'memory': 200,
+=======
+    'memory': 300,
+>>>>>>> basex-8.5
+>>>>>>> basex-8.4
     'permission': 'admin'
   }
   return try {

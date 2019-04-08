@@ -1,7 +1,11 @@
 (:~
  : Query resources.
  :
+<<<<<<< HEAD:webapp/dba/databases/resources/query.xqm
  : @author Christian Grün, BaseX GmbH, 2014-15
+=======
+ : @author Christian Grün, BaseX Team, 2014-16
+>>>>>>> basex-8.4:webapp/dba/databases/resources/query.xqm
  :)
 module namespace _ = 'dba/databases';
 

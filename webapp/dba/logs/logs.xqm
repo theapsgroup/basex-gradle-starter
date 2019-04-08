@@ -1,7 +1,11 @@
 (:~
  : Logging page.
  :
+<<<<<<< HEAD
  : @author Christian Grün, BaseX GmbH, 2014-15
+=======
+ : @author Christian Grün, BaseX Team, 2014-16
+>>>>>>> basex-8.4
  :)
 module namespace _ = 'dba/logs';
 
@@ -52,7 +56,11 @@ function _:logs(
           <h2>{ if($name) then <a href="{ $_:CAT }">Logs</a> else 'Logs' }:
             <input size="14" name="loglist" id="loglist" value="{ $loglist }"
               placeholder="regular expression"
+<<<<<<< HEAD
               onkeyup="logslist('Please wait…', 'Query was successful.');"/>
+=======
+              onkeyup="logList();"/>
+>>>>>>> basex-8.4
           </h2>
         </form>
         <form action="{ $_:CAT }" method="post" class="update" autocomplete="off">
@@ -68,10 +76,17 @@ function _:logs(
             { $name }:
             <input size="40" id="logs" value="{ ($loglist, $logs)[1] }"
               placeholder="regular expression"
+<<<<<<< HEAD
               onkeyup="logentries('Please wait…', 'Query was successful.');"/>
           </h3>,
           <div id='output'/>,
           <script type="text/javascript">(function(){{ logentries('', ''); }})();</script>
+=======
+              onkeyup="logEntries();"/>
+          </h3>,
+          <div id='output'/>,
+          <script type="text/javascript">(function(){{ logEntries(); }})();</script>
+>>>>>>> basex-8.4
         ) else (),
         html:focus(if($name) then 'logs' else 'loglist')
       }</td>
@@ -94,7 +109,12 @@ declare
   %rest:query-param("sort",    "{$sort}")
   %rest:query-param("loglist", "{$loglist}")
   %output:method("html")
+<<<<<<< HEAD
 function _:query(
+=======
+  %rest:single
+function _:log(
+>>>>>>> basex-8.4
   $name     as xs:string,
   $sort     as xs:string?,
   $query    as xs:string?,
@@ -134,6 +154,10 @@ declare
   %rest:path("/dba/loglist")
   %rest:query-param("sort",  "{$sort}")
   %output:method("html")
+<<<<<<< HEAD
+=======
+  %rest:single
+>>>>>>> basex-8.4
 function _:loglist(
   $sort   as xs:string?,
   $query  as xs:string?
