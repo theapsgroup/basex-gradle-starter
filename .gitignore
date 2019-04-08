@@ -4,6 +4,7 @@
 .basexhistory
 build/
 data/
+logs/
 *~
 \#*\#
 .\#*
